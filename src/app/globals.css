@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+/*
+  Every color, type style, radius, shadow and easing in the deck is defined here.
+  Components use the generated classes (bg-paper, text-ink-muted, text-h1, shadow-tile)
+  and never raw hex values.
+*/
+@theme {
+  --font-sans: "Nunito Variable", "M PLUS Rounded 1c", ui-rounded, system-ui, sans-serif;
+  --font-jp: "M PLUS Rounded 1c", "Nunito Variable", sans-serif;
+
+  /* Paper and ink */
+  --color-paper: #f7f4ec;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunk: #eee9de;
+  --color-line: #e2ddd1;
+  --color-line-strong: #cfc8ba;
+  --color-ink: #34322d;
+  --color-ink-muted: #75716a;
+  --color-ink-faint: #a7a298;
+
+  /* One accent: Duolingo-style feather green, for glow, motion and small marks */
+  --color-accent: #58cc02;
+  --color-accent-ink: #357a00;
+  --color-accent-soft: #e3f7d2;
+  --color-accent-glow: rgb(88 204 2 / 0.28);
+
+  /* Answer states inside the lesson mockups */
+  --color-wrong: #ff4b4b;
+  --color-wrong-ink: #c42b2b;
+  --color-wrong-soft: #ffe3e3;
+
+  /* The custom-printed origami sheet */
+  --color-sheet: #e9f8dc;
+  --color-sheet-fold: #cdeeb1;
+  --color-sheet-shade: #b4e08d;
+  --color-sheet-edge: #8fc464;
+
+  /* Nara, the sika deer */
+  --color-deer: #c98b4f;
+  --color-deer-dark: #a06a38;
+  --color-deer-cream: #f6e6cb;
+  --color-deer-spot: #fff7e8;
+  --color-deer-eye: #3a2a1f;
+  --color-deer-eye-white: #ffffff;
+  --color-deer-blush: #f2a98e;
+
+  /* Hardware in the kiosk and tent drawings */
+  --color-shell-top: #fbfaf6;
+  --color-shell-left: #e8e3d8;
+  --color-shell-right: #d6cfc1;
+  --color-device: #3a3833;
+  --color-device-face: #4a4842;
+  --color-screen: #1f1e1b;
+
+  /* Type scale at 1080p. Headlines 48px and up, body 24px and up. */
+  --text-display: 148px;
+  --text-display--line-height: 1;
+  --text-display--font-weight: 900;
+  --text-h1: 76px;
+  --text-h1--line-height: 1.04;
+  --text-h1--font-weight: 900;
+  --text-h2: 48px;
+  --text-h2--line-height: 1.12;
+  --text-h2--font-weight: 800;
+  --text-h3: 36px;
+  --text-h3--line-height: 1.18;
+  --text-h3--font-weight: 800;
+  --text-lead: 34px;
+  --text-lead--line-height: 1.32;
+  --text-body: 28px;
+  --text-body--line-height: 1.38;
+  --text-small: 24px;
+  --text-small--line-height: 1.35;
+  --text-panel: 18px;
+  --text-panel--line-height: 1.5;
+  --text-cite: 20px;
+  --text-cite--line-height: 1.35;
+  --text-fine: 17px;
+  --text-fine--line-height: 1.35;
+  --text-jp-xl: 168px;
+  --text-jp-xl--line-height: 1.05;
+  --text-jp-lg: 88px;
+  --text-jp-lg--line-height: 1.1;
+  --text-jp-md: 46px;
+  --text-jp-md--line-height: 1.15;
+  --text-jp-sm: 28px;
+  --text-jp-sm--line-height: 1.2;
+
+  /* Radii, shadows and motion */
+  --radius-tile: 18px;
+  --radius-card: 28px;
+  --radius-pill: 999px;
+  --shadow-tile: inset 0 0 0 2px var(--color-line), 0 4px 0 var(--color-line);
+  --shadow-tile-selected: inset 0 0 0 3px var(--color-ink-muted), 0 4px 0 var(--color-ink-muted);
+  --shadow-tile-correct: inset 0 0 0 3px var(--color-accent), 0 4px 0 var(--color-accent);
+  --shadow-tile-wrong: inset 0 0 0 3px var(--color-wrong), 0 4px 0 var(--color-wrong);
+  --shadow-clue: inset 0 -4px 0 var(--color-accent);
+  --shadow-well: inset 0 2px 12px rgb(70 58 30 / 0.12);
+  --shadow-card: 0 1px 0 rgb(52 50 45 / 0.04), 0 18px 40px -18px rgb(70 58 30 / 0.28);
+  --shadow-drop-sheet: drop-shadow(0 6px 8px rgb(70 58 30 / 0.18));
+  --shadow-drop-poster: drop-shadow(0 30px 40px rgb(70 58 30 / 0.22));
+  --shadow-paper: 0 2px 0 rgb(52 50 45 / 0.05), 0 26px 50px -24px rgb(70 58 30 / 0.35);
+  --ease-fold: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  :lang(ja),
+  .jp {
+    font-family: var(--font-jp);
+  }
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+}
+
+/* The deck hides the cursor after a few idle seconds while presenting. */
+.cursor-idle,
+.cursor-idle * {
+  cursor: none !important;
+}
+
+/* Projected light on the paper glows softly, the way a projector would. */
+.projected {
+  filter: drop-shadow(0 0 6px var(--color-accent-glow));
+}
+
+@media print {
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+  html,
+  body {
+    background: var(--color-paper);
+  }
+}
+
+.print-page {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+}
+.print-page:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}

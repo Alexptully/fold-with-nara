@@ -1,0 +1,29 @@
+"use client";
+
+import { sources, type Source } from "@/content/sources";
+import { sourcesSlide } from "@/content/content";
+import { SlideShell } from "../primitives";
+
+const list: Source[] = Object.values(sources);
+
+export function SourcesSlide() {
+  return (
+    <SlideShell heading={sourcesSlide.heading}>
+      <ol className="absolute left-24 right-24 top-[200px] columns-2 gap-16" data-no-advance>
+        {list.map((source) => (
+          <li key={source.title} className="mb-6 break-inside-avoid text-cite text-ink">
+            <p className="font-extrabold">{source.cite}</p>
+            <p className="text-ink-muted">{source.title}</p>
+            {source.url ? (
+              <a href={source.url} target="_blank" rel="noreferrer" className="break-all text-accent-ink underline underline-offset-2">
+                {source.url}
+              </a>
+            ) : (
+              <p className="text-ink-muted">Course handout, no public link</p>
+            )}
+          </li>
+        ))}
+      </ol>
+    </SlideShell>
+  );
+}
