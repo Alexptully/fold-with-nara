@@ -3,7 +3,7 @@
 import { ArrowCounterClockwise, CheckCircle } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
-import { NaraAvatar } from "@/components/art/Nara";
+import { Nara } from "@/components/art/nara/Nara";
 import { Tile } from "@/components/ui/Tile";
 import { questions, wrongAnswers, type ChoiceQuestion } from "@/content/content";
 import { duration, ease } from "@/lib/motion";
@@ -78,7 +78,7 @@ function ClueBubble() {
   const before = sakura.story.slice(Math.max(0, clueStart - 46), clueStart);
   return (
     <div className="flex h-full items-center gap-3 p-5">
-      <NaraAvatar className="h-[70px] w-[100px] shrink-0" />
+      <Nara pose="think" className="h-[190px] w-[120px] shrink-0" />
       <p className="text-small text-ink">
         ...{before}
         <mark className="rounded-md bg-accent-soft px-1 text-ink shadow-clue">{sakura.clue}</mark>.

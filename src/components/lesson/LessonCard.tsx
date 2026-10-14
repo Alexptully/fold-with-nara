@@ -1,18 +1,19 @@
 "use client";
 
-import { CheckCircle, LightbulbFilament } from "@phosphor-icons/react";
-import { motion } from "motion/react";
+import { Check, X } from "@phosphor-icons/react";
+import { AnimatePresence, motion } from "motion/react";
 import { useState } from "react";
-import { NaraAvatar } from "@/components/art/Nara";
+import { Nara, type Pose } from "@/components/art/nara/Nara";
 import { Button } from "@/components/ui/Button";
 import { SpeechBubble } from "@/components/ui/SpeechBubble";
 import { exerciseLabels, folds, questions, tryLesson, type Question } from "@/content/content";
-import { duration, ease } from "@/lib/motion";
+import { duration, ease, spring } from "@/lib/motion";
+import { play } from "@/lib/sound";
 import { ChoiceExercise, MatchExercise, SpeakExercise, type ExerciseOutcome } from "./Exercises";
 
 /**
- * A Duolingo-style lesson screen for one question: progress, Nara's story,
- * the exercise, and a footer that reacts to right and wrong answers.
+ * A Duolingo-style lesson screen for one question: progress, Nara and her story,
+ * the exercise, and a feedback banner that reacts to right and wrong answers.
  */
 
 type CardProps = {
@@ -23,6 +24,10 @@ type CardProps = {
 };
 
 const done = (outcome: ExerciseOutcome) => outcome === "solved" || outcome === "explained";
+
+// Nara's expression follows the learner: presenting the question, thinking after a miss,
+// cheering a right answer and encouraging after a second miss.
+const poseFor: Record<ExerciseOutcome, Pose> = { open: "present", missed: "think", solved: "cheer", explained: "love" };
 
 function initialSelection(question: Question, print: boolean): number | null {
   if (!print || question.kind === "speak" || question.kind === "match") return null;
@@ -37,6 +42,8 @@ export function LessonCard({ question, print, onAdvance, onOutcome }: CardProps)
   const setOutcome = (next: ExerciseOutcome) => {
     setOutcomeState(next);
     onOutcome(next);
+    if (next === "solved") play("correct");
+    if (next === "missed" || next === "explained") play("wrong");
   };
 
   const check = () => {
@@ -49,10 +56,12 @@ export function LessonCard({ question, print, onAdvance, onOutcome }: CardProps)
 
   const retry = () => {
     setSelected(null);
-    setOutcome("open");
+    setOutcomeState("open");
+    onOutcome("open");
   };
 
   const progress = (question.n - 1 + (done(outcome) ? 1 : 0)) / questions.length;
+  const pose = question.kind === "speak" && outcome === "open" ? "talk" : poseFor[outcome];
 
   return (
     <div data-no-advance className="relative flex h-full flex-col rounded-card bg-paper-raised shadow-card">
@@ -60,17 +69,18 @@ export function LessonCard({ question, print, onAdvance, onOutcome }: CardProps)
         <span className="shrink-0 text-small font-extrabold text-ink-muted">{exerciseLabels[question.kind]}</span>
         <ProgressBar value={progress} />
       </div>
-      <div className="flex items-start gap-6 px-10 pt-7">
-        <NaraAvatar className="mt-1 h-[104px] w-[150px] shrink-0" />
-        <SpeechBubble className="flex-1">
+      <div className="flex items-end gap-4 px-8 pt-4">
+        <Nara pose={pose} className="h-[210px] w-[140px] shrink-0" />
+        <SpeechBubble className="mb-10 flex-1">
           <StoryText story={question.story} clue={question.clue} lit={outcome === "missed"} />
         </SpeechBubble>
       </div>
-      <h3 className="px-10 pt-7 text-h3 text-ink">{question.prompt}</h3>
+      <h3 className="px-10 pt-2 text-h3 text-ink">{question.prompt}</h3>
       <div className="flex-1 px-10 pt-5">
         <ExerciseBody question={question} outcome={outcome} selected={selected} onSelect={setSelected} onSolve={() => setOutcome("solved")} />
       </div>
       <Footer question={question} outcome={outcome} canCheck={selected !== null} onCheck={check} onRetry={retry} onAdvance={onAdvance} />
+      <XpPop show={outcome === "solved" && !print} />
     </div>
   );
 }
@@ -93,15 +103,18 @@ function ExerciseBody({
   return <ChoiceExercise question={question} outcome={outcome} selected={selected} onSelect={onSelect} />;
 }
 
+/** Duolingo's progress bar: a green fill with a lighter stripe along its top. */
 function ProgressBar({ value }: { value: number }) {
   return (
-    <div className="h-5 flex-1 overflow-hidden rounded-pill bg-paper-sunk" role="progressbar" aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
+    <div className="h-5 flex-1 overflow-hidden rounded-pill bg-line" role="progressbar" aria-valuenow={Math.round(value * 100)} aria-valuemin={0} aria-valuemax={100}>
       <motion.div
-        className="h-full rounded-pill bg-accent"
+        className="relative h-full rounded-pill bg-accent"
         initial={false}
-        animate={{ width: `${Math.max(value, 0.03) * 100}%` }}
+        animate={{ width: `${Math.max(value, 0.04) * 100}%` }}
         transition={{ duration: duration.slow, ease: ease.outSoft }}
-      />
+      >
+        <span className="absolute inset-x-3 top-1 h-1.5 rounded-pill bg-paper opacity-30" />
+      </motion.div>
     </div>
   );
 }
@@ -136,7 +149,7 @@ type FooterProps = {
 };
 
 const footerLook: Record<ExerciseOutcome, string> = {
-  open: "bg-transparent",
+  open: "bg-transparent shadow-divider",
   missed: "bg-wrong-soft",
   explained: "bg-wrong-soft",
   solved: "bg-accent-soft",
@@ -144,13 +157,10 @@ const footerLook: Record<ExerciseOutcome, string> = {
 
 function Footer(props: FooterProps) {
   return (
-    <motion.div
-      className={`flex min-h-[132px] items-center justify-between gap-8 rounded-b-card px-10 py-6 transition-colors ${footerLook[props.outcome]}`}
-      layout
-    >
+    <div className={`flex min-h-[136px] items-center justify-between gap-8 rounded-b-card px-10 py-6 transition-colors duration-300 ${footerLook[props.outcome]}`}>
       <FooterMessage question={props.question} outcome={props.outcome} />
       <FooterAction {...props} />
-    </motion.div>
+    </div>
   );
 }
 
@@ -158,34 +168,26 @@ function FooterMessage({ question, outcome }: { question: Question; outcome: Exe
   const fold = folds[question.n - 1];
   if (outcome === "solved") {
     return (
-      <Message icon={<CheckCircle size={52} weight="fill" className="text-accent" />} title={tryLesson.correctTitle} tone="text-accent-ink">
+      <Message good title={tryLesson.correctTitle}>
         {tryLesson.unlockedLine(fold.n)}
       </Message>
     );
   }
-  if (outcome === "missed") {
-    return (
-      <Message icon={<LightbulbFilament size={52} weight="fill" className="text-wrong" />} title={tryLesson.wrongTitle} tone="text-wrong-ink">
-        {question.hint}
-      </Message>
-    );
-  }
-  if (outcome === "explained") {
-    return (
-      <Message icon={<LightbulbFilament size={52} weight="fill" className="text-wrong" />} title="Here's the answer" tone="text-wrong-ink">
-        {question.explain} It comes back in the review round.
-      </Message>
-    );
-  }
+  if (outcome === "missed") return <Message title={tryLesson.wrongTitle}>{question.hint}</Message>;
+  if (outcome === "explained") return <Message title="Here's the answer">{question.explain} It comes back in the review round.</Message>;
   return <span />;
 }
 
-function Message({ icon, title, tone, children }: { icon: React.ReactNode; title: string; tone: string; children: React.ReactNode }) {
+/** The round badge, title and line on the left of Duolingo's feedback banner. */
+function Message({ good = false, title, children }: { good?: boolean; title: string; children: React.ReactNode }) {
+  const tone = good ? "text-accent-ink" : "text-wrong-ink";
   return (
-    <motion.div className="flex items-center gap-5" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-      {icon}
+    <motion.div className="flex items-center gap-5" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={spring}>
+      <span className={`grid h-16 w-16 shrink-0 place-items-center rounded-pill bg-paper ${tone}`}>
+        {good ? <Check size={38} weight="bold" aria-hidden="true" /> : <X size={38} weight="bold" aria-hidden="true" />}
+      </span>
       <div>
-        <p className={`text-h3 ${tone}`}>{title}</p>
+        <p className={`font-display text-h3 ${tone}`}>{title}</p>
         <p className={`text-small ${tone}`}>{children}</p>
       </div>
     </motion.div>
@@ -194,15 +196,33 @@ function Message({ icon, title, tone, children }: { icon: React.ReactNode; title
 
 function FooterAction({ question, outcome, canCheck, onCheck, onRetry, onAdvance }: FooterProps) {
   const isLast = question.n === questions.length;
-  if (outcome === "solved") return <Button variant="onCorrect" onClick={onAdvance}>{isLast ? "Finish the crane" : tryLesson.continueLabel}</Button>;
-  if (outcome === "explained") return <Button variant="onWrong" onClick={onAdvance}>{tryLesson.continueLabel}</Button>;
-  if (outcome === "missed") return <Button variant="onWrong" onClick={onRetry}>{tryLesson.retryLabel}</Button>;
+  if (outcome === "solved") return <Button variant="primary" onClick={onAdvance}>{isLast ? "Finish the crane" : tryLesson.continueLabel}</Button>;
+  if (outcome === "explained") return <Button variant="danger" onClick={onAdvance}>{tryLesson.continueLabel}</Button>;
+  if (outcome === "missed") return <Button variant="danger" onClick={onRetry}>{tryLesson.retryLabel}</Button>;
   if (question.kind === "choose" || question.kind === "word") {
     return (
-      <Button onClick={onCheck} disabled={!canCheck}>
+      <Button variant="primary" onClick={onCheck} disabled={!canCheck} sound={null}>
         {tryLesson.checkLabel}
       </Button>
     );
   }
   return null;
+}
+
+/** "+10 XP" floats up from the banner after a right answer. */
+function XpPop({ show }: { show: boolean }) {
+  return (
+    <AnimatePresence>
+      {show ? (
+        <motion.p
+          className="pointer-events-none absolute bottom-36 right-12 font-display text-h2 text-bee-ink"
+          initial={{ opacity: 0, y: 20, scale: 0.6 }}
+          animate={{ opacity: [0, 1, 1, 0], y: [20, -10, -30, -60], scale: [0.6, 1.15, 1, 1] }}
+          transition={{ duration: 1.6, times: [0, 0.2, 0.7, 1] }}
+        >
+          +10 XP
+        </motion.p>
+      ) : null}
+    </AnimatePresence>
+  );
 }

@@ -59,3 +59,26 @@ export function polygon(points: Pt[]): string {
 export function line(points: Pt[]): string {
   return points.map((p, i) => `${i === 0 ? "M" : "L"}${pt(p)}`).join(" ");
 }
+
+export function ellipse(cx: number, cy: number, rx: number, ry: number): string {
+  return `M${fmt(cx - rx)} ${fmt(cy)} A${rx} ${ry} 0 1 0 ${fmt(cx + rx)} ${fmt(cy)} A${rx} ${ry} 0 1 0 ${fmt(cx - rx)} ${fmt(cy)} Z`;
+}
+
+/** A heart centered on (cx, cy); s is roughly its half-width. */
+export function heart(cx: number, cy: number, s: number): string {
+  const p = (dx: number, dy: number) => `${fmt(cx + dx * s)} ${fmt(cy + dy * s)}`;
+  return `M${p(0, 0.95)} C${p(-1.45, 0.1)} ${p(-0.95, -1)} ${p(0, -0.38)} C${p(0.95, -1)} ${p(1.45, 0.1)} ${p(0, 0.95)} Z`;
+}
+
+/**
+ * Mirrors a path across the vertical line x = axis. Only for paths built from
+ * M, L, Q, C and Z, where every number is part of an x,y pair.
+ */
+export function mirrorX(d: string, axis: number): string {
+  let isX = true;
+  return d.replace(/-?\d+(\.\d+)?/g, (num) => {
+    const value = isX ? fmt(axis * 2 - Number(num)) : Number(num);
+    isX = !isX;
+    return String(value);
+  });
+}

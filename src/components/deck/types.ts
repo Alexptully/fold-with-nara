@@ -1,5 +1,6 @@
 import type { ComponentType } from "react";
 import type { SourceKey } from "@/content/sources";
+import type { SoundName } from "@/lib/sound";
 
 export type SlideProps = {
   /** The current build step, starting at 1. */
@@ -20,6 +21,10 @@ export type SlideDef = {
   /** Sources shown in the footer, keyed by the first step they apply to. */
   sourcesByStep?: Record<number, SourceKey[]>;
   notes: string[];
+  /** Played on each build step after the first. */
+  stepSound?: SoundName;
+  /** Played once the slide has turned into view. */
+  arrivalSound?: SoundName;
   Content: ComponentType<SlideProps>;
 };
 

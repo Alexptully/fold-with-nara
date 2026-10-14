@@ -13,6 +13,7 @@
     "check": "npm run typecheck && npm run lint && npm run check:dashes"
   },
   "dependencies": {
+    "@fontsource-variable/fredoka": "^5.3.0",
     "@fontsource-variable/nunito": "^5.3.0",
     "@fontsource/m-plus-rounded-1c": "^5.3.0",
     "@phosphor-icons/react": "^2.1.10",

@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SlideDef } from "./types";
 
-export type DeckPosition = { slide: number; step: number; direction: 1 | -1 };
+/** `animate` is false for jumps from the address bar, which should not turn a page. */
+export type DeckPosition = { slide: number; step: number; direction: 1 | -1; animate: boolean };
 
 const ADVANCE_KEYS = new Set(["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"]);
 const BACK_KEYS = new Set(["ArrowLeft", "ArrowUp", "PageUp", "Backspace"]);
@@ -21,33 +22,34 @@ function isTyping(target: EventTarget | null): boolean {
 
 /** Keyboard, click, swipe and address-bar navigation through slides and their build steps. */
 export function useDeckNavigation(slides: SlideDef[]) {
-  const [position, setPosition] = useState<DeckPosition>({ slide: 0, step: 1, direction: 1 });
+  const [position, setPosition] = useState<DeckPosition>({ slide: 0, step: 1, direction: 1, animate: false });
   const touchStart = useRef<number | null>(null);
 
   const next = useCallback(() => {
     setPosition((current) => {
-      if (current.step < slides[current.slide].steps) return { ...current, step: current.step + 1, direction: 1 };
+      if (current.step < slides[current.slide].steps) return { ...current, step: current.step + 1, direction: 1, animate: true };
       if (current.slide === slides.length - 1) return current;
-      return { slide: current.slide + 1, step: 1, direction: 1 };
+      return { slide: current.slide + 1, step: 1, direction: 1, animate: true };
     });
   }, [slides]);
 
   const prev = useCallback(() => {
     setPosition((current) => {
-      if (current.step > 1) return { ...current, step: current.step - 1, direction: -1 };
+      if (current.step > 1) return { ...current, step: current.step - 1, direction: -1, animate: true };
       if (current.slide === 0) return current;
-      return { slide: current.slide - 1, step: slides[current.slide - 1].steps, direction: -1 };
+      return { slide: current.slide - 1, step: slides[current.slide - 1].steps, direction: -1, animate: true };
     });
   }, [slides]);
 
   const goTo = useCallback(
-    (slide: number) => setPosition((current) => ({ slide, step: 1, direction: slide >= current.slide ? 1 : -1 })),
+    (slide: number, animate = true) =>
+      setPosition((current) => ({ slide, step: 1, direction: slide >= current.slide ? 1 : -1, animate })),
     [],
   );
 
-  // Start from the slide in the address bar, and follow manual hash edits.
+  // Start from the slide in the address bar, and follow manual hash edits, without a page turn.
   useEffect(() => {
-    const sync = () => goTo(readHash(slides.length));
+    const sync = () => goTo(readHash(slides.length), false);
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);

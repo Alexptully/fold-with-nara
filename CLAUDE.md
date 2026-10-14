@@ -11,7 +11,9 @@ A web slide deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 202
 - Phosphor Icons (`@phosphor-icons/react`), not lucide and not emojis
 - All slide copy, stats, sources and chart data live in one content file (`src/content/content.ts`). All team placeholders (product name, team names, character name, optional renders) live in one config file (`src/content/config.ts`). Sources live in `src/content/sources.ts`.
 
-The visual reference is the Standard Physics deck: one full-bleed stage, huge display type, drawn SVG diagrams that animate in, paper grain, a neutral palette with one accent, and fine-print sources.
+The visual reference is Duolingo's own look, laid out like the Standard Physics deck: one full-bleed white stage, chunky rounded display type, drawn SVG diagrams that animate in with a springy pop, faint paper grain and fine-print sources. Feather green is the accent; Duolingo's bright secondary colors (macaw blue, bee yellow, cardinal red, pink) are reserved for Nara's effects, answer states, badges and the origami models.
+
+Nara is drawn in `src/components/art/nara/` from the team's character sheet. Every pose (smile, talk, present, think, love, laugh, cheer, bow) reuses the same parts, so change her anatomy in `geometry.ts`, never per slide.
 
 Every slide is drawn on a fixed 1920 by 1080 stage that scales to fit the window, so sizes in code are real pixels at 1080p.
 
@@ -23,6 +25,7 @@ Keep the slides clean: no progress bar, dots or slide numbers. Each slide's foot
 - `/print` (or the P key) is the print version, one landscape page per slide or build step, for PDF export
 - `npm run check` runs the type checker, the linter with its complexity limit, and the em dash scan. Run it before saying a task is done.
 - `npm run present` builds the static site and serves it at http://localhost:3000 (no dev server needed on presentation day).
+- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press.
 - Work on a branch and open a pull request. Never push straight to `main`.
 
 ## General
@@ -45,7 +48,7 @@ Keep the slides clean: no progress bar, dots or slide numbers. Each slide's foot
 
 ### Typography
 
-- This deck uses Nunito (variable) for Latin text and M PLUS Rounded 1c for Japanese, both self-hosted from npm. Wrap Japanese in the `Jp` primitive so it gets the right face and `lang="ja"`.
+- This deck uses Fredoka (variable) for headings, Nunito (variable) for running text and M PLUS Rounded 1c for Japanese, all self-hosted from npm. Wrap Japanese in the `Jp` primitive so it gets the right face and `lang="ja"`.
 - Never use Lora or similar bracketed, moderate-contrast "blog default" serifs for display or headings.
 - Never use high-contrast italic display serifs anywhere (Instrument Serif, Playfair Display, DM Serif Display, Cormorant, Fraunces italic, Libre Caslon Display, Bodoni Moda, Italiana).
 - Research Google Fonts before picking type. Check the weights, optical sizes and whether a variable version exists.
@@ -75,7 +78,7 @@ If a design change means touching many files, the abstraction is missing. Extend
 - No reflexive rows of three (three cards, three stats, three steps). Show as many things as there really are.
 - Avoid colored icons on pastel rounded squares as a layout device.
 - No mystery controls. A button or link says what it does before it's clicked ("Open our Figma board", not "Figma").
-- A hot, saturated accent is for glow, motion and small marks, not for filling primary buttons or chips. Controls stay neutral with one calm accent.
+- A hot, saturated accent is for glow, motion and small marks, not for filling primary buttons or chips. Controls stay neutral with one calm accent. The one exception is the Duolingo lesson mockup (`LessonCard`) and the journey path, which copy Duolingo's own UI: filled green Check and Continue buttons, a filled red Try again, and filled path nodes, because those slides depict the product.
 - Text is the last resort. Before writing a label or caption, ask whether size, weight, color, position, a container, an icon or a small diagram could carry the same fact.
 - Give each section one heading that names the thing, with no comma and no supporting paragraph that restates it.
 - Prefer a diagram, table or marked-up state over prose that says the same thing. Put details that don't fit into presenter notes or behind a disclosure.
@@ -98,7 +101,8 @@ The deck should look like a design textbook or a designer's portfolio. Take on t
 - Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only.
 - Use animation and interactivity, and check animations frame by frame instead of assuming the CSS is right.
 - Carry detail all the way through: grain, texture, edge treatment and weight.
-- Repeat one motif across the whole deck, the way strong writers and photographers repeat an image. This deck's motif: the dashed green crease line that Nara's projector draws on paper. It appears as the `Crease` primitive on diagrams, sweeps across the stage when a slide unfolds, and links each question to its fold. Green is reserved for projected light, right answers and progress.
+- Repeat one motif across the whole deck, the way strong writers and photographers repeat an image. This deck's motif: the dashed green crease line that Nara's projector draws on paper. It appears as the `Crease` primitive on diagrams, flashes along the fold line when a slide turns like a sheet of paper, joins the steps of the journey path and links each question to its fold. Green is reserved for projected light, right answers and progress.
+- Slide transitions animate only transform and opacity (see `PageTurn.tsx`). Clip-path and filter animations on the full stage repaint every frame and stutter; don't bring them back.
 
 ## Writing
 
@@ -122,5 +126,5 @@ If your Claude Code setup has the `better-*` skills (`better-ui`, `better-typogr
 1. Every required section from the brief is clearly visible, and each slide's footer tag says which one it covers.
 2. There are no em dashes anywhere in the project.
 3. Every stat has a source in its slide's footer and an entry on the sources page.
-4. Keyboard navigation, speaker notes (N), full screen (F) and print-to-PDF (P) all work.
+4. Keyboard navigation, speaker notes (N), full screen (F), print-to-PDF (P) and mute (M) all work.
 5. `npm run check` passes with no errors.

@@ -50,6 +50,7 @@ export function KeyValueList({
   visibleCount,
   stacked = false,
   size = "body",
+  perRow = 1,
 }: {
   rows: readonly KeyValue[];
   keyWidth?: number;
@@ -59,9 +60,11 @@ export function KeyValueList({
   stacked?: boolean;
   /** "small" sets values at 24px for dense facts beside a drawing. */
   size?: "body" | "small";
+  /** How many key/value pairs sit side by side in each row. */
+  perRow?: number;
 }) {
   const shown = visibleCount ?? rows.length;
-  const columns = stacked ? "1fr" : `${keyWidth}px 1fr`;
+  const columns = stacked ? "1fr" : Array.from({ length: perRow }, () => `${keyWidth}px 1fr`).join(" ");
   const gaps = stacked ? "gap-y-1 [&>dd]:mb-8" : "gap-x-8 gap-y-5";
   return (
     <dl className={`grid ${gaps} ${className}`} style={{ gridTemplateColumns: columns }}>

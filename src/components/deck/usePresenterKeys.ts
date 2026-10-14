@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { asset } from "@/lib/paths";
+import { isMuted, setMuted } from "@/lib/sound";
 
 const STAGE_WIDTH = 1920;
 const STAGE_HEIGHT = 1080;
@@ -12,11 +13,20 @@ function toggleFullScreen() {
   else void document.documentElement.requestFullscreen?.();
 }
 
-/** Stage scaling, the idle cursor, and the N (notes), F (full screen) and P (print) keys. */
+const shortcuts: Record<string, () => void> = {
+  f: toggleFullScreen,
+  p: () => {
+    window.location.href = asset("/print/");
+  },
+};
+
+/** Stage scaling, the idle cursor, and the N (notes), F (full screen), P (print) and M (mute) keys. */
 export function usePresenterKeys() {
   const [scale, setScale] = useState(1);
   const [notesOpen, setNotesOpen] = useState(false);
   const [cursorIdle, setCursorIdle] = useState(false);
+  const [muted, setMutedState] = useState(isMuted);
+  const [muteToast, setMuteToast] = useState(0);
 
   useEffect(() => {
     const fit = () => setScale(Math.min(window.innerWidth / STAGE_WIDTH, window.innerHeight / STAGE_HEIGHT));
@@ -30,8 +40,13 @@ export function usePresenterKeys() {
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       const key = event.key.toLowerCase();
       if (key === "n") setNotesOpen((open) => !open);
-      if (key === "f") toggleFullScreen();
-      if (key === "p") window.location.href = asset("/print/");
+      if (key === "m") {
+        const next = !isMuted();
+        setMuted(next);
+        setMutedState(next);
+        setMuteToast((count) => count + 1);
+      }
+      shortcuts[key]?.();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -52,7 +67,7 @@ export function usePresenterKeys() {
     };
   }, []);
 
-  return { scale, notesOpen, setNotesOpen, cursorIdle };
+  return { scale, notesOpen, setNotesOpen, cursorIdle, muted, muteToast };
 }
 
 export const stageSize = { width: STAGE_WIDTH, height: STAGE_HEIGHT };

@@ -1,7 +1,7 @@
 "use client";
 
 import { circle, roundedPolygon, roundedRect, semicircle } from "@/lib/shapes";
-import { naraShapeCounts, type ShapeKind } from "./Nara";
+import type { ShapeKind } from "./nara/Nara";
 
 const shapes: { kind: ShapeKind; d: string }[] = [
   { kind: "roundedSquare", d: roundedRect(8, 8, 64, 64, 16) },
@@ -16,10 +16,12 @@ const shapes: { kind: ShapeKind; d: string }[] = [
  */
 export function ShapeKit({
   labels,
+  counts,
   active,
   onHover,
 }: {
   labels: Record<ShapeKind, string>;
+  counts: Record<ShapeKind, number>;
   active: ShapeKind | null;
   onHover: (kind: ShapeKind | null) => void;
 }) {
@@ -47,7 +49,7 @@ export function ShapeKit({
               </svg>
               <span className={`text-small font-bold ${lit ? "text-accent-ink" : "text-ink"}`}>
                 {labels[shape.kind]}
-                <span className="block text-ink-muted font-semibold">{naraShapeCounts[shape.kind]} parts</span>
+                <span className="block text-ink-muted font-semibold">{counts[shape.kind]} {counts[shape.kind] === 1 ? "part" : "parts"}</span>
               </span>
             </button>
           </li>

@@ -1,6 +1,7 @@
 "use client";
 
 import { MotionGlobalConfig } from "motion/react";
+import { disableSound } from "@/lib/sound";
 import { Grain } from "./Grain";
 import { SlideFooter } from "./SlideFooter";
 import { slides } from "./slides";
@@ -8,6 +9,7 @@ import { sourcesForStep, type SlideDef } from "./types";
 
 // On the print route every animation jumps straight to its end state.
 MotionGlobalConfig.skipAnimations = true;
+disableSound();
 
 const noop = () => undefined;
 

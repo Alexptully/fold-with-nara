@@ -9,9 +9,9 @@ const list: Source[] = Object.values(sources);
 export function SourcesSlide() {
   return (
     <SlideShell heading={sourcesSlide.heading}>
-      <ol className="absolute left-24 right-24 top-[200px] columns-2 gap-16" data-no-advance>
+      <ol className="absolute left-24 right-24 top-[176px] columns-2 gap-16" data-no-advance>
         {list.map((source) => (
-          <li key={source.title} className="mb-6 break-inside-avoid text-cite text-ink">
+          <li key={source.title} className="mb-4 break-inside-avoid text-cite text-ink">
             <p className="font-extrabold">{source.cite}</p>
             <p className="text-ink-muted">{source.title}</p>
             {source.url ? (

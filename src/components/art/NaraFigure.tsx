@@ -2,15 +2,15 @@
 
 import { config } from "@/content/config";
 import { asset } from "@/lib/paths";
-import { Nara } from "./Nara";
+import { Nara, type Pose } from "./nara/Nara";
 
 /**
- * Nara as she appears on the title, encouragement and closing slides.
- * Uses the team's illustration when config.characterImage is set.
+ * Nara on the title and closing slides. Uses the team's own illustration
+ * when config.characterImage is set; otherwise the vector Nara in the given pose.
  */
-export function NaraFigure({ bowing = true }: { bowing?: boolean }) {
+export function NaraFigure({ pose = "talk", className }: { pose?: Pose; className?: string }) {
   if (config.characterImage) {
-    return <img src={asset(config.characterImage)} alt={config.characterName} className="h-auto w-full" />;
+    return <img src={asset(config.characterImage)} alt={config.characterName} className={`h-auto w-full ${className ?? ""}`} />;
   }
-  return <Nara bowing={bowing} title={config.characterName} />;
+  return <Nara pose={pose} title={config.characterName} className={className} />;
 }

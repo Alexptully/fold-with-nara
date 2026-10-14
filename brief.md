@@ -21,13 +21,33 @@ Each slide's footer names the section it covers.
 | Requirement | Slide |
 | --- | --- |
 | New world character, consistent with the simple illustration style (rounded square, circle, rounded triangle, semicircle) | Meet Nara |
-| Important cultural aspect of a country | What we teach and why |
-| Distinct location | One station in two sizes (Nara Park as the lesson's setting, kiosk and tent as the physical places) |
+| Important cultural aspect of a country | What we teach and why, Choose what to fold |
+| Distinct location | The airport kiosk, The tent pop-up (and Nara Park as the lesson's setting) |
 | Concise 10-question lesson for beginners | The 10-question lesson, Try the lesson |
 | How the lesson corrects wrong answers | When you get it wrong |
-| How the character encourages the learner to start and stay engaged | How Nara keeps you going |
+| How the character encourages the learner to start and stay engaged | How Nara keeps you going (all seven expressions from the character sheet) |
 | How the installation teaches (team script, section 2) | How a station teaches, Help fades as you learn, The Duolingo Method in paper |
-| Visitor journey and takeaway (team script, section 3) | The ten-minute visit |
+| Visitor journey and takeaway (team script, section 3) | Your visit, step by step; The ten-minute visit |
+
+## The user experience, in the team's order
+
+"Your visit, step by step" follows this list from the team doc exactly, one path node per item:
+
+1. Welcome screen with fun animations, starring Nara the sika deer from Nara Park.
+2. Free or paid, depending on the location.
+3. Choose what to fold, at three levels. Easy: Sakura and Mt. Fuji. Medium: Crane and Koi fish. Hard: Samurai helmet and the special Duo fold.
+4. The station prints paper designed for that model.
+5. Place the paper in the frame, as the screen in front of you shows.
+6. The projector outlines where to fold, right on the paper.
+7. Each fold comes with a question on the screen, and you answer it to move on. The questions are about the culture behind the item you're folding.
+8. Scan with your phone to get a badge on your Duolingo account.
+9. Keep the origami, or hang it in the installation.
+
+## Character and installation references
+
+- Nara follows the team's character sheet (outline sketch, colored figure and seven expressions: talk, present, think, love, laugh, cheer, bow). The deck draws Nara in vector so every pose stays sharp and can animate.
+- The kiosk and tent follow the team's render: a wooden kiosk about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper dispenser and storage; and a white faceted dome tent with stations around the walls and origami hanging overhead.
+- Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo.
 
 ## The concept in one sentence
 
@@ -70,10 +90,12 @@ Every number and cultural claim on a slide, with its source key in `src/content/
 | Kimono is ki (wear) + mono (thing) | `kimono` |
 | Cranes symbolize long life; a thousand cranes is a wish for recovery | `senbazuru` |
 | Japanese is one of Duolingo's Top 9 courses; the five Duolingo Method principles; the character shape guide | `duolingoPrompt` |
+| Mt. Fuji is a sacred place and an icon of Japan (UNESCO World Heritage, 2013) | `fuji` |
+| Carp streamers stand for strength and perseverance; kabuto are displayed on Children's Day to inspire bravery | `childrensDay` |
 | Testing yourself beats restudying for long-term retention | `retrieval` |
 | Fading worked steps helps learners move to solving alone | `fading` |
 
-**Labeled estimates.** The ten-minute timeline on "The ten-minute visit" is a team estimate and is labeled that way on the slide. Replace it with timings from the prototype.
+**Labeled estimates.** The ten-minute timeline on "The ten-minute visit" is a team estimate and is labeled that way on the slide. Replace it with timings from the prototype. The kiosk's 7 ft height and 2.5 ft footprint are the team's design targets from the render, not measurements.
 
 ## Placeholders
 
@@ -87,7 +109,8 @@ All in `src/content/config.ts`:
 ## Open items for the team
 
 - Sophia: review or replace the five draft questions (2, 3, 7, 8, 9).
-- Sophia: export the Illustrator Nara and set `characterImage` if the team prefers it to the built-in drawing.
+- Sophia: the vector Nara follows your character sheet. If you'd rather show your Illustrator file on the title and closing slides, export it and set `characterImage`.
+- Decide pricing for the paid locations (the deck only says "free or paid, depending on the location").
 - Sam: drop the kiosk render into `public/renders/` and set `kioskRender`.
 - Tsion: the speaker notes (press N) follow the first-draft script; trim them to fit four minutes.
 - Decide whether Q1 is said out loud by the whole room (the notes assume yes).

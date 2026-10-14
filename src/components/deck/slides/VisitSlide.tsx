@@ -101,21 +101,14 @@ function SegmentLabels() {
 }
 
 function MinuteAxis() {
-  const minutes = Array.from({ length: visitTotalSeconds / 60 + 1 }, (_, i) => i);
+  const minutes = Array.from({ length: Math.floor(visitTotalSeconds / 60) + 1 }, (_, i) => i);
   return (
     <div className="relative mt-2 h-8">
-      {minutes.map((minute) => {
-        const isLast = minute === minutes.length - 1;
-        return (
-          <span
-            key={minute}
-            className={`absolute whitespace-nowrap text-small text-ink-muted ${isLast ? "-translate-x-full" : "-translate-x-1/2"}`}
-            style={{ left: isLast ? BAR_WIDTH : minute * 60 * pxPerSecond }}
-          >
-            {isLast ? `${minute} min` : minute}
-          </span>
-        );
-      })}
+      {minutes.map((minute) => (
+        <span key={minute} className="absolute -translate-x-1/2 whitespace-nowrap text-small text-ink-muted" style={{ left: minute * 60 * pxPerSecond }}>
+          {minute === minutes.length - 1 ? `${minute} min` : minute}
+        </span>
+      ))}
     </div>
   );
 }

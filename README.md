@@ -24,8 +24,13 @@ On presentation day, use `npm run present` instead. It builds the finished site 
 | N | Show or hide speaker notes |
 | F | Full screen |
 | P | Open the print version (for PDF) |
+| M | Turn sound effects off or on |
 
 On a touch screen, swipe left or right. The address bar shows the slide number (`/#7`), so you can jump straight to a slide to rehearse it.
+
+**Sound.** The deck plays short sound effects: a paper swish between slides, a ding for a right answer, a bonk for a wrong one and a fanfare on the thank-you slide. Browsers only allow sound after your first click or key press. Press M to mute.
+
+**Interactive slides.** On "Choose what to fold", click a card to select it. On "Your visit, step by step", each arrow press moves Nara to the next step.
 
 **The "Try the lesson" slide is interactive.** Each arrow press moves to the next question. Click the answers to show how Nara reacts: try a wrong answer first on the tea house question to show the hint. On questions 1 and 10, ask the room to say the phrase together, then click **Everyone said it**. Clicking inside the lesson card never skips the slide.
 
@@ -49,7 +54,7 @@ All the words live in three files. You can edit them in any text editor, or on G
 
 ### Swap in our own drawings
 
-- **Sophia's Nara:** export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
+- **Sophia's Nara:** the deck draws Nara from your character sheet in every pose. To show your own file on the title and closing slides instead, export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
 - **Sam's kiosk render:** save it as `public/renders/kiosk.png` and set `kioskRender: "/renders/kiosk.png"`.
 
 ## Before you push a change

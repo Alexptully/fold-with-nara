@@ -53,6 +53,16 @@ export const sources = {
     title: "One thousand origami cranes (senbazuru): cranes as a symbol of long life, given to wish for recovery",
     url: "https://en.wikipedia.org/wiki/One_thousand_origami_cranes",
   },
+  fuji: {
+    cite: "UNESCO World Heritage List, Fujisan, 2013",
+    title: "Fujisan, sacred place and source of artistic inspiration (a pilgrimage site and an internationally recognized icon of Japan)",
+    url: "https://whc.unesco.org/en/list/1418",
+  },
+  childrensDay: {
+    cite: "Japan House Los Angeles, Children's Day, 2022",
+    title: "The Colorful Traditions of Children's Day (carp streamers for strength and perseverance; kabuto displayed to inspire bravery)",
+    url: "https://japanhousela.com/articles/the-colorful-traditions-of-childrens-day",
+  },
   retrieval: {
     cite: "Roediger and Karpicke, Psychological Science, 2006",
     title: "Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention, 17(3), 249 to 255",

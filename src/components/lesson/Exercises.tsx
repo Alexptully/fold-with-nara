@@ -8,6 +8,7 @@ import { Tile, type TileState } from "@/components/ui/Tile";
 import { Jp } from "@/components/deck/primitives";
 import type { ChoiceQuestion, MatchQuestion, SpeakQuestion } from "@/content/content";
 import { tryLesson } from "@/content/content";
+import { play } from "@/lib/sound";
 
 /**
  * The three exercise bodies inside the lesson card. Each one reports a right
@@ -45,7 +46,10 @@ export function ChoiceExercise({ question, outcome, selected, onSelect }: Choice
         <Tile
           key={option}
           state={choiceTileState(i, selected, question.correct, outcome)}
-          onClick={() => onSelect(i)}
+          onClick={() => {
+            play("tap");
+            onSelect(i);
+          }}
           disabled={locked}
           className="min-h-[96px]"
         >
@@ -83,8 +87,8 @@ export function SpeakExercise({ question, solved, onSolve }: { question: SpeakQu
   return (
     <div className="flex items-center gap-8 py-4">
       <motion.span
-        className="grid h-36 w-36 place-items-center rounded-pill bg-paper-raised text-accent-ink shadow-tile"
-        animate={listening ? { scale: [1, 1.08, 1], boxShadow: ["var(--shadow-tile)", "var(--shadow-tile-correct)", "var(--shadow-tile)"] } : { scale: 1 }}
+        className="grid h-32 w-32 place-items-center rounded-pill bg-macaw text-paper shadow-button-blue"
+        animate={listening ? { scale: [1, 1.08, 1] } : { scale: 1 }}
         transition={{ duration: 0.7, repeat: listening ? Infinity : 0 }}
         aria-hidden="true"
       >
@@ -106,9 +110,15 @@ export function MatchExercise({ question, solved, onSolve }: { question: MatchQu
   const [picked, setPicked] = useState<number | null>(null);
   const [miss, setMiss] = useState<[number, number] | null>(null);
 
+  const pickWord = (pairIndex: number) => {
+    play("tap");
+    setPicked(pairIndex);
+  };
+
   const pickMeaning = (pairIndex: number) => {
     if (picked === null) return;
     if (picked !== pairIndex) {
+      play("wrong");
       setMiss([picked, pairIndex]);
       window.setTimeout(() => setMiss(null), 600);
       setPicked(null);
@@ -118,6 +128,7 @@ export function MatchExercise({ question, solved, onSolve }: { question: MatchQu
     setMatched(next);
     setPicked(null);
     if (next.length === question.pairs.length) onSolve();
+    else play("pop");
   };
 
   const wordState = (i: number): TileState => {
@@ -135,7 +146,7 @@ export function MatchExercise({ question, solved, onSolve }: { question: MatchQu
       {question.pairs.map((pair, row) => {
         const meaningIndex = meaningOrder[row] ?? row;
         return [
-          <Tile key={`w${row}`} state={wordState(row)} onClick={() => setPicked(row)} disabled={matched.includes(row)} className="py-3">
+          <Tile key={`w${row}`} state={wordState(row)} onClick={() => pickWord(row)} disabled={matched.includes(row)} className="py-3">
             <Jp className="text-jp-sm font-extrabold">{pair.word}</Jp>
           </Tile>,
           <Tile
