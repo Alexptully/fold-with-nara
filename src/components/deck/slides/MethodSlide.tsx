@@ -3,12 +3,16 @@
 import { motion } from "motion/react";
 import { method } from "@/content/content";
 import { duration, ease } from "@/lib/motion";
+import type { NaraSpot } from "../NaraActor";
 import { Reveal, SlideShell } from "../primitives";
+
+/** Nara laughs along on the right, then walks to center stage for the bow on the next slide. */
+export const methodSpot: NaraSpot = { x: 1330, y: 230, h: 720, pose: "laugh" };
 
 export function MethodSlide() {
   return (
     <SlideShell heading={method.heading}>
-      <table className="absolute left-24 right-24 top-[200px] border-collapse text-left">
+      <table className="absolute left-24 top-[210px] w-[1180px] border-collapse text-left">
         <thead className="sr-only">
           <tr>
             <th>Duolingo Method principle</th>
@@ -24,7 +28,7 @@ export function MethodSlide() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: duration.base, delay: 0.1 + i * 0.1, ease: ease.outSoft }}
             >
-              <th scope="row" className={`w-[560px] py-6 pr-10 align-top text-h3 ${i === method.rows.length - 1 ? "text-accent-ink" : "text-ink"}`}>
+              <th scope="row" className="w-[540px] py-6 pr-10 align-top text-h3 text-ink">
                 {row.key}
               </th>
               <td className="py-6 align-top text-body text-ink">{row.value}</td>
@@ -32,7 +36,7 @@ export function MethodSlide() {
           ))}
         </tbody>
       </table>
-      <Reveal delay={0.9} className="absolute left-24 top-[930px] max-w-[1500px]">
+      <Reveal delay={0.9} className="absolute left-24 top-[880px] w-[1180px]">
         <p className="text-body text-ink-muted">{method.research}</p>
       </Reveal>
     </SlideShell>

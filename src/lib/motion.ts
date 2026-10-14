@@ -13,7 +13,10 @@ export const duration = {
   quick: 0.25,
   base: 0.5,
   slow: 0.9,
-  pageTurn: 0.8,
+  /** Slides blending into each other. */
+  slide: 0.75,
+  /** Nara walking or growing from one spot to the next. */
+  travel: 0.95,
 };
 
 /** Pop-and-rise used by most reveals, with a small springy overshoot. Pass the delay as `custom`. */

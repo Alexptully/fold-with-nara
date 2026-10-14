@@ -70,7 +70,7 @@ export function LessonCard({ question, print, onAdvance, onOutcome }: CardProps)
         <ProgressBar value={progress} />
       </div>
       <div className="flex items-end gap-4 px-8 pt-4">
-        <Nara pose={pose} className="h-[210px] w-[140px] shrink-0" />
+        <Nara pose={pose} className="h-[250px] w-[172px] shrink-0" />
         <SpeechBubble className="mb-10 flex-1">
           <StoryText story={question.story} clue={question.clue} lit={outcome === "missed"} />
         </SpeechBubble>
@@ -196,7 +196,8 @@ function Message({ good = false, title, children }: { good?: boolean; title: str
 
 function FooterAction({ question, outcome, canCheck, onCheck, onRetry, onAdvance }: FooterProps) {
   const isLast = question.n === questions.length;
-  if (outcome === "solved") return <Button variant="primary" onClick={onAdvance}>{isLast ? "Finish the crane" : tryLesson.continueLabel}</Button>;
+  if (outcome === "solved" && isLast) return <Button variant="primary" onClick={() => finish(onAdvance)} sound={null}>{tryLesson.finishLabel}</Button>;
+  if (outcome === "solved") return <Button variant="primary" onClick={onAdvance}>{tryLesson.continueLabel}</Button>;
   if (outcome === "explained") return <Button variant="danger" onClick={onAdvance}>{tryLesson.continueLabel}</Button>;
   if (outcome === "missed") return <Button variant="danger" onClick={onRetry}>{tryLesson.retryLabel}</Button>;
   if (question.kind === "choose" || question.kind === "word") {
@@ -207,6 +208,12 @@ function FooterAction({ question, outcome, canCheck, onCheck, onRetry, onAdvance
     );
   }
   return null;
+}
+
+/** The last Continue finishes the crane with the lesson-complete fanfare. */
+function finish(onAdvance: () => void) {
+  play("complete");
+  onAdvance();
 }
 
 /** "+10 XP" floats up from the banner after a right answer. */

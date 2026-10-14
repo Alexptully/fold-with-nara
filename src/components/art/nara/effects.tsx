@@ -5,46 +5,61 @@ import type { ReactNode } from "react";
 import { heart } from "@/lib/shapes";
 import type { Effect } from "./geometry";
 
-/** The little marks around Nara from the character sheet: sparkles, a question mark, hearts and bow lines. */
+/**
+ * The marks around Nara from the animation: two yellow dashes when she talks or
+ * laughs, a blue question mark, pink hearts, a cheer burst and the blue bow lines.
+ * Positions are in the same frame coordinates as the geometry.
+ */
 
 const loop = (duration: number, delay = 0) => ({ duration, delay, repeat: Infinity, ease: "easeInOut" as const });
 
-function Ticks({ lines, color }: { lines: string[]; color: string }) {
+type Dash = { cx: number; cy: number; angle: number };
+
+function Dashes({ dashes }: { dashes: Dash[] }) {
   return (
     <>
-      {lines.map((d) => (
-        <path key={d} d={d} fill="none" stroke={color} strokeWidth={8} strokeLinecap="round" />
+      {dashes.map((d, i) => (
+        <g key={i} transform={`rotate(${d.angle} ${d.cx} ${d.cy})`}>
+          <motion.rect
+            x={d.cx - 27}
+            y={d.cy - 13}
+            width={54}
+            height={26}
+            rx={5}
+            fill="var(--color-spark)"
+            style={{ transformOrigin: `${d.cx}px ${d.cy}px`, transformBox: "view-box" }}
+            animate={{ opacity: [1, 0.45, 1], scaleX: [1, 0.78, 1] }}
+            transition={loop(1.2, i * 0.18)}
+          />
+        </g>
       ))}
     </>
   );
 }
 
-function Pulse({ children, origin }: { children: ReactNode; origin: string }) {
-  return (
-    <motion.g
-      style={{ transformOrigin: origin, transformBox: "view-box" }}
-      animate={{ scale: [0.85, 1.08, 0.85], opacity: [0.75, 1, 0.75] }}
-      transition={loop(1.4)}
-    >
-      {children}
-    </motion.g>
-  );
-}
-
-const sparkleLeft = ["M104 338 L80 326", "M100 358 L74 360", "M104 378 L84 392"];
-const sparkleRight = sparkleLeft.map((d) => d.replace(/(\d+) (\d+)/g, (_, x: string, y: string) => `${412 - Number(x)} ${Number(y) - 120}`));
-const burst = ["M92 66 L76 42", "M64 84 L40 74", "M308 66 L324 42", "M336 84 L360 74"];
+const sparkleLeft: Dash[] = [
+  { cx: 277, cy: 413, angle: 40 },
+  { cx: 279, cy: 505, angle: -25 },
+];
+const sparkleRight: Dash[] = sparkleLeft.map((d) => ({ cx: 920 - d.cx, cy: d.cy, angle: -d.angle }));
+// Three dashes radiating from the raised hand when Nara cheers.
+const burst: Dash[] = [
+  { cx: 668, cy: 290, angle: -80 },
+  { cx: 742, cy: 316, angle: -42 },
+  { cx: 782, cy: 384, angle: -6 },
+];
 
 function Question() {
   return (
     <motion.text
-      x={318}
-      y={150}
-      fontSize={84}
-      fontWeight={800}
+      x={640}
+      y={300}
+      fontSize={132}
+      fontWeight={700}
       fill="var(--color-macaw)"
       fontFamily="var(--font-display)"
-      animate={{ y: [150, 140, 150], rotate: [0, 6, 0] }}
+      style={{ transformOrigin: "676px 260px", transformBox: "view-box" }}
+      animate={{ y: [0, -12, 0], rotate: [0, 8, 0] }}
       transition={loop(1.8)}
     >
       ?
@@ -54,8 +69,8 @@ function Question() {
 
 function FloatingHearts() {
   const hearts = [
-    { x: 306, y: 300, s: 17, delay: 0 },
-    { x: 330, y: 344, s: 12, delay: 0.6 },
+    { x: 646, y: 470, s: 24, delay: 0 },
+    { x: 690, y: 540, s: 17, delay: 0.6 },
   ];
   return (
     <>
@@ -64,7 +79,7 @@ function FloatingHearts() {
           key={h.x}
           d={heart(h.x, h.y, h.s)}
           fill="var(--color-love)"
-          animate={{ y: [0, -18, 0], opacity: [0.7, 1, 0.7] }}
+          animate={{ y: [0, -22, 0], opacity: [1, 0.7, 1] }}
           transition={loop(2, h.delay)}
         />
       ))}
@@ -72,33 +87,23 @@ function FloatingHearts() {
   );
 }
 
+const mirror = (d: string) => d.replace(/(\d+) (\d+)/g, (_, x: string, y: string) => `${920 - Number(x)} ${y}`);
+
 function MotionLines() {
-  const arcs = ["M90 216 Q78 246 90 276", "M68 228 Q60 246 68 264"];
+  const left = ["M290 492 Q246 531 290 570", "M268 510 Q244 531 268 552"];
   return (
-    <motion.g animate={{ opacity: [0.4, 1, 0.4] }} transition={loop(1.3)}>
-      {[...arcs, ...arcs.map((d) => d.replace(/(\d+) (\d+)/g, (_, x: string, y: string) => `${400 - Number(x)} ${y}`))].map((d) => (
-        <path key={d} d={d} fill="none" stroke="var(--color-macaw-ring)" strokeWidth={6} strokeLinecap="round" />
+    <motion.g animate={{ opacity: [1, 0.35, 1] }} transition={loop(1.3)}>
+      {[...left, ...left.map(mirror)].map((d) => (
+        <path key={d} d={d} fill="none" stroke="var(--color-motion)" strokeWidth={9} strokeLinecap="round" />
       ))}
     </motion.g>
   );
 }
 
 const effects: Record<Effect, () => ReactNode> = {
-  sparkleLeft: () => (
-    <Pulse origin="90px 358px">
-      <Ticks lines={sparkleLeft} color="var(--color-bee)" />
-    </Pulse>
-  ),
-  sparkleRight: () => (
-    <Pulse origin="310px 238px">
-      <Ticks lines={sparkleRight} color="var(--color-bee)" />
-    </Pulse>
-  ),
-  burst: () => (
-    <Pulse origin="200px 150px">
-      <Ticks lines={burst} color="var(--color-bee)" />
-    </Pulse>
-  ),
+  sparkleLeft: () => <Dashes dashes={sparkleLeft} />,
+  sparkleRight: () => <Dashes dashes={sparkleRight} />,
+  burst: () => <Dashes dashes={burst} />,
   question: () => <Question />,
   hearts: () => <FloatingHearts />,
   motionLines: () => <MotionLines />,

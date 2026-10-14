@@ -3,26 +3,17 @@
 import { ArrowsLeftRight, ChatCircleDots, CursorClick, Microphone, type Icon } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { CranePaper } from "@/components/art/CranePaper";
-import { folds, lessonOverview, questions, type ExerciseKind, type Technique } from "@/content/content";
+import { folds, lessonOverview, questions, type ExerciseKind } from "@/content/content";
 import { duration, ease } from "@/lib/motion";
-import { Jp, Reveal, SlideShell } from "../primitives";
+import { Jp, SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
 
-export const exerciseIcons: Record<ExerciseKind, Icon> = {
+const exerciseIcons: Record<ExerciseKind, Icon> = {
   speak: Microphone,
   choose: CursorClick,
   word: ChatCircleDots,
   match: ArrowsLeftRight,
 };
-
-const repeated: Technique[] = ["kite", "reverse"];
-
-/** Which use of a repeated technique this fold is (1st, 2nd, 3rd), or 0 if it doesn't repeat. */
-function repeatIndex(foldIndex: number): number {
-  const technique = folds[foldIndex].technique;
-  if (!repeated.includes(technique)) return 0;
-  return folds.slice(0, foldIndex + 1).filter((fold) => fold.technique === technique).length;
-}
 
 export function LessonOverviewSlide({ step }: SlideProps) {
   return (
@@ -32,12 +23,6 @@ export function LessonOverviewSlide({ step }: SlideProps) {
           <QuestionColumn key={question.n} index={i} showFold={step >= 2} />
         ))}
       </ol>
-      <Reveal show={step >= 2} delay={0.8} className="absolute left-24 top-[930px]">
-        <p className="flex items-center gap-4 text-body text-ink">
-          <UseDots count={3} filled={1} />
-          {lessonOverview.repeatNote}
-        </p>
-      </Reveal>
     </SlideShell>
   );
 }
@@ -46,7 +31,6 @@ function QuestionColumn({ index, showFold }: { index: number; showFold: boolean 
   const question = questions[index];
   const fold = folds[index];
   const ExerciseIcon = exerciseIcons[question.kind];
-  const uses = repeatIndex(index);
   return (
     <motion.li
       initial={{ opacity: 0, y: 30 }}
@@ -76,19 +60,7 @@ function QuestionColumn({ index, showFold }: { index: number; showFold: boolean 
           <CranePaper state={fold.n} label={`After fold ${fold.n}: ${fold.instruction}`} />
         </div>
         <p className="mt-2 text-small font-bold text-ink">Fold {fold.n}</p>
-        <div className="mt-2 h-6">{uses > 0 ? <UseDots count={folds.filter((f) => f.technique === fold.technique).length} filled={uses} /> : null}</div>
       </motion.div>
     </motion.li>
-  );
-}
-
-/** Small dots: which repeat of a fold technique this is. */
-export function UseDots({ count, filled }: { count: number; filled: number }) {
-  return (
-    <span className="inline-flex gap-1.5" aria-label={`Use ${filled} of ${count}`}>
-      {Array.from({ length: count }, (_, i) => (
-        <span key={i} className={`h-4 w-4 rounded-pill ${i < filled ? "bg-accent" : "bg-line"}`} />
-      ))}
-    </span>
   );
 }

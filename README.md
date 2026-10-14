@@ -25,14 +25,17 @@ On presentation day, use `npm run present` instead. It builds the finished site 
 | F | Full screen |
 | P | Open the print version (for PDF) |
 | M | Turn sound effects off or on |
+| T | Reset the rehearsal clock in the notes |
 
 On a touch screen, swipe left or right. The address bar shows the slide number (`/#7`), so you can jump straight to a slide to rehearse it.
 
-**Sound.** The deck plays short sound effects: a paper swish between slides, a ding for a right answer, a bonk for a wrong one and a fanfare on the thank-you slide. Browsers only allow sound after your first click or key press. Press M to mute.
+**Timing.** The pitch is planned at 3:25 across ten slides (see `brief.md`). Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
 
-**Interactive slides.** On "Choose what to fold", click a card to select it. On "Your visit, step by step", each arrow press moves Nara to the next step.
+**Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish the crane. Browsers only allow sound after your first click or key press. Press M to mute.
 
-**The "Try the lesson" slide is interactive.** Each arrow press moves to the next question. Click the answers to show how Nara reacts: try a wrong answer first on the tea house question to show the hint. On questions 1 and 10, ask the room to say the phrase together, then click **Everyone said it**. Clicking inside the lesson card never skips the slide.
+**Nara moves with you.** She walks from slide to slide and changes expression as she goes. On "Your visit, step by step", each arrow press walks her to the next step. On "Choose what to fold", click a card to see what the model stands for.
+
+**The "Try the lesson" slide is interactive.** It shows questions 1, 5 and 10, one per arrow press. On question 1, ask the room to say konnichiwa together, then click **Everyone said it**. On question 5, pick a wrong answer first to show Nara's hint, then the right one. On question 10, say arigatō gozaimasu together and click **Finish the crane**. Clicking inside the lesson card never skips the slide.
 
 ## Make a PDF
 
@@ -40,13 +43,13 @@ On a touch screen, swipe left or right. The address bar shows the slide number (
 2. Open the print dialog (Cmd+P or Ctrl+P) and choose **Save as PDF**.
 3. Under **More settings**, set **Margins** to **None** and turn on **Background graphics**.
 
-Every slide prints on its own 1920 by 1080 page, and the lesson prints one page per question.
+Every slide prints on its own 1920 by 1080 page, and the lesson prints one page per demo question.
 
 ## Change the words
 
 All the words live in three files. You can edit them in any text editor, or on GitHub with the pencil icon.
 
-- `src/content/content.ts`: every slide's text, the ten questions, Nara's stories and hints, and the speaker notes. Keep the quotation marks and commas around each piece of text.
+- `src/content/content.ts`: every slide's text, the ten questions, Nara's stories and hints, and the speaker notes. Keep the quotation marks and commas around each piece of text. Keep slide text short; put the rest in the notes.
 - `src/content/config.ts`: the deck name, team names, Nara's name, and the paths to our own images.
 - `src/content/sources.ts`: every source. If you add a number or a fact to a slide, add its source here and list it for that slide in `src/components/deck/slides.ts`.
 
@@ -54,7 +57,7 @@ All the words live in three files. You can edit them in any text editor, or on G
 
 ### Swap in our own drawings
 
-- **Sophia's Nara:** the deck draws Nara from your character sheet in every pose. To show your own file on the title and closing slides instead, export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
+- **Sophia's Nara:** the deck draws Nara from your character sheet and animation in every pose. To show your own file instead wherever Nara walks across the stage, export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
 - **Sam's kiosk render:** save it as `public/renders/kiosk.png` and set `kioskRender: "/renders/kiosk.png"`.
 
 ## Before you push a change

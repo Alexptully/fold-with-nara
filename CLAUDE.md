@@ -13,11 +13,15 @@ A web slide deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 202
 
 The visual reference is Duolingo's own look, laid out like the Standard Physics deck: one full-bleed white stage, chunky rounded display type, drawn SVG diagrams that animate in with a springy pop, faint paper grain and fine-print sources. Feather green is the accent; Duolingo's bright secondary colors (macaw blue, bee yellow, cardinal red, pink) are reserved for Nara's effects, answer states, badges and the origami models.
 
-Nara is drawn in `src/components/art/nara/` from the team's character sheet. Every pose (smile, talk, present, think, love, laugh, cheer, bow) reuses the same parts, so change her anatomy in `geometry.ts`, never per slide.
+Nara is drawn in `src/components/art/nara/` from the team's character sheet and animation (measured from its frames: flat colors, no shading). Every pose (smile, wave, talk, present, think, love, laugh, cheer, bow) reuses the same parts, so change her anatomy in `geometry.ts`, never per slide. `NaraSketch` is the head-only outline from the construction sheet.
+
+Nara lives on the stage, not inside slides (`src/components/deck/NaraActor.tsx`). Each slide in `slides.ts` says where she stands and which pose she wears at each build step (`nara`), and she walks, grows and changes expression between spots while the slides blend underneath. Draw a separate Nara inside a slide only when she is part of a picture of the product (the lesson card) or a lineup of expressions.
 
 Every slide is drawn on a fixed 1920 by 1080 stage that scales to fit the window, so sizes in code are real pixels at 1080p.
 
 Keep the slides clean: no progress bar, dots or slide numbers. Each slide's footer carries only its sources and, if the assignment has a rubric, its rubric tag.
+
+The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:25, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
 
 ## Commands
 
@@ -25,7 +29,8 @@ Keep the slides clean: no progress bar, dots or slide numbers. Each slide's foot
 - `/print` (or the P key) is the print version, one landscape page per slide or build step, for PDF export
 - `npm run check` runs the type checker, the linter with its complexity limit, and the em dash scan. Run it before saying a task is done.
 - `npm run present` builds the static site and serves it at http://localhost:3000 (no dev server needed on presentation day).
-- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press.
+- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare). Changing slides is silent.
+- T resets the rehearsal clock in the notes panel.
 - Work on a branch and open a pull request. Never push straight to `main`.
 
 ## General
@@ -36,7 +41,7 @@ Keep the slides clean: no progress bar, dots or slide numbers. Each slide's foot
 - Code should explain itself through clear names. Comment only tricky logic.
 - Passing the lint and cyclomatic complexity checks is a hard requirement, the same as a type error or a failing test. Pull branchy logic into named functions, replace nested conditionals with early returns or a lookup, and split a function that does more than one job.
 - Never use em dashes anywhere: slide text, notes, code or comments. Use commas, colons, periods or parentheses.
-- Keep slide text short. Details go in the speaker notes.
+- Keep slide text short: a heading, one picture and a few words. Details go in the speaker notes.
 - If you change a team rule, update this file in the same pull request.
 
 ## Design standards
@@ -101,8 +106,8 @@ The deck should look like a design textbook or a designer's portfolio. Take on t
 - Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only.
 - Use animation and interactivity, and check animations frame by frame instead of assuming the CSS is right.
 - Carry detail all the way through: grain, texture, edge treatment and weight.
-- Repeat one motif across the whole deck, the way strong writers and photographers repeat an image. This deck's motif: the dashed green crease line that Nara's projector draws on paper. It appears as the `Crease` primitive on diagrams, flashes along the fold line when a slide turns like a sheet of paper, joins the steps of the journey path and links each question to its fold. Green is reserved for projected light, right answers and progress.
-- Slide transitions animate only transform and opacity (see `PageTurn.tsx`). Clip-path and filter animations on the full stage repaint every frame and stutter; don't bring them back.
+- Repeat one motif across the whole deck, the way strong writers and photographers repeat an image. This deck's motif: the dashed green crease line that Nara's projector draws on paper. It appears as the `Crease` primitive on diagrams, joins the steps of the journey path and links each question to its fold. Green is reserved for projected light, right answers and progress.
+- Slides blend into each other (see `SlideTransition.tsx`). Each slide picks how it arrives: `blend`, `zoom`, `push` or `rise`, and going back plays the same move in reverse. Vary them so the deck doesn't repeat one move. Transitions animate only transform and opacity; clip-path and filter animations on the full stage repaint every frame and stutter, so don't bring them back.
 
 ## Writing
 
@@ -126,5 +131,6 @@ If your Claude Code setup has the `better-*` skills (`better-ui`, `better-typogr
 1. Every required section from the brief is clearly visible, and each slide's footer tag says which one it covers.
 2. There are no em dashes anywhere in the project.
 3. Every stat has a source in its slide's footer and an entry on the sources page.
-4. Keyboard navigation, speaker notes (N), full screen (F), print-to-PDF (P) and mute (M) all work.
-5. `npm run check` passes with no errors.
+4. Keyboard navigation, speaker notes (N), full screen (F), print-to-PDF (P), mute (M) and the clock reset (T) all work.
+5. The timed slides still add up to under four minutes.
+6. `npm run check` passes with no errors.

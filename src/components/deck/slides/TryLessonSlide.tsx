@@ -6,7 +6,7 @@ import { useState } from "react";
 import { CranePaper } from "@/components/art/CranePaper";
 import type { ExerciseOutcome } from "@/components/lesson/Exercises";
 import { LessonCard } from "@/components/lesson/LessonCard";
-import { folds, questions, tryLesson, type Guidance } from "@/content/content";
+import { demoQuestions, folds, questions, tryLesson, type Guidance } from "@/content/content";
 import { duration, ease } from "@/lib/motion";
 import { SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
@@ -17,11 +17,15 @@ const guidanceLabel: Record<Guidance, string> = {
   try: "Your turn, hints if you pause",
 };
 
+/** Three of the ten questions, live: one build step each. */
+export const demoIndexFor = (step: number) => demoQuestions[Math.min(step, demoQuestions.length) - 1] - 1;
+
 export function TryLessonSlide({ step, print, advance }: SlideProps) {
-  const question = questions[step - 1];
+  const index = demoIndexFor(step);
+  const question = questions[index];
   return (
     <SlideShell heading={tryLesson.heading}>
-      <LessonStage key={step} questionIndex={step - 1} print={print} advance={advance} />
+      <LessonStage key={step} questionIndex={index} print={print} advance={advance} />
       <p className="sr-only">
         Question {question.n} of {questions.length}
       </p>

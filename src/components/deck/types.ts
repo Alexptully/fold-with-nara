@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import type { SourceKey } from "@/content/sources";
-import type { SoundName } from "@/lib/sound";
+import type { NaraSpot } from "./NaraActor";
+import type { TransitionKind } from "./SlideTransition";
 
 export type SlideProps = {
   /** The current build step, starting at 1. */
@@ -16,15 +17,17 @@ export type SlideDef = {
   /** Footer tag naming the required section this slide covers. */
   section?: string;
   steps: number;
+  /** Speaking time for this slide. The timed slides add up to under four minutes. */
+  seconds: number;
+  /** How this slide arrives (going back plays it in reverse). */
+  transition: TransitionKind;
+  /** Where Nara stands on this slide at each build step, or null when she steps off stage. */
+  nara?: (step: number) => NaraSpot | null;
   /** Steps that get their own PDF page. Defaults to the last step only. */
   printSteps?: number[];
   /** Sources shown in the footer, keyed by the first step they apply to. */
   sourcesByStep?: Record<number, SourceKey[]>;
   notes: string[];
-  /** Played on each build step after the first. */
-  stepSound?: SoundName;
-  /** Played once the slide has turned into view. */
-  arrivalSound?: SoundName;
   Content: ComponentType<SlideProps>;
 };
 
@@ -35,3 +38,5 @@ export function sourcesForStep(slide: SlideDef, step: number): SourceKey[] {
     .sort((a, b) => a[0] - b[0]);
   return entries.length > 0 ? entries[entries.length - 1][1] : [];
 }
+
+export const naraSpotFor = (slide: SlideDef, step: number): NaraSpot | null => slide.nara?.(step) ?? null;

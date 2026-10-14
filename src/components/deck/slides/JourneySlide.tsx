@@ -14,16 +14,16 @@ import {
   type Icon,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
-import { Nara } from "@/components/art/nara/Nara";
 import { journey, type JourneyIcon } from "@/content/content";
-import { spring } from "@/lib/motion";
 import type { Pt } from "@/lib/shapes";
+import type { NaraSpot } from "../NaraActor";
 import { SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
 
 /**
  * The visit drawn as a Duolingo learning path: round "lesson" nodes joined by
- * the deck's dashed crease. Each press completes a node and Nara walks on.
+ * the deck's dashed crease. Each press completes a node, and the stage-level
+ * Nara walks to it with the expression for that step.
  */
 
 const icons: Record<JourneyIcon, Icon> = {
@@ -41,21 +41,36 @@ const icons: Record<JourneyIcon, Icon> = {
 const ROW_1 = 360;
 const ROW_2 = 760;
 const nodes: Pt[] = [
-  [210, ROW_1],
-  [560, ROW_1],
-  [910, ROW_1],
-  [1260, ROW_1],
-  [1590, ROW_1],
-  [1500, ROW_2],
-  [1150, ROW_2],
-  [800, ROW_2],
-  [450, ROW_2],
+  [260, ROW_1],
+  [605, ROW_1],
+  [950, ROW_1],
+  [1295, ROW_1],
+  [1620, ROW_1],
+  [1530, ROW_2],
+  [1185, ROW_2],
+  [840, ROW_2],
+  [495, ROW_2],
 ];
 const R = 58;
 
+// Nara stands beside the current node: left of it on the top row, right of it on the bottom row.
+const NARA_HEIGHT = 250;
+const naraScale = NARA_HEIGHT / 900;
+
+export function journeySpot(step: number): NaraSpot {
+  const index = Math.min(step, nodes.length) - 1;
+  const [nx, ny] = nodes[index];
+  const onRowTwo = ny === ROW_2;
+  // Her visible body spans x 220 to 700 of her 620-wide frame, which starts at 150.
+  const x = onRowTwo ? nx + R + 14 - 70 * naraScale : nx - R - 14 - 550 * naraScale;
+  // Feet (frame y 893) rest level with the bottom of the node.
+  const y = ny + R + 6 - 873 * naraScale;
+  return { x: Math.round(x), y: Math.round(y), h: NARA_HEIGHT, pose: journey.steps[index].pose };
+}
+
 function segment(from: Pt, to: Pt): string {
   if (from[1] === to[1]) return `M${from[0]} ${from[1]} L${to[0]} ${to[1]}`;
-  return `M${from[0]} ${from[1]} C${from[0] + 290} ${from[1]} ${to[0] + 330} ${to[1]} ${to[0]} ${to[1]}`;
+  return `M${from[0]} ${from[1]} C${from[0] + 260} ${from[1]} ${to[0] + 300} ${to[1]} ${to[0]} ${to[1]}`;
 }
 
 type NodeState = "done" | "current" | "locked";
@@ -65,8 +80,6 @@ const stateOf = (index: number, step: number): NodeState => {
 };
 
 export function JourneySlide({ step }: SlideProps) {
-  const current = nodes[Math.min(step, nodes.length) - 1];
-  const onRowTwo = current[1] === ROW_2;
   return (
     <SlideShell heading={journey.heading}>
       <svg className="absolute inset-0" width={1920} height={1080} aria-hidden="true">
@@ -85,17 +98,9 @@ export function JourneySlide({ step }: SlideProps) {
       </svg>
       <ol>
         {journey.steps.map((item, i) => (
-          <PathNode key={item.title} index={i} at={nodes[i]} state={stateOf(i, step)} icon={icons[item.icon]} title={item.title} body={item.body} />
+          <PathNode key={item.title} index={i} at={nodes[i]} state={stateOf(i, step)} icon={icons[item.icon]} title={item.title} />
         ))}
       </ol>
-      <motion.div
-        className="absolute h-[200px] w-[134px]"
-        initial={false}
-        animate={{ left: current[0] + (onRowTwo ? 72 : -206), top: current[1] - 150 }}
-        transition={spring}
-      >
-        <Nara pose={step === nodes.length ? "cheer" : "talk"} className="h-full w-full" />
-      </motion.div>
     </SlideShell>
   );
 }
@@ -106,7 +111,7 @@ const nodeLook: Record<NodeState, string> = {
   locked: "bg-line text-ink-faint shadow-node-locked",
 };
 
-function PathNode({ index, at, state, icon: IconComponent, title, body }: { index: number; at: Pt; state: NodeState; icon: Icon; title: string; body: string }) {
+function PathNode({ index, at, state, icon: IconComponent, title }: { index: number; at: Pt; state: NodeState; icon: Icon; title: string }) {
   const shown = state !== "locked";
   return (
     <li className="absolute w-[300px] -translate-x-1/2 text-center" style={{ left: at[0], top: at[1] - R }}>
@@ -125,7 +130,6 @@ function PathNode({ index, at, state, icon: IconComponent, title, body }: { inde
         <h2 className="mt-5 text-h4 text-ink">
           {index + 1}. {title}
         </h2>
-        <p className="mt-1 text-small text-ink-muted">{body}</p>
       </motion.div>
     </li>
   );

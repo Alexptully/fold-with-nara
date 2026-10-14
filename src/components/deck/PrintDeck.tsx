@@ -3,9 +3,10 @@
 import { MotionGlobalConfig } from "motion/react";
 import { disableSound } from "@/lib/sound";
 import { Grain } from "./Grain";
+import { NaraActor } from "./NaraActor";
 import { SlideFooter } from "./SlideFooter";
 import { slides } from "./slides";
-import { sourcesForStep, type SlideDef } from "./types";
+import { naraSpotFor, sourcesForStep, type SlideDef } from "./types";
 
 // On the print route every animation jumps straight to its end state.
 MotionGlobalConfig.skipAnimations = true;
@@ -30,6 +31,7 @@ export function PrintDeck() {
             <section key={`${slide.name}-${step}`} className="print-page bg-paper" aria-label={`${slide.name}, build ${step}`}>
               <slide.Content step={step} print advance={noop} />
               <SlideFooter sourceKeys={sourcesForStep(slide, step)} section={slide.section} />
+              <NaraActor spot={naraSpotFor(slide, step)} />
               <Grain />
             </section>
           )),

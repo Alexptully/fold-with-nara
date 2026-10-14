@@ -16,10 +16,10 @@ export const config = {
   // The character's name, used everywhere Nara appears in text.
   characterName: "Nara",
 
-  // Optional: Sophia's Illustrator drawing of Nara, shown on the title, "How Nara keeps
-  // you going" and closing slides. Put the file in /public/renders/ and set this to
-  // "/renders/nara.png". Leave empty to use the built-in drawing. "Meet Nara" always
-  // uses the built-in drawing, because that slide shows how it's made from the shape guide.
+  // Optional: Sophia's Illustrator drawing of Nara, shown wherever Nara walks across the
+  // stage (it can't change expression or light up by shape). Put the file in
+  // /public/renders/ and set this to "/renders/nara.png". Leave empty to use the built-in
+  // drawing. The lesson card and "How Nara reacts" always use the built-in poses.
   characterImage: "",
 
   // Optional: Sam's render of the kiosk. Put it in /public/renders/ and set the path.

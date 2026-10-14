@@ -1,21 +1,24 @@
 "use client";
 
 import { motion } from "motion/react";
-import { NaraFigure } from "@/components/art/NaraFigure";
 import { OrigamiIcon } from "@/components/art/OrigamiIcon";
 import { SpeechBubble } from "@/components/ui/SpeechBubble";
 import { config } from "@/content/config";
 import { title, type OrigamiModel } from "@/content/content";
 import { spring } from "@/lib/motion";
+import type { NaraSpot } from "../NaraActor";
 import { Reveal } from "../primitives";
+
+/** Nara waves from the right; the stage-level Nara stands here (see NaraActor). */
+export const titleSpot: NaraSpot = { x: 1040, y: 190, h: 800, pose: "wave" };
 
 // The welcome screen: Nara says hello while the fold options drift around her like paper in the air.
 const floaters: { model: OrigamiModel; x: number; y: number; size: number; delay: number }[] = [
-  { model: "sakura", x: 1080, y: 150, size: 120, delay: 0.5 },
-  { model: "crane", x: 1660, y: 120, size: 150, delay: 0.7 },
-  { model: "fuji", x: 1720, y: 560, size: 130, delay: 0.9 },
-  { model: "koi", x: 1010, y: 640, size: 130, delay: 1.1 },
-  { model: "kabuto", x: 1460, y: 820, size: 120, delay: 1.3 },
+  { model: "sakura", x: 1010, y: 110, size: 110, delay: 0.5 },
+  { model: "crane", x: 1690, y: 110, size: 150, delay: 0.7 },
+  { model: "fuji", x: 1700, y: 590, size: 130, delay: 0.9 },
+  { model: "koi", x: 990, y: 770, size: 120, delay: 1.1 },
+  { model: "kabuto", x: 1720, y: 830, size: 110, delay: 1.3 },
 ];
 
 export function TitleSlide() {
@@ -37,22 +40,14 @@ export function TitleSlide() {
         <Floater key={item.model} {...item} />
       ))}
       <motion.div
-        className="absolute left-[1130px] top-[300px] w-[420px]"
-        initial={{ opacity: 0, y: 80, scale: 0.9 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ ...spring, delay: 0.35 }}
-      >
-        <NaraFigure pose="talk" className="h-[620px] w-[420px]" />
-      </motion.div>
-      <motion.div
-        className="absolute left-[1430px] top-[250px] w-[400px]"
+        className="absolute left-[1560px] top-[300px] w-[320px]"
         initial={{ opacity: 0, scale: 0.6, x: -40 }}
         animate={{ opacity: 1, scale: 1, x: 0 }}
         transition={{ ...spring, delay: 1.1 }}
         style={{ transformOrigin: "0% 80%" }}
       >
         <SpeechBubble>
-          <p className="text-small text-ink">{title.welcome}</p>
+          <p className="text-body font-bold text-ink">{title.welcome}</p>
         </SpeechBubble>
       </motion.div>
     </div>

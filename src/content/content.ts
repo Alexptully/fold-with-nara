@@ -250,15 +250,16 @@ export const exerciseLabels: Record<ExerciseKind, string> = {
 };
 
 /* ---------- Slides, in deck order ---------- */
+// Slides keep to a heading, one picture and a few words. The talk lives in the notes,
+// and each slide's `seconds` budget keeps the whole pitch under four minutes.
 
 export const title = {
   headline: config.productName,
   tagline: config.tagline,
-  welcome: "Konnichiwa! I'm Nara, a sika deer from Nara Park. Want to fold with me?",
+  welcome: "Konnichiwa! Want to fold with me?",
   notes: [
-    "Before we start: everyone should have one square of paper. We'll fold it together later.",
-    `We're ${config.team.join(", ")}. For Prompt 2 we designed a new world character, ${nara} the sika deer, and a 10-question lesson you fold with your hands at an origami pop-up.`,
-    "This is the welcome screen visitors see at the station: Nara waves hello before anything else happens.",
+    "Hand out the paper squares before you start.",
+    `We're ${config.team.join(", ")}. Our Prompt 2 pitch is ${nara}, a sika deer who teaches a ten-question lesson you fold with your hands.`,
   ],
 };
 
@@ -272,63 +273,13 @@ export const meetNara = {
   },
   profile: [
     { key: "Species", value: "Sika deer, 鹿 (shika)" },
-    { key: "Home", value: "Nara Park, where 1,687 deer were counted in July 2026" },
-    { key: "Teaches", value: "Polite Japanese and the culture behind each fold" },
-    { key: "Signature move", value: "Bows at the end of every lesson, like the deer of Nara Park" },
-  ],
-  history: "Nara's deer have been revered as messengers of the gods for more than 1,250 years.",
-  notes: [
-    `This is ${nara}, a sika deer from Nara Park, where deer live alongside visitors and are protected as a natural monument.`,
-    `We started from an outline built out of rounded shapes, the same way Duolingo's characters are drawn: a round head, oval eyes, leaf-shaped ears and antlers made of rounded capsules. Hover a shape to see every part of ${nara} made from it.`,
-    "We picked a Nara deer because those deer famously bow to visitors, and bowing is one of the first things a visitor to Japan learns. So the character's signature move is also part of the lesson.",
-    "The 1,687 figure is the Nara Deer Preservation Foundation's July 2026 count, a record high.",
-  ],
-};
-
-export type Expression = { pose: Pose; when: string; line: string };
-
-export const encouragement = {
-  heading: `How ${nara} keeps you going`,
-  expressions: [
-    { pose: "talk", when: "Welcome", line: "Konnichiwa! Want to fold with me?" },
-    { pose: "present", when: "Each question", line: "Here's your next question!" },
-    { pose: "think", when: "After a miss", line: "Hmm, look back at what I said." },
-    { pose: "laugh", when: "Right answer", line: "You got it!" },
-    { pose: "cheer", when: "Fold unlocked", line: "+10 XP! Your next fold is lit up." },
-    { pose: "love", when: "Hardest fold", line: "This one is tricky for everyone." },
-    { pose: "bow", when: "The end", line: "Arigatō gozaimasu!" },
-  ] satisfies Expression[],
-  progress: "Ten badges, one per question, and an origami model that takes shape as you answer.",
-  notes: [
-    `${nara} has seven expressions, and each one belongs to a moment in the lesson.`,
-    `To get someone to start something new, ${nara} waves hello and asks them to fold together, so nobody feels they need experience.`,
-    `After a miss, ${nara} thinks it over with you instead of saying you're wrong. At the hardest fold, ${nara} says out loud that it's tricky for everyone, so a beginner doesn't think they're the problem.`,
-    `Right answers get a laugh, an unlocked fold gets a cheer and +10 XP, and every lesson ends with ${nara}'s bow.`,
-  ],
-};
-
-export const whatWeTeach = {
-  heading: "What we teach and why",
-  objective:
-    "In under ten minutes, a beginner folds a piece of origami and learns the Japanese words and culture behind it, one question per fold.",
-  wordParts: [
-    { jp: "折り", romaji: "ori", english: "to fold" },
-    { jp: "紙", romaji: "kami", english: "paper" },
-  ],
-  reasons: [
-    {
-      key: "Why Japanese culture",
-      value: "Our team is drawn to it, and origami is a part of it a visitor can actually hold.",
-    },
-    {
-      key: "Why it fits Duolingo",
-      value: "Japanese is one of Duolingo's Top 9 language courses, and every answer here unlocks a real fold.",
-    },
+    { key: "Home", value: "Nara Park, with 1,687 deer counted in July 2026" },
+    { key: "Signature move", value: "A bow, like the deer of Nara Park" },
   ],
   notes: [
-    "For our lesson, we're teaching visitors how to make origami while learning about Japanese history and culture.",
-    "Our team chose this because we're interested in Japanese culture, and origami gives visitors a hands-on way to explore it. They learn the Japanese name of what they're making, along with the culture connected to it.",
-    "The word itself is the first lesson: origami is ori, to fold, plus kami, paper.",
+    `${nara} starts as an outline of rounded shapes, the way Duolingo draws its characters: a rounded-square head, oval eyes, leaf ears and capsule antlers.`,
+    "Hover a shape to light up every part made from it.",
+    `${nara} is a sika deer from Nara Park, where the deer bow to visitors. Bowing is one of the first things you learn in Japan, so her signature move is part of the lesson.`,
   ],
 };
 
@@ -337,23 +288,22 @@ export type JourneyIcon = "wave" | "ticket" | "choose" | "print" | "frame" | "pr
 export const journey = {
   heading: "Your visit, step by step",
   steps: [
-    { icon: "wave", title: "Say hi to Nara", body: "The welcome screen opens with a fun animation of Nara, our sika deer from Nara Park." },
-    { icon: "ticket", title: "Free or paid", body: "Free at events and campuses. Some places, like airports, may charge." },
-    { icon: "choose", title: "Choose your fold", body: "Pick what to fold at one of three levels: easy, medium or hard." },
-    { icon: "print", title: "Print your paper", body: "The station prints a sheet designed for the model you chose." },
-    { icon: "frame", title: "Place your paper", body: "The screen in front of you shows where it goes in the frame." },
-    { icon: "projector", title: "Follow the light", body: "The projector outlines each fold right on your paper." },
-    { icon: "question", title: "Answer to unlock", body: "Each fold comes with a culture question about your model. Answer it to move on." },
-    { icon: "phone", title: "Scan for a badge", body: "Scan the code with your phone to add a badge to your Duolingo account." },
-    { icon: "bird", title: "Keep it or hang it", body: "Take your origami home, or hang it in the installation." },
-  ] satisfies { icon: JourneyIcon; title: string; body: string }[],
+    { icon: "wave", title: "Say hi to Nara", pose: "wave" },
+    { icon: "ticket", title: "Free or paid", pose: "smile" },
+    { icon: "choose", title: "Choose your fold", pose: "think" },
+    { icon: "print", title: "Print your paper", pose: "present" },
+    { icon: "frame", title: "Place your paper", pose: "smile" },
+    { icon: "projector", title: "Follow the light", pose: "talk" },
+    { icon: "question", title: "Answer to unlock", pose: "laugh" },
+    { icon: "phone", title: "Scan for a badge", pose: "cheer" },
+    { icon: "bird", title: "Keep it or hang it", pose: "love" },
+  ] satisfies { icon: JourneyIcon; title: string; pose: Pose }[],
   notes: [
-    "Here's the whole visit, in order. Press through it one step at a time.",
-    "Visitors are welcomed by a fun animation of Nara, our sika deer from Nara Park.",
-    "Depending on the location, the station is free or paid: free at events and campuses, possibly paid at airports.",
-    "They choose what they want to fold and a difficulty level. The station prints paper designed for their model, and they place it in the frame as the screen shows.",
-    "The projector outlines where to fold. With each fold, a question appears on the screen, and they have to answer it to move on. The questions are about the culture behind the model they're folding.",
-    "At the end, they scan a code with their phone to get a badge on their Duolingo account, then choose to keep their origami or hang it in the installation.",
+    "Press once per step. Nara walks the path with you.",
+    "Nara welcomes you. It's free at events and campuses, and airports may charge.",
+    "You choose a model and a level, the station prints paper for it, and you set it in the frame.",
+    "The projector outlines each fold on your paper, and each fold comes with a culture question you answer to move on.",
+    "At the end you scan for a Duolingo badge, then keep your origami or hang it in the installation.",
   ],
 };
 
@@ -377,7 +327,7 @@ export const options = {
       rank: 1,
       models: [
         { model: "sakura", name: "Sakura", jp: "桜", romaji: "sakura", meaning: "Beauty that doesn't last", source: "sakura" },
-        { model: "fuji", name: "Mt. Fuji", jp: "富士山", romaji: "Fujisan", meaning: "A sacred mountain and an icon of Japan", source: "fuji" },
+        { model: "fuji", name: "Mt. Fuji", jp: "富士山", romaji: "Fujisan", meaning: "A sacred mountain", source: "fuji" },
       ],
     },
     {
@@ -392,197 +342,108 @@ export const options = {
       name: "Hard",
       rank: 3,
       models: [
-        { model: "kabuto", name: "Samurai helmet", jp: "兜", romaji: "kabuto", meaning: "Shown on Children's Day to inspire bravery", source: "childrensDay" },
+        { model: "kabuto", name: "Samurai helmet", jp: "兜", romaji: "kabuto", meaning: "Bravery, on Children's Day", source: "childrensDay" },
         { model: "duo", name: "Duo", jp: "", romaji: "", meaning: "A special bonus fold", locked: true },
       ],
     },
   ] satisfies { name: string; rank: number; models: FoldOption[] }[],
-  featuredNote: "The lesson in this deck is the crane. Every model gets its own ten questions about its culture.",
   notes: [
-    "Visitors choose what they want to fold, at three difficulty levels.",
-    "Easy is sakura and Mt. Fuji. Medium is the crane and the koi fish. Hard is the samurai helmet and a special Duo fold.",
-    "Each model brings its own culture questions: the crane's questions are about long life and senbazuru, the koi's are about Children's Day, and so on.",
-    "Click a card to select it, the way a visitor would on the kiosk screen.",
+    "Three levels. Easy is sakura and Mt. Fuji, medium is the crane and the koi fish, and hard is the samurai helmet and a special Duo fold.",
+    "Each model brings its own culture questions. Click a card to see what it stands for. Our example lesson is the crane.",
   ],
 };
 
-export const kiosk = {
-  heading: "The airport kiosk",
-  callouts: {
-    head: "Camera and projector",
-    screen: "Touchscreen for choosing",
-    workspace: "Folding area",
-    dispenser: "Paper dispenser",
-    storage: "Paper and computer storage",
+export const places = {
+  heading: "Where it pops up",
+  kiosk: {
+    name: "Airport kiosk",
+    detail: "One visitor at a time",
+    callouts: {
+      head: "Camera and projector",
+      screen: "Touchscreen",
+      workspace: "Folding area",
+      dispenser: "Paper dispenser",
+      storage: "Storage",
+    },
+    height: "About 7 ft",
+    edge: "2.5 ft",
+    sideJp: "折って 知って つながろう",
+    sideEn: "A small fold, a bigger world",
   },
-  height: "About 7 ft",
-  edge: "2.5 ft",
-  sideJp: "折って 知って つながろう",
-  sideEn: "A small fold, a bigger world",
-  facts: [
-    { key: "Where", value: "Airports, malls, museums and campuses" },
-    { key: "Visitors", value: "One at a time" },
-    { key: "Cost", value: "Free or paid, depending on the location" },
-  ],
-  notes: [
-    "The first version is a compact kiosk for high-traffic places like airports and malls. One person uses it at a time.",
-    "From the top: an overhead arm holds the camera and projector, a touchscreen handles choosing and shows progress, the folding area is where the light lands on your paper, the dispenser prints your sheet, and the cabinet hides paper and the computer.",
-    "It's about seven feet tall on a two-and-a-half-foot square footprint, our design target.",
-    "The side panel says 折って 知って つながろう: fold, learn, connect.",
-  ],
-};
-
-export const tent = {
-  heading: "The tent pop-up",
-  signJp: "折って つながろう",
-  signEn: "A small fold, a bigger world",
-  facts: [
-    { key: "Where", value: "Events, festivals and campus fairs" },
-    { key: "Visitors", value: "Several at once, one per station" },
-    { key: "Stations", value: "Each has a screen, projector, camera and paper dispenser" },
-    { key: "Cranes", value: "Hang yours from the canopy, and the ceiling fills up over the day" },
-  ],
-  plan: {
-    entrance: "Entrance",
-    stations: "Folding stations",
-    canopy: "Hang your origami here",
+  tent: {
+    name: "Event tent",
+    detail: "Stations around the wall, origami overhead",
+    signJp: "折って つながろう",
+    signEn: "A small fold, a bigger world",
   },
   notes: [
-    "The second version is a larger pop-up for events, built like a giant folded-paper dome. Several people fold at once.",
-    "It doesn't invent new technology: inside, the same station repeats around the walls, each with a screen, projector, camera and paper dispenser.",
-    "Visitors who choose to hang their origami add it to the canopy in the middle, so the installation grows as more people finish.",
-    `Prompt 2 asks for a distinct location. The lesson's setting is Nara Park itself: each question is a stop on ${nara}'s walk, from the park gate to a tea house to a shrine.`,
-  ],
-};
-
-export const mechanism = {
-  heading: "How a station teaches",
-  loop: [
-    { key: "Show", value: "The projector outlines the next fold right on your paper." },
-    { key: "Fold", value: "You make the fold with your own hands." },
-    { key: "Check", value: "The camera checks the fold and gives feedback." },
-    { key: "Ask", value: "A question about your model appears. Answer it to move on." },
-  ],
-  paperNote: "Each sheet is printed for its model, so the art only lines up when the folds are right.",
-  notes: [
-    "Every fold goes through the same loop.",
-    "The projector above the table outlines where to fold, directly on the paper, so nobody has to look back and forth at a video.",
-    "Our proposed camera system checks each fold and gives feedback so visitors can adjust.",
-    "Then the screen in front of them shows a question tied to the item they're folding, and they have to answer it to move on to the next fold.",
+    "The kiosk fits airports and malls, with an overhead camera and projector, a touchscreen and a paper dispenser.",
+    `The tent is for events: stations line the wall, and finished origami hangs from the canopy. Inside the lesson, the setting is Nara Park, one stop per question on ${nara}'s walk.`,
   ],
 };
 
 export const lessonOverview = {
   heading: "The 10-question lesson",
-  repeatNote: "Kite and reverse folds come back, with less help each time.",
   notes: [
-    "Here's the whole crane lesson, our medium-level example. Ten questions, each one tied to a stop on Nara's walk and each one unlocking a fold of the crane.",
-    "The exercise types mix the way a Duolingo lesson does: two speaking questions, multiple choice, a pick-the-word question and a match-the-pairs review.",
-    "The distractors in question 7 are words from earlier questions, so even a wrong option is review. Question 9 brings back anything the visitor missed.",
+    "This is the crane lesson. Each question is a stop in Nara Park, and each right answer unlocks the next fold.",
+    "Kite folds come back with less help each time, and question 9 reviews what you missed.",
   ],
 };
+
+/** The questions shown live on "Try the lesson", one per build step. */
+export const demoQuestions = [1, 5, 10];
 
 export const tryLesson = {
   heading: "Try the lesson",
   checkLabel: "Check",
   continueLabel: "Continue",
   retryLabel: "Try again",
+  finishLabel: "Finish the crane",
   speakLabel: "Everyone said it",
   revealLabel: "Show the answer",
   correctTitle: "Nice work!",
   wrongTitle: "Almost!",
   unlockedLine: (fold: number) => `Fold ${fold} is lit up on your paper.`,
   notes: [
-    "Use the arrow keys to move between questions, and click the answers to show how Nara reacts.",
-    "Question 1: ask the whole room to say konnichiwa together, then click 'Everyone said it'.",
-    "Try a wrong answer on the tea house question to show the hint, then pick the right one.",
-    "If time is short, show questions 1, 4 and 10 and skip the rest.",
+    "Question 1: have the whole room say konnichiwa, then click 'Everyone said it'.",
+    "Question 5: pick a wrong answer first. Nara thinks it over and lights up the clue in her story. Then pick the right one.",
+    "Question 10: say arigatō gozaimasu together and click 'Finish the crane'.",
   ],
 };
 
-export const wrongAnswers = {
-  heading: "When you get it wrong",
-  answerLane: {
-    name: "A wrong answer",
-    steps: [
-      "The tile shakes red and the footer says Almost. You try again right away.",
-      `${nara} points back to the line in the story that holds the answer.`,
-      `A second miss: ${nara} explains the answer, and it comes back in the review round.`,
-    ],
-  },
-  foldLane: {
-    name: "A wrong fold",
-    steps: [
-      "The camera sees a corner that doesn't line up.",
-      "The projector outlines that corner and draws where it should go.",
-      "You refold, and the outline turns green.",
-    ],
-  },
-  rule: "There are no hearts to lose and no lockout. The worst a mistake does is bring back a hint.",
-  notes: [
-    "If visitors get a question wrong, the station gives feedback and a hint, then lets them try again.",
-    "The hint is never new information. Nara points back to the sentence in the story that holds the answer, so the visitor rereads and retrieves it.",
-    "A second miss gets a short explanation, and that question is added to the question 9 review round.",
-    "Fold mistakes work the same way: the projector highlights the one corner that's off instead of restarting the step.",
-  ],
-};
+export type Reaction = { pose: Pose; moment: string; fix?: string };
 
-export const fading = {
-  heading: "Help fades as you learn",
-  stages: [
-    { fold: 4, label: "First kite fold", help: "Animated fold, lines and arrows, and Nara talks you through it" },
-    { fold: 7, label: "Second kite fold", help: "Lines and arrows only" },
-    { fold: 8, label: "Third kite fold", help: "Your turn. A hint appears only if you pause or slip" },
-  ],
-  research:
-    "Fading worked steps like this, from full examples to solving alone, helped learners in field and lab experiments.",
+export const reactions = {
+  heading: `How ${nara} reacts`,
+  lineup: [
+    { pose: "wave", moment: "Hello" },
+    { pose: "present", moment: "New question" },
+    { pose: "think", moment: "First miss", fix: "Points to the clue" },
+    { pose: "love", moment: "Second miss", fix: "Explains, then reviews it" },
+    { pose: "laugh", moment: "Right answer" },
+    { pose: "cheer", moment: "Fold unlocked" },
+    { pose: "bow", moment: "The end" },
+  ] satisfies Reaction[],
+  rule: "No hearts to lose and no lockout.",
   notes: [
-    "The station shouldn't just tell you what to do ten times. To show real learning, the help fades.",
-    "The kite fold shows up three times in the crane. The first time, the projector animates it. The second time, it only draws lines and arrows. The third time, it asks you to do it yourself, and hints come back only if you struggle.",
-    "The reverse fold fades the same way across folds 9 and 10.",
-    "This follows research on fading worked examples by Renkl, Atkinson and Maier.",
+    `${nara} has an expression for every moment, so the encouragement shows on her face.`,
+    "A first miss gets a hint pointing back to the story. A second miss gets the answer, which returns in the review. Wrong folds work the same way: the projector marks the corner to fix.",
   ],
 };
 
 export const method = {
   heading: "The Duolingo Method in paper",
   rows: [
-    { key: "Learn by doing", value: "You fold real paper, and each right answer unlocks the next fold." },
-    { key: "Learn in a personalized way", value: "Pick your model and level. Hints appear only when you need them." },
-    { key: "Focus on what matters", value: "Day-one Japanese: hello, thank you, a bow and the words around you." },
-    { key: "Stay motivated", value: "Badges, a crane taking shape and a review round for anything you missed." },
-    { key: "Feel the delight", value: `${nara} bows when you get one right, and you leave holding a crane you made.` },
-    { key: "For Gen Z and Gen Alpha", value: "Rounds under a minute, instructions drawn on the paper and something to show off afterward." },
+    { key: "Learn by doing", value: "Each right answer unlocks a real fold" },
+    { key: "Learn in a personalized way", value: "Pick your model and your level" },
+    { key: "Focus on what matters", value: "Hello, thank you and a bow" },
+    { key: "Stay motivated", value: "A crane takes shape, then a badge" },
+    { key: "Feel the delight", value: "You leave holding what you made" },
   ],
-  research: "Questions between folds are retrieval practice: recalling a fact builds longer-lasting memory than rereading it.",
+  research: "A question between folds is retrieval practice, which beats rereading for long-term memory.",
   notes: [
-    "Our installation uses the Duolingo Method through bite-sized lessons, immediate feedback, repetition and visible progress.",
-    "For Gen Z and Gen Alpha, we're combining short, visual instructions with an activity where visitors watch something take shape as they learn.",
-    "The questions between folds aren't decoration. Roediger and Karpicke's 2006 study found that testing yourself on material beats restudying it for long-term retention.",
-  ],
-};
-
-export const visit = {
-  heading: "The ten-minute visit",
-  segments: [
-    { label: "Welcome", seconds: 30 },
-    { label: "Choose and print", seconds: 40 },
-    { label: "Place paper", seconds: 15 },
-    { label: "Ten rounds of question and fold", seconds: 450 },
-    { label: "Badge, keep or hang", seconds: 45 },
-  ],
-  estimateLabel: "Team estimate. We'll time real visitors on the prototype.",
-  takeaways: [
-    { key: "Something you made", value: "Your origami. Keep it, or hang it in the installation." },
-    { key: "Phrases you can say", value: "konnichiwa and arigatō gozaimasu" },
-    { key: "Words you know", value: "ojigi, origami, sakura, kimono, tsuru and senbazuru, with what each means" },
-    { key: "Folds you can do", value: "Valley, kite, petal and inside reverse folds" },
-    { key: "A badge", value: "On your Duolingo account, from scanning the code at the end" },
-  ],
-  notes: [
-    "The experience is designed to take ten minutes or less, without a teacher present. These timings are our estimate, and the prototype is how we'll test them.",
-    "After the last fold and the last question, visitors scan for their badge, then keep their origami or hang it in the installation.",
-    "They leave with a finished object, practice with four folding techniques, the Japanese names, and culture reinforced through the questions.",
+    "Every principle of the Duolingo Method has a physical version here.",
+    "The questions between folds are retrieval practice: Roediger and Karpicke found testing beats restudying. The whole visit takes about ten minutes, by our estimate.",
   ],
 };
 
@@ -595,9 +456,5 @@ export const closing = {
 
 export const sourcesSlide = {
   heading: "Sources",
-  notes: ["Every number and cultural fact in the deck is listed here."],
+  notes: ["Every number and cultural fact in the deck is listed here. Not part of the timed pitch."],
 };
-
-/* ---------- Derived figures ---------- */
-
-export const visitTotalSeconds = visit.segments.reduce((sum, segment) => sum + segment.seconds, 0);

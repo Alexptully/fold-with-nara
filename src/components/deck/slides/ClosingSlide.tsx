@@ -1,10 +1,13 @@
 "use client";
 
 import { motion } from "motion/react";
-import { NaraFigure } from "@/components/art/NaraFigure";
 import { config } from "@/content/config";
 import { closing } from "@/content/content";
+import type { NaraSpot } from "../NaraActor";
 import { Jp, Reveal } from "../primitives";
+
+/** Nara bows on the left while the thank-you comes in on the right. */
+export const closingSpot: NaraSpot = { x: 110, y: 170, h: 820, pose: "bow" };
 
 // Paper confetti in the deck's colors, falling and turning like folded squares.
 const confetti = [
@@ -34,9 +37,6 @@ export function ClosingSlide() {
           aria-hidden="true"
         />
       ))}
-      <div className="absolute left-[150px] top-[200px] w-[500px]">
-        <NaraFigure pose="bow" className="h-[750px] w-[500px]" />
-      </div>
       <div className="absolute left-[820px] top-[330px] w-[980px]">
         <Reveal>
           <Jp className="block text-jp-lg font-extrabold text-ink">{closing.jp}</Jp>

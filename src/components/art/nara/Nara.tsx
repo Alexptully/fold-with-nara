@@ -1,190 +1,248 @@
 "use client";
 
 import { motion, type TargetAndTransition, type Transition } from "motion/react";
-import { useId } from "react";
 import { duration, ease } from "@/lib/motion";
 import { NaraEffect } from "./effects";
-import { NARA_VIEWBOX, partsFor, poses, type Layer, type Part, type Pose, type ShapeKind, type Tone } from "./geometry";
+import {
+  BODY_VIEWBOX,
+  HEAD_VIEWBOX,
+  partsFor,
+  poses,
+  sketchParts,
+  type Layer,
+  type Part,
+  type Pose,
+  type PoseSpec,
+  type ShapeKind,
+  type Tone,
+} from "./geometry";
 
 export type { Pose, ShapeKind } from "./geometry";
 export { shapeCounts } from "./geometry";
 
-export type NaraMode = "color" | "outline";
-
 const toneVar: Record<Tone, string> = {
   deer: "var(--color-deer)",
   cream: "var(--color-deer-cream)",
-  ear: "var(--color-deer-ear)",
   antler: "var(--color-deer-antler)",
-  hoof: "var(--color-deer-hoof)",
-  eye: "var(--color-deer-eye)",
+  dark: "var(--color-deer-dark)",
   white: "var(--color-deer-eye-white)",
   mouth: "var(--color-deer-mouth)",
   tongue: "var(--color-deer-tongue)",
+  line: "var(--color-deer-line)",
   card: "var(--color-accent)",
   cardShade: "var(--color-accent-ink)",
   heart: "var(--color-love)",
 };
 
-type Look = { mode: NaraMode; highlight: ShapeKind | null; drawIn: boolean; uid: string };
+const box = (v: typeof BODY_VIEWBOX) => `${v.x} ${v.y} ${v.w} ${v.h}`;
 
 type NaraProps = {
   pose?: Pose;
-  mode?: NaraMode;
   /** Lights every part made from one of the guide's shapes; the rest dims. */
   highlight?: ShapeKind | null;
-  /** In outline mode, draws the sketch in stroke by stroke. */
-  drawIn?: boolean;
   className?: string;
   title?: string;
 };
 
-export function Nara({ pose = "smile", mode = "color", highlight = null, drawIn = false, className, title = "Nara the sika deer" }: NaraProps) {
-  const uid = useId().replace(/:/g, "");
+/** Nara in color, in any of her poses, with the small motions from the team's animation. */
+export function Nara({ pose = "smile", highlight = null, className, title = "Nara the sika deer" }: NaraProps) {
   const spec = poses[pose];
   const parts = partsFor(pose);
-  const look: Look = { mode, highlight, drawIn, uid };
   const layer = (name: Layer) => parts.filter((part) => part.layer === name);
-  const [hx, hy] = spec.headOffset;
   return (
-    <svg viewBox={NARA_VIEWBOX} className={className} role="img" aria-label={title} overflow="visible">
+    <svg viewBox={box(BODY_VIEWBOX)} className={className} role="img" aria-label={title} overflow="visible">
       <GroundShadow bounce={spec.loop === "bounce"} />
-      <motion.g {...figureLoop(spec.loop)}>
-        <PartList parts={layer("body")} look={look} />
-        <motion.g
-          style={{ transformOrigin: "200px 300px", transformBox: "view-box" }}
-          initial={false}
-          animate={headMotion(spec.loop, hx, hy, spec.headTilt)}
-          transition={headTransition(spec.loop)}
-        >
-          <PartList parts={layer("head")} look={look} />
-        </motion.g>
-        <PartList parts={layer("front")} look={look} />
-        {mode === "color" ? <NaraEffect effect={spec.effect} /> : null}
+      <motion.g style={{ transformOrigin: "460px 893px", transformBox: "view-box" }} {...figureLoop(spec.loop)}>
+        <PartList parts={layer("back")} highlight={highlight} />
+        <PartList parts={layer("body").filter((part) => !isWavingArm(spec, part))} highlight={highlight} />
+        {spec.loop === "wave" ? <WavingArm parts={layer("body").filter((part) => isWavingArm(spec, part))} highlight={highlight} /> : null}
+        <Head spec={spec} parts={layer("head")} highlight={highlight} />
+        <PartList parts={layer("front")} highlight={highlight} />
+        <NaraEffect effect={spec.effect} />
       </motion.g>
     </svg>
+  );
+}
+
+const isWavingArm = (spec: PoseSpec, part: Part) => spec.loop === "wave" && part.id.endsWith("-right");
+
+function WavingArm({ parts, highlight }: { parts: Part[]; highlight: ShapeKind | null }) {
+  return (
+    <motion.g
+      style={{ transformOrigin: "542px 500px", transformBox: "view-box" }}
+      animate={{ rotate: [-8, 14, -8] }}
+      transition={{ duration: 0.9, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <PartList parts={parts} highlight={highlight} />
+    </motion.g>
   );
 }
 
 function GroundShadow({ bounce }: { bounce: boolean }) {
   return (
     <motion.ellipse
-      cx={200}
-      cy={580}
-      rx={96}
-      ry={12}
-      fill="var(--color-line)"
-      style={{ transformOrigin: "200px 580px", transformBox: "view-box" }}
-      animate={bounce ? { scaleX: [1, 0.78, 1] } : { scaleX: 1 }}
+      cx={459.5}
+      cy={895.5}
+      rx={172}
+      ry={16}
+      fill="var(--color-deer-shadow)"
+      style={{ transformOrigin: "460px 896px", transformBox: "view-box" }}
+      animate={bounce ? { scaleX: [1, 0.74, 1] } : { scaleX: 1 }}
       transition={bounce ? { duration: 0.9, repeat: Infinity, ease: "easeInOut" } : { duration: 0.2 }}
     />
   );
 }
 
-function figureLoop(kind: string): { animate?: TargetAndTransition; transition?: Transition } {
-  if (kind !== "bounce") return {};
-  return { animate: { y: [0, -26, 0] }, transition: { duration: 0.9, repeat: Infinity, ease: "easeInOut" } };
+function figureLoop(kind: PoseSpec["loop"]): { animate?: TargetAndTransition; transition?: Transition } {
+  if (kind === "bounce") return { animate: { y: [0, -40, 0] }, transition: { duration: 0.9, repeat: Infinity, ease: "easeInOut" } };
+  if (kind === "hop") {
+    return {
+      animate: { scaleX: [1, 1.05, 0.96, 1], scaleY: [1, 0.94, 1.05, 1], y: [0, 0, -26, 0] },
+      transition: { duration: 0.8, times: [0, 0.25, 0.6, 1], repeat: Infinity, repeatDelay: 0.5, ease: "easeInOut" },
+    };
+  }
+  if (kind === "breathe") return { animate: { scaleY: [1, 1.012, 1] }, transition: { duration: 3, repeat: Infinity, ease: "easeInOut" } };
+  return {};
 }
 
-function headMotion(kind: string, x: number, y: number, tilt: number): TargetAndTransition {
-  if (kind === "bow") return { x, y: [y - 4, y + 6, y - 4], rotate: tilt };
-  if (kind === "nod") return { x, y: [y, y + 3, y], rotate: tilt };
-  if (kind === "sway") return { x, y, rotate: [tilt, tilt - 3, tilt] };
-  return { x, y, rotate: tilt };
+function headMotion(spec: PoseSpec): TargetAndTransition {
+  const drop = spec.headDrop;
+  if (spec.loop === "bow") return { y: [drop - 8, drop + 6, drop - 8], rotate: spec.headTilt };
+  if (spec.loop === "nod") return { y: [0, 6, 0], rotate: spec.headTilt };
+  if (spec.loop === "sway") return { y: drop, rotate: [spec.headTilt, spec.headTilt - 4, spec.headTilt] };
+  return { y: drop, rotate: spec.headTilt };
 }
 
-function headTransition(kind: string): Transition {
-  if (kind === "none") return { duration: duration.base, ease: ease.outSoft };
-  const lengths: Record<string, number> = { bow: 2.4, nod: 1.6, sway: 2.2, bounce: 0.9 };
-  return { duration: lengths[kind] ?? 2, repeat: Infinity, ease: "easeInOut" };
+function headTransition(kind: PoseSpec["loop"]): Transition {
+  const lengths: Partial<Record<PoseSpec["loop"], number>> = { bow: 2.4, nod: 1.4, sway: 2.2 };
+  const length = lengths[kind];
+  return length ? { duration: length, repeat: Infinity, ease: "easeInOut" } : { duration: duration.base, ease: ease.outSoft };
 }
 
-function PartList({ parts, look }: { parts: Part[]; look: Look }) {
-  const eyes = parts.filter((part) => part.eye);
-  const rest = parts.filter((part) => !part.eye);
-  const eyeStart = parts.findIndex((part) => part.eye);
-  const before = eyeStart < 0 ? rest : rest.filter((part) => parts.indexOf(part) < eyeStart);
-  const after = eyeStart < 0 ? [] : rest.filter((part) => parts.indexOf(part) > eyeStart);
-  return (
-    <>
-      {before.map((part, i) => <PartView key={part.id} part={part} look={look} index={i} />)}
-      {eyes.length > 0 ? <BlinkingEyes parts={eyes} look={look} /> : null}
-      {after.map((part, i) => <PartView key={part.id} part={part} look={look} index={before.length + i} />)}
-    </>
-  );
-}
-
-/** Open eyes blink every few seconds, the way Duolingo's characters do. */
-function BlinkingEyes({ parts, look }: { parts: Part[]; look: Look }) {
-  const blink = look.mode === "color";
+/** The head sways, nods or bows as one piece; antlers fold back when Nara bows. */
+function Head({ spec, parts, highlight }: { spec: PoseSpec; parts: Part[]; highlight: ShapeKind | null }) {
+  const antlers = parts.filter((part) => part.id.startsWith("antler"));
+  const ears = (side: "l" | "r") => parts.filter((part) => part.id.startsWith("ear") && part.id.endsWith(side));
+  const face = parts.filter((part) => !part.id.startsWith("antler") && !part.id.startsWith("ear"));
+  const bowing = spec.headDrop > 0;
   return (
     <motion.g
-      style={{ transformOrigin: "200px 200px", transformBox: "view-box" }}
-      animate={blink ? { scaleY: [1, 1, 0.08, 1] } : { scaleY: 1 }}
-      transition={blink ? { duration: 4.2, times: [0, 0.93, 0.96, 1], repeat: Infinity, repeatDelay: 0.4 } : { duration: 0.2 }}
+      style={{ transformOrigin: "460px 486px", transformBox: "view-box" }}
+      initial={false}
+      animate={headMotion(spec)}
+      transition={headTransition(spec.loop)}
     >
-      {parts.map((part, i) => <PartView key={part.id} part={part} look={look} index={20 + i} />)}
+      <g style={{ transformOrigin: "460px 230px", transformBox: "view-box", transform: bowing ? "scaleY(0.66)" : undefined }}>
+        <PartList parts={antlers} highlight={highlight} />
+      </g>
+      <Ear parts={ears("l")} highlight={highlight} side={-1} />
+      <Ear parts={ears("r")} highlight={highlight} side={1} />
+      <PartList parts={face} highlight={highlight} />
     </motion.g>
   );
 }
 
-function PartView({ part, look, index }: { part: Part; look: Look; index: number }) {
-  const lit = look.highlight === part.kind;
-  const dim = look.highlight !== null && !lit;
+/** Ears flick now and then, like in the animation. */
+function Ear({ parts, highlight, side }: { parts: Part[]; highlight: ShapeKind | null; side: 1 | -1 }) {
+  const pivot = side < 0 ? "350px 270px" : "570px 270px";
   return (
-    <motion.g initial={false} animate={{ opacity: dim ? 0.28 : 1 }} transition={{ duration: duration.quick }}>
-      {look.mode === "outline" ? <OutlinePart part={part} look={look} index={index} /> : <ColorPart part={part} look={look} lit={lit} />}
+    <motion.g
+      style={{ transformOrigin: pivot, transformBox: "view-box" }}
+      animate={{ rotate: [0, 0, side * -10, 0] }}
+      transition={{ duration: 3.6, times: [0, 0.82, 0.9, 1], repeat: Infinity, delay: side > 0 ? 0.12 : 0 }}
+    >
+      <PartList parts={parts} highlight={highlight} />
     </motion.g>
   );
 }
 
-function ColorPart({ part, look, lit }: { part: Part; look: Look; lit: boolean }) {
+function PartList({ parts, highlight }: { parts: Part[]; highlight: ShapeKind | null }) {
+  const eyes = parts.filter((part) => part.eye);
+  const eyeStart = parts.findIndex((part) => part.eye);
+  const before = eyeStart < 0 ? parts : parts.slice(0, eyeStart);
+  const after = eyeStart < 0 ? [] : parts.slice(eyeStart).filter((part) => !part.eye);
+  return (
+    <>
+      {before.map((part) => <PartView key={part.id} part={part} highlight={highlight} />)}
+      {eyes.length > 0 ? <BlinkingEyes parts={eyes} highlight={highlight} /> : null}
+      {after.map((part) => <PartView key={part.id} part={part} highlight={highlight} />)}
+    </>
+  );
+}
+
+/** Open eyes blink every few seconds. */
+function BlinkingEyes({ parts, highlight }: { parts: Part[]; highlight: ShapeKind | null }) {
+  return (
+    <motion.g
+      style={{ transformOrigin: "460px 349px", transformBox: "view-box" }}
+      animate={{ scaleY: [1, 1, 0.1, 1] }}
+      transition={{ duration: 4.2, times: [0, 0.93, 0.96, 1], repeat: Infinity, repeatDelay: 0.4 }}
+    >
+      {parts.map((part) => <PartView key={part.id} part={part} highlight={highlight} />)}
+    </motion.g>
+  );
+}
+
+function PartView({ part, highlight }: { part: Part; highlight: ShapeKind | null }) {
+  const lit = highlight === part.kind;
+  const dim = highlight !== null && !lit;
   const color = toneVar[part.tone];
-  if (part.stroke) {
-    return (
-      <>
-        {lit ? <path d={part.d} fill="none" stroke="var(--color-accent-ink)" strokeWidth={part.stroke + 8} strokeLinecap="round" /> : null}
-        {part.edge && !lit ? <path d={part.d} fill="none" stroke="var(--color-deer-shade)" strokeWidth={part.stroke + 5} strokeLinecap="round" /> : null}
-        <path d={part.d} fill="none" stroke={color} strokeWidth={part.stroke} strokeLinecap="round" strokeLinejoin="round" />
-      </>
-    );
-  }
+  return (
+    <motion.g initial={false} animate={{ opacity: dim ? 0.25 : 1 }} transition={{ duration: duration.quick }}>
+      {part.stroke ? <StrokePart part={part} color={color} lit={lit} /> : <FillPart part={part} color={color} lit={lit} />}
+    </motion.g>
+  );
+}
+
+function StrokePart({ part, color, lit }: { part: Part; color: string; lit: boolean }) {
+  const width = part.stroke ?? 0;
   return (
     <>
-      {part.shade ? <ShadedFill part={part} uid={look.uid} /> : <path d={part.d} fill={color} transform={part.transform} />}
-      {lit ? <path d={part.d} fill="none" stroke="var(--color-accent-ink)" strokeWidth={4} /> : null}
+      {part.outline || lit ? (
+        <path d={part.d} fill="none" stroke={lit ? "var(--color-accent-ink)" : "var(--color-deer-line)"} strokeWidth={width + (lit ? 10 : 4)} strokeLinecap="round" strokeLinejoin="round" />
+      ) : null}
+      <path d={part.d} fill="none" stroke={color} strokeWidth={width} strokeLinecap="round" strokeLinejoin="round" />
     </>
   );
 }
 
-/** A flat fill with a darker crescent on the lower right, the only shading Nara gets. */
-function ShadedFill({ part, uid }: { part: Part; uid: string }) {
-  const clip = `${uid}-${part.id}`;
+function FillPart({ part, color, lit }: { part: Part; color: string; lit: boolean }) {
   return (
-    <>
-      <defs>
-        <clipPath id={clip}>
-          <path d={part.d} />
-        </clipPath>
-      </defs>
-      <path d={part.d} fill="var(--color-deer-shade)" />
-      <path d={part.d} fill={toneVar[part.tone]} transform="translate(-9 -10)" clipPath={`url(#${clip})`} />
-    </>
+    <path
+      d={part.d}
+      fill={color}
+      stroke={edgeColor(part, lit)}
+      strokeWidth={lit ? 6 : 2.5}
+      strokeLinejoin="round"
+    />
   );
 }
 
-/** The construction sketch: grey outlines on white, like the first page of the character sheet. */
-function OutlinePart({ part, look, index }: { part: Part; look: Look; index: number }) {
-  const draw = look.drawIn
-    ? { initial: { pathLength: 0 }, animate: { pathLength: 1 }, transition: { duration: duration.slow, delay: index * 0.04, ease: ease.fold } }
-    : {};
-  if (part.stroke) {
-    return (
-      <>
-        <motion.path d={part.d} fill="none" stroke="var(--color-sketch)" strokeWidth={part.stroke + 6} strokeLinecap="round" {...draw} />
-        <path d={part.d} fill="none" stroke="var(--color-paper)" strokeWidth={part.stroke} strokeLinecap="round" />
-      </>
-    );
-  }
-  return <motion.path d={part.d} fill="var(--color-paper)" stroke="var(--color-sketch)" strokeWidth={3} strokeLinejoin="round" {...draw} />;
+function edgeColor(part: Part, lit: boolean): string {
+  if (lit) return "var(--color-accent-ink)";
+  return part.outline ? "var(--color-deer-line)" : "none";
+}
+
+/** The construction sheet: Nara's head drawn as grey outlines of rounded capsules and ovals. */
+export function NaraSketch({ drawIn = true, highlight = null, className, title = "Nara, outline sketch" }: { drawIn?: boolean; highlight?: ShapeKind | null; className?: string; title?: string }) {
+  return (
+    <svg viewBox={box(HEAD_VIEWBOX)} className={className} role="img" aria-label={title} overflow="visible">
+      {sketchParts().map((part, i) => {
+        const lit = highlight === part.kind;
+        return (
+          <motion.path
+            key={part.id}
+            d={part.d}
+            fill="none"
+            stroke={lit ? "var(--color-accent-ink)" : "var(--color-sketch)"}
+            strokeWidth={lit ? 6 : 4}
+            strokeLinejoin="round"
+            initial={drawIn ? { pathLength: 0 } : false}
+            animate={{ pathLength: 1, opacity: highlight !== null && !lit ? 0.3 : 1 }}
+            transition={{ pathLength: { duration: duration.slow, delay: i * 0.05, ease: ease.fold }, opacity: { duration: duration.quick } }}
+          />
+        );
+      })}
+    </svg>
+  );
 }

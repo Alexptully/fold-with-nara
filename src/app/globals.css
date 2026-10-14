@@ -53,17 +53,18 @@
   --color-sheet-shade: #b4e08d;
   --color-sheet-edge: #8fc464;
 
-  /* Nara, the sika deer */
-  --color-deer: #c4783b;
-  --color-deer-shade: #a9622d;
-  --color-deer-cream: #f7d9ae;
-  --color-deer-ear: #f6d2b8;
-  --color-deer-antler: #7a4628;
-  --color-deer-hoof: #64361f;
-  --color-deer-eye: #3d2416;
-  --color-deer-eye-white: #ffffff;
-  --color-deer-mouth: #6b2a1c;
-  --color-deer-tongue: #ff8a8a;
+  /* Nara, the sika deer, sampled from the team's animation frames */
+  --color-deer: #b26f3f;
+  --color-deer-cream: #eccba5;
+  --color-deer-antler: #733e2b;
+  --color-deer-dark: #50352a;
+  --color-deer-line: #a2623a;
+  --color-deer-eye-white: #fdf8f3;
+  --color-deer-mouth: #4f3429;
+  --color-deer-tongue: #e35550;
+  --color-deer-shadow: #e8e6e2;
+  --color-spark: #f2bb56;
+  --color-motion: #90c6e7;
   --color-sketch: #a8a8a8;
 
   /* Origami options */

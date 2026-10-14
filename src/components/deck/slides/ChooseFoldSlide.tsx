@@ -6,9 +6,9 @@ import { OrigamiIcon } from "@/components/art/OrigamiIcon";
 import { options, type FoldOption, type OrigamiModel } from "@/content/content";
 import { spring } from "@/lib/motion";
 import { play } from "@/lib/sound";
-import { Jp, Reveal, SlideShell } from "../primitives";
+import { Jp, SlideShell } from "../primitives";
 
-/** The kiosk's first screen: pick a model at one of three levels. Click a card to select it. */
+/** The kiosk's first screen: pick a model at one of three levels. Click a card to see what it stands for. */
 export function ChooseFoldSlide() {
   const [selected, setSelected] = useState<OrigamiModel>("crane");
   const select = (model: OrigamiModel) => {
@@ -17,9 +17,6 @@ export function ChooseFoldSlide() {
   };
   return (
     <SlideShell heading={options.heading}>
-      <Reveal delay={0.6} className="absolute right-24 top-[86px] max-w-[700px] text-right">
-        <p className="text-body text-ink-muted">{options.featuredNote}</p>
-      </Reveal>
       <div className="absolute left-24 right-24 top-[210px] grid grid-cols-3 gap-12" data-no-advance>
         {options.levels.map((level, column) => (
           <section key={level.name}>
@@ -82,7 +79,14 @@ function OptionCard({ option, selected, delay, onSelect }: { option: FoldOption;
             <Jp className="font-extrabold">{option.jp}</Jp> {option.romaji}
           </span>
         ) : null}
-        <span className="text-small text-ink-muted">{option.meaning}</span>
+        <motion.span
+          className="text-small text-macaw-ink"
+          initial={false}
+          animate={{ opacity: selected ? 1 : 0, y: selected ? 0 : 8 }}
+          transition={{ duration: 0.25 }}
+        >
+          {option.meaning}
+        </motion.span>
       </span>
     </motion.button>
   );

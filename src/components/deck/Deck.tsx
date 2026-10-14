@@ -1,69 +1,41 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
-import { play } from "@/lib/sound";
-import { duration } from "@/lib/motion";
+import { useMemo, useState } from "react";
+import type { ShapeKind } from "@/components/art/nara/Nara";
 import { Grain } from "./Grain";
+import { NaraActor, NaraHighlightContext } from "./NaraActor";
 import { NotesPanel } from "./NotesPanel";
-import { HingeCrease, PageLayer } from "./PageTurn";
 import { SlideFooter } from "./SlideFooter";
+import { SlideLayer, type TransitionCustom } from "./SlideTransition";
 import { slides } from "./slides";
-import { sourcesForStep, type SlideDef } from "./types";
+import { naraSpotFor, sourcesForStep } from "./types";
 import { useDeckNavigation } from "./useDeckNavigation";
 import { stageSize, usePresenterKeys } from "./usePresenterKeys";
+import { useTalkClock } from "./useTalkClock";
 
-type Turn = { id: number; from: number; fromStep: number; direction: 1 | -1 };
-
-/** Tracks the page that is folding away while the next one comes in. */
-function usePageTurn(index: number, step: number, direction: 1 | -1, animate: boolean) {
-  const [shown, setShown] = useState({ index, step });
-  const [turn, setTurn] = useState<Turn | null>(null);
-  if (shown.index !== index || shown.step !== step) {
-    if (shown.index !== index && animate) setTurn({ id: (turn?.id ?? 0) + 1, from: shown.index, fromStep: shown.step, direction });
-    setShown({ index, step });
-  }
-  useEffect(() => {
-    if (!turn) return;
-    play("fold");
-    const timer = window.setTimeout(() => setTurn(null), duration.pageTurn * 1000 + 60);
-    return () => window.clearTimeout(timer);
-  }, [turn]);
-  return turn;
+/** Going forward, a slide arrives its own way; going back replays that move in reverse. */
+function transitionFor(index: number, direction: 1 | -1, animate: boolean): TransitionCustom {
+  if (!animate) return { kind: "cut", direction };
+  const arriving = direction > 0 ? slides[index] : (slides[index + 1] ?? slides[index]);
+  return { kind: arriving.transition, direction };
 }
 
-/** Build-step pops and arrival sounds that some slides ask for. */
-function useSlideSounds(index: number, step: number, animate: boolean) {
-  const last = useRef({ index, step });
-  useEffect(() => {
-    const slide = slides[index];
-    const sameSlide = last.current.index === index;
-    last.current = { index, step };
-    if (sameSlide && step > 1 && slide.stepSound) play(slide.stepSound);
-    if (sameSlide || !animate || !slide.arrivalSound) return;
-    const sound = slide.arrivalSound;
-    const timer = window.setTimeout(() => play(sound), duration.pageTurn * 1000 * 0.7);
-    return () => window.clearTimeout(timer);
-  }, [index, step, animate]);
-}
-
-function SlidePage({ slide, step, advance }: { slide: SlideDef; step: number; advance: () => void }) {
-  return (
-    <section className="absolute inset-0" aria-label={slide.name}>
-      <slide.Content step={step} print={false} advance={advance} />
-      <SlideFooter sourceKeys={sourcesForStep(slide, step)} section={slide.section} />
-    </section>
-  );
+/** Shape highlights belong to the slide that set them, so they clear when the slide changes. */
+function useShapeHighlight(index: number) {
+  const [state, setState] = useState<{ index: number; kind: ShapeKind | null }>({ index, kind: null });
+  const highlight = state.index === index ? state.kind : null;
+  return useMemo(() => ({ highlight, setHighlight: (kind: ShapeKind | null) => setState({ index, kind }) }), [highlight, index]);
 }
 
 export function Deck() {
   const nav = useDeckNavigation(slides);
   const presenter = usePresenterKeys();
+  const elapsed = useTalkClock();
   const { slide: index, step, direction, animate } = nav.position;
-  const turn = usePageTurn(index, step, direction, animate);
-  useSlideSounds(index, step, animate);
   const slide = slides[index];
-  const leaving = turn && turn.from !== index ? turn : null;
+  const custom = transitionFor(index, direction, animate);
+  const highlight = useShapeHighlight(index);
 
   return (
     <main
@@ -76,22 +48,20 @@ export function Deck() {
         className="absolute left-1/2 top-1/2"
         style={{ width: stageSize.width, height: stageSize.height, transform: `translate(-50%, -50%) scale(${presenter.scale})` }}
       >
-        <div className="relative h-full w-full overflow-hidden bg-paper" style={{ perspective: 2600 }}>
-          {leaving ? (
-            <PageLayer key={`slide-${leaving.from}`} role="leaving" direction={leaving.direction} turning>
-              <SlidePage slide={slides[leaving.from]} step={leaving.fromStep} advance={nav.next} />
-            </PageLayer>
-          ) : null}
-          <PageLayer key={`slide-${index}`} role="current" direction={leaving?.direction ?? 1} turning={Boolean(leaving)}>
-            <SlidePage slide={slide} step={step} advance={nav.next} />
-          </PageLayer>
-          {leaving ? <HingeCrease id={leaving.id} /> : null}
-          <Grain />
-        </div>
+        <NaraHighlightContext.Provider value={highlight}>
+          <div className="relative h-full w-full overflow-hidden bg-paper">
+            <AnimatePresence initial={false} custom={custom}>
+              <SlideLayer key={index} custom={custom} label={slide.name}>
+                <slide.Content step={step} print={false} advance={nav.next} />
+                <SlideFooter sourceKeys={sourcesForStep(slide, step)} section={slide.section} />
+              </SlideLayer>
+            </AnimatePresence>
+            <NaraActor spot={naraSpotFor(slide, step)} cut={!animate} />
+            <Grain />
+          </div>
+        </NaraHighlightContext.Provider>
       </div>
-      {presenter.notesOpen ? (
-        <NotesPanel slide={slide} nextSlide={slides[index + 1]} step={step} onClose={() => presenter.setNotesOpen(false)} />
-      ) : null}
+      {presenter.notesOpen ? <NotesPanel index={index} step={step} elapsed={elapsed} onClose={() => presenter.setNotesOpen(false)} /> : null}
       <SoundToast muted={presenter.muted} toastId={presenter.muteToast} />
       <p className="sr-only" aria-live="polite">
         {slide.name}, build {step} of {slide.steps}

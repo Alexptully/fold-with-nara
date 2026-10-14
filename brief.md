@@ -14,6 +14,25 @@ We take option 1 (a cultural aspect of Japan). The lesson lives inside the team'
 
 The pitch window is four minutes and should be interactive: the audience folds paper during the pitch.
 
+## Running order and timing
+
+Ten timed slides, 3:25 in total, which leaves room for the room to answer out loud. Sources is the last page and isn't presented.
+
+| # | Slide | Time |
+| --- | --- | --- |
+| 1 | Title | 0:12 |
+| 2 | Meet Nara | 0:25 |
+| 3 | Your visit, step by step | 0:35 |
+| 4 | Choose what to fold | 0:18 |
+| 5 | Where it pops up | 0:18 |
+| 6 | The 10-question lesson | 0:15 |
+| 7 | Try the lesson (questions 1, 5 and 10) | 0:40 |
+| 8 | How Nara reacts | 0:20 |
+| 9 | The Duolingo Method in paper | 0:15 |
+| 10 | Thank you | 0:07 |
+
+Slides keep to a heading, one picture and a few words. Everything else is in the speaker notes.
+
 ## Required sections and where each one is covered
 
 Each slide's footer names the section it covers.
@@ -21,13 +40,13 @@ Each slide's footer names the section it covers.
 | Requirement | Slide |
 | --- | --- |
 | New world character, consistent with the simple illustration style (rounded square, circle, rounded triangle, semicircle) | Meet Nara |
-| Important cultural aspect of a country | What we teach and why, Choose what to fold |
-| Distinct location | The airport kiosk, The tent pop-up (and Nara Park as the lesson's setting) |
+| Important cultural aspect of a country | Choose what to fold, The 10-question lesson |
+| Distinct location | Where it pops up (and Nara Park as the lesson's setting, one stop per question) |
 | Concise 10-question lesson for beginners | The 10-question lesson, Try the lesson |
-| How the lesson corrects wrong answers | When you get it wrong |
-| How the character encourages the learner to start and stay engaged | How Nara keeps you going (all seven expressions from the character sheet) |
-| How the installation teaches (team script, section 2) | How a station teaches, Help fades as you learn, The Duolingo Method in paper |
-| Visitor journey and takeaway (team script, section 3) | Your visit, step by step; The ten-minute visit |
+| How the lesson corrects wrong answers | Try the lesson (question 5), How Nara reacts |
+| How the character encourages the learner to start and stay engaged | How Nara reacts (seven expressions, one per moment) |
+| How the installation teaches (team script, section 2) | Your visit, step by step; The Duolingo Method in paper |
+| Visitor journey and takeaway (team script, section 3) | Your visit, step by step |
 
 ## The user experience, in the team's order
 
@@ -45,7 +64,7 @@ Each slide's footer names the section it covers.
 
 ## Character and installation references
 
-- Nara follows the team's character sheet (outline sketch, colored figure and seven expressions: talk, present, think, love, laugh, cheer, bow). The deck draws Nara in vector so every pose stays sharp and can animate.
+- Nara follows the team's character sheet and its animation: the outline sketch, the colored figure and the expressions (wave, talk, present, think, love, laugh, cheer, bow, plus a resting smile). The deck draws Nara in vector, measured from the animation's frames, so every pose stays sharp and can move: she blinks, flicks her ears, hops when she laughs and walks from slide to slide.
 - The kiosk and tent follow the team's render: a wooden kiosk about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper dispenser and storage; and a white faceted dome tent with stations around the walls and origami hanging overhead.
 - Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo.
 
@@ -95,7 +114,7 @@ Every number and cultural claim on a slide, with its source key in `src/content/
 | Testing yourself beats restudying for long-term retention | `retrieval` |
 | Fading worked steps helps learners move to solving alone | `fading` |
 
-**Labeled estimates.** The ten-minute timeline on "The ten-minute visit" is a team estimate and is labeled that way on the slide. Replace it with timings from the prototype. The kiosk's 7 ft height and 2.5 ft footprint are the team's design targets from the render, not measurements.
+**Labeled estimates.** The ten-minute visit is a team estimate and appears only in the speaker notes. Replace it with timings from the prototype. The kiosk's 7 ft height and 2.5 ft footprint are the team's design targets from the render, not measurements.
 
 ## Placeholders
 
@@ -112,5 +131,5 @@ All in `src/content/config.ts`:
 - Sophia: the vector Nara follows your character sheet. If you'd rather show your Illustrator file on the title and closing slides, export it and set `characterImage`.
 - Decide pricing for the paid locations (the deck only says "free or paid, depending on the location").
 - Sam: drop the kiosk render into `public/renders/` and set `kioskRender`.
-- Tsion: the speaker notes (press N) follow the first-draft script; trim them to fit four minutes.
+- Tsion: the speaker notes (press N) are cut to the timing table above. Rehearse with the notes panel's clock and adjust a slide's `seconds` in `slides.ts` if a section runs long.
 - Decide whether Q1 is said out loud by the whole room (the notes assume yes).

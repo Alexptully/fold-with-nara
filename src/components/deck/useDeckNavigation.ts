@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { SlideDef } from "./types";
 
-/** `animate` is false for jumps from the address bar, which should not turn a page. */
+/** `animate` is false for jumps from the address bar, which cut straight to the slide. */
 export type DeckPosition = { slide: number; step: number; direction: 1 | -1; animate: boolean };
 
 const ADVANCE_KEYS = new Set(["ArrowRight", "ArrowDown", "PageDown", " ", "Enter"]);
@@ -47,7 +47,7 @@ export function useDeckNavigation(slides: SlideDef[]) {
     [],
   );
 
-  // Start from the slide in the address bar, and follow manual hash edits, without a page turn.
+  // Start from the slide in the address bar, and follow manual hash edits, without a transition.
   useEffect(() => {
     const sync = () => goTo(readHash(slides.length), false);
     sync();
