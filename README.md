@@ -29,7 +29,7 @@ On presentation day, use `npm run present` instead. It builds the finished site 
 
 On a touch screen, swipe left or right. The address bar shows the slide number (`/#7`), so you can jump straight to a slide to rehearse it.
 
-**Timing.** The pitch is planned at 3:27 across eleven slides (see `brief.md`). Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
+**Timing.** The pitch is planned at 3:33 across twelve slides (see `brief.md`). The speaker notes follow our script. Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
 
 **Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish Mt. Fuji. The kiosk and tent cards pop when they flip. Browsers only allow sound after your first click or key press. Press M to mute.
 
@@ -39,7 +39,9 @@ On a touch screen, swipe left or right. The address bar shows the slide number (
 
 **Our mini booth.** This slide is your cue to point to the physical mini booth on the table and show what it does.
 
-**The "Try the lesson" slide is interactive.** It shows questions 1, 5 and 10, one per arrow press. On question 1, ask the room to say konnichiwa together, then click **Everyone said it**. On question 5, pick a wrong answer first to show Nara's hint, then the right one. On question 10, say arigatō gozaimasu together and click **Finish Mt. Fuji**. The lesson is Mt. Fuji: one question unlocks each fold, and the next one comes while the camera checks it. Clicking inside the lesson card never skips the slide.
+**The "Try the lesson" slide is interactive.** The lesson is Mt. Fuji: three questions unlock each of its three folds. The slide plays the question that unlocks each fold, one per arrow press, and the room folds along. Question 3 unlocks fold 1 (fold in half into a triangle). On question 6, pick a wrong answer first to show Nara's hint, then the right one, and fold the left corner over. Question 9 unlocks fold 3 (open it so it stands); click **Finish Mt. Fuji** for the fanfare. Clicking inside the lesson card never skips the slide.
+
+**You folded Mt. Fuji.** The completion screen shows the finished mountain with Nara cheering. Click **Take it home** to show that choice, or **Hang it in the tent** (or press the arrow) to watch the mountain fly up and hang in the tent.
 
 ## Make a PDF
 

@@ -3,13 +3,15 @@
 import type { ButtonHTMLAttributes } from "react";
 import { play, type SoundName } from "@/lib/sound";
 
-type Variant = "primary" | "danger" | "chunky" | "quiet";
+type Variant = "primary" | "danger" | "chunky" | "chosen" | "quiet";
 
 // Primary and danger copy Duolingo's lesson buttons: a filled face on a darker 4px ledge.
 const variants: Record<Variant, string> = {
   primary: "bg-accent text-paper shadow-button-green active:translate-y-1 active:shadow-none",
   danger: "bg-wrong text-paper shadow-button-red active:translate-y-1 active:shadow-none",
   chunky: "bg-paper-raised text-ink shadow-tile active:translate-y-1 active:shadow-none",
+  // A chunky button the visitor has picked, in the lesson's selected-tile blue.
+  chosen: "bg-macaw-soft text-macaw-ink shadow-tile-selected",
   quiet: "bg-transparent text-ink-muted underline underline-offset-4 decoration-2",
 };
 

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Nara, type Pose } from "@/components/art/nara/Nara";
 import { Button } from "@/components/ui/Button";
 import { SpeechBubble } from "@/components/ui/SpeechBubble";
-import { exerciseLabels, foldFor, questions, roleFor, tryLesson, type Question } from "@/content/content";
+import { exerciseLabels, folds, foldUnlockedBy, foldsDoneBefore, questions, QUESTIONS_PER_FOLD, tryLesson, type Question } from "@/content/content";
 import { duration, ease, spring } from "@/lib/motion";
 import { play } from "@/lib/sound";
 import { ChoiceExercise, MatchExercise, SpeakExercise, type ExerciseOutcome } from "./Exercises";
@@ -19,6 +19,8 @@ import { ChoiceExercise, MatchExercise, SpeakExercise, type ExerciseOutcome } fr
 type CardProps = {
   question: Question;
   print: boolean;
+  /** The last question shown: its Continue finishes the model with the fanfare. */
+  finishing?: boolean;
   onAdvance: () => void;
   onOutcome: (outcome: ExerciseOutcome) => void;
 };
@@ -34,7 +36,7 @@ function initialSelection(question: Question, print: boolean): number | null {
   return question.correct;
 }
 
-export function LessonCard({ question, print, onAdvance, onOutcome }: CardProps) {
+export function LessonCard({ question, print, finishing = false, onAdvance, onOutcome }: CardProps) {
   const [outcome, setOutcomeState] = useState<ExerciseOutcome>(print ? "solved" : "open");
   const [selected, setSelected] = useState<number | null>(initialSelection(question, print));
   const [misses, setMisses] = useState(0);
@@ -79,7 +81,7 @@ export function LessonCard({ question, print, onAdvance, onOutcome }: CardProps)
       <div className="flex-1 px-10 pt-5">
         <ExerciseBody question={question} outcome={outcome} selected={selected} onSelect={setSelected} onSolve={() => setOutcome("solved")} />
       </div>
-      <Footer question={question} outcome={outcome} canCheck={selected !== null} onCheck={check} onRetry={retry} onAdvance={onAdvance} />
+      <Footer question={question} outcome={outcome} canCheck={selected !== null} finishing={finishing} onCheck={check} onRetry={retry} onAdvance={onAdvance} />
       <XpPop show={outcome === "solved" && !print} />
     </div>
   );
@@ -143,6 +145,7 @@ type FooterProps = {
   question: Question;
   outcome: ExerciseOutcome;
   canCheck: boolean;
+  finishing: boolean;
   onCheck: () => void;
   onRetry: () => void;
   onAdvance: () => void;
@@ -164,11 +167,13 @@ function Footer(props: FooterProps) {
   );
 }
 
-/** After a right answer: the fold it unlocked, the fold the camera just checked, or the finished model. */
+/** After a right answer: the fold it unlocked, how many answers are left before the next one, or the finished model. */
 function solvedLine(question: Question): string {
-  const fold = foldFor(question.n);
-  if (roleFor(question.n) === "unlock") return tryLesson.unlockedLine(fold.n);
-  return question.n === questions.length ? tryLesson.finishedLine : tryLesson.checkedLine(fold.n);
+  const fold = foldUnlockedBy(question.n);
+  if (fold) return tryLesson.unlockedLine(fold.n);
+  if (question.n === questions.length) return tryLesson.finishedLine;
+  const next = folds[foldsDoneBefore(question.n)];
+  return tryLesson.towardLine(QUESTIONS_PER_FOLD - (question.n % QUESTIONS_PER_FOLD), next.n);
 }
 
 function FooterMessage({ question, outcome }: { question: Question; outcome: ExerciseOutcome }) {
@@ -200,11 +205,11 @@ function Message({ good = false, title, children }: { good?: boolean; title: str
   );
 }
 
-function FooterAction({ question, outcome, canCheck, onCheck, onRetry, onAdvance }: FooterProps) {
-  const isLast = question.n === questions.length;
-  if (outcome === "solved" && isLast) return <Button variant="primary" onClick={() => finish(onAdvance)} sound={null}>{tryLesson.finishLabel}</Button>;
-  if (outcome === "solved") return <Button variant="primary" onClick={onAdvance}>{tryLesson.continueLabel}</Button>;
-  if (outcome === "explained") return <Button variant="danger" onClick={onAdvance}>{tryLesson.continueLabel}</Button>;
+function FooterAction({ question, outcome, canCheck, finishing, onCheck, onRetry, onAdvance }: FooterProps) {
+  const next = finishing ? () => finish(onAdvance) : onAdvance;
+  const sound = finishing ? null : "tap";
+  if (outcome === "solved") return <Button variant="primary" onClick={next} sound={sound}>{finishing ? tryLesson.finishLabel : tryLesson.continueLabel}</Button>;
+  if (outcome === "explained") return <Button variant="danger" onClick={next} sound={sound}>{tryLesson.continueLabel}</Button>;
   if (outcome === "missed") return <Button variant="danger" onClick={onRetry}>{tryLesson.retryLabel}</Button>;
   if (question.kind === "choose" || question.kind === "word") {
     return (
@@ -216,7 +221,7 @@ function FooterAction({ question, outcome, canCheck, onCheck, onRetry, onAdvance
   return null;
 }
 
-/** The last Continue finishes Mt. Fuji with the lesson-complete fanfare. */
+/** The last Continue of the demo finishes Mt. Fuji with the lesson-complete fanfare. */
 function finish(onAdvance: () => void) {
   play("complete");
   onAdvance();

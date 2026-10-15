@@ -9,7 +9,8 @@ import type { Guidance } from "@/content/content";
 /**
  * The visitor's printed sheet at every stage of the origami Mt. Fuji, from the
  * team's fold sheet. State 0 is the printed square (white sky, blue mountain with a
- * jagged snowline, measured from the photo); state 5 is the standing mountain.
+ * jagged snowline and dashed guide lines, measured from the photo); state 3 is the
+ * standing mountain after three folds.
  * A `guide` overlays the projector's marks for the next fold.
  */
 
@@ -45,8 +46,7 @@ const centerLine: Segment = [APEX, BASE_C];
 const liftedFlap: Pt[] = [APEX, BASE_C, [72, 176]];
 
 export const fujiStates: PaperState[] = [
-  { faces: [{ pts: square, tone: "sky" }, { pts: mountain, tone: "paper" }] },
-  { faces: [{ pts: square, tone: "sky" }, { pts: mountain, tone: "paper" }], creases: [diagonalA] },
+  // The sheet comes printed with its dashed guide lines on both diagonals.
   { faces: [{ pts: square, tone: "sky" }, { pts: mountain, tone: "paper" }], creases: [diagonalA, diagonalB] },
   {
     faces: [
@@ -78,24 +78,14 @@ const guides: Record<number, FoldGuide> = {
     lines: [diagonalA],
     arrows: [{ from: [40, 200], to: [200, 40], bend: 0.3 }],
     ghost: { from: [[30, 30], [30, 210], [210, 210]], to: [[30, 30], [210, 30], [210, 210]] },
-  },
-  2: {
-    lines: [diagonalB],
-    arrows: [{ from: [200, 200], to: [40, 40], bend: -0.3 }],
-    ghost: { from: [[210, 30], [210, 210], [30, 210]], to: [[210, 30], [30, 30], [30, 210]] },
-  },
-  3: {
-    lines: [diagonalA],
-    arrows: [{ from: [40, 200], to: [200, 40], bend: 0.3 }],
-    ghost: { from: [[30, 30], [30, 210], [210, 210]], to: [[30, 30], [210, 30], [210, 210]] },
     turn: true,
   },
-  4: {
+  2: {
     lines: [centerLine],
     arrows: [{ from: [38, 176], to: [202, 176], bend: -0.32 }],
     ghost: { from: [BASE_L, BASE_C, APEX], to: [BASE_R, BASE_C, APEX] },
   },
-  5: {
+  3: {
     lines: [centerLine],
     arrows: [{ from: [84, 168], to: [40, 180], bend: 0.35 }],
     ghost: { from: liftedFlap, to: [APEX, BASE_C, [44, 180]] },
@@ -114,26 +104,29 @@ const toneFill: Record<Tone, string> = {
 const toPoints = (pts: Pt[]) => pts.map((p) => p.join(",")).join(" ");
 const toPath = (pts: Pt[]) => `M${pts.map((p) => p.join(" ")).join(" L")} Z`;
 
+/** The drawing's frame; `tight` crops to the folded mountain for big hero shots. */
+const FULL_VIEWBOX = "0 0 240 240";
+const TIGHT_VIEWBOX = "24 82 192 108";
+
 export function FujiPaper({
   state,
   guide,
   guidance = "mark",
-  checking = false,
+  tight = false,
   className,
   label,
 }: {
   state: number;
+  tight?: boolean;
   guide?: number | null;
   guidance?: Guidance;
-  /** The camera is checking this fold: corner brackets frame the paper. */
-  checking?: boolean;
   className?: string;
   label?: string;
 }) {
   const paper = fujiStates[Math.max(0, Math.min(state, fujiStates.length - 1))];
   const fold = guide ? guides[guide] : undefined;
   return (
-    <svg viewBox="0 0 240 240" className={className} role="img" aria-label={label ?? `Origami Mt. Fuji, after fold ${state} of 5`} overflow="visible">
+    <svg viewBox={tight ? TIGHT_VIEWBOX : FULL_VIEWBOX} className={className} role="img" aria-label={label ?? `Origami Mt. Fuji, after fold ${state} of 3`} overflow="visible">
       <g style={{ filter: "var(--shadow-drop-sheet)" }}>
         {paper.faces.map((face, i) => (
           <motion.polygon
@@ -154,7 +147,6 @@ export function FujiPaper({
         <line key={`c${i}`} x1={a[0]} y1={a[1]} x2={b[0]} y2={b[1]} stroke="var(--color-ink-faint)" strokeWidth={1.2} strokeDasharray="4 4" />
       ))}
       {fold && guidance !== "try" ? <GuideMarks fold={fold} animated={guidance === "show"} /> : null}
-      {checking ? <CameraFrame /> : null}
     </svg>
   );
 }
@@ -195,28 +187,6 @@ function TurnMark() {
     <g transform="translate(206 12)">
       <path d="M-14 4 A14 14 0 1 1 6 13" fill="none" stroke="var(--color-accent)" strokeWidth={3} strokeLinecap="round" />
       <path d="M1 7 L9 15 L-1 18 Z" fill="var(--color-accent)" />
-    </g>
-  );
-}
-
-/** Corner brackets and a sweeping line: the overhead camera checking the fold. */
-function CameraFrame() {
-  const corners = ["M18 40 V18 H40", "M200 18 H222 V40", "M222 200 V222 H200", "M40 222 H18 V200"];
-  return (
-    <g className="projected" stroke="var(--color-accent)" strokeWidth={4} fill="none" strokeLinecap="round">
-      {corners.map((d) => (
-        <path key={d} d={d} />
-      ))}
-      <motion.line
-        x1={26}
-        x2={214}
-        y1={60}
-        y2={60}
-        strokeWidth={2.5}
-        strokeOpacity={0.7}
-        animate={{ y: [0, 140, 0] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
-      />
     </g>
   );
 }

@@ -63,11 +63,6 @@ export const sources = {
     title: "The Colorful Traditions of Children's Day (carp streamers for strength and perseverance; kabuto displayed to inspire bravery)",
     url: "https://japanhousela.com/articles/the-colorful-traditions-of-childrens-day",
   },
-  retrieval: {
-    cite: "Roediger and Karpicke, 2006",
-    title: "Test-Enhanced Learning: Taking Memory Tests Improves Long-Term Retention, 17(3), 249 to 255",
-    url: "https://doi.org/10.1111/j.1467-9280.2006.01693.x",
-  },
 } as const satisfies Record<string, Source>;
 
 export type SourceKey = keyof typeof sources;

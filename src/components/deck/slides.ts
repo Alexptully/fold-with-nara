@@ -1,4 +1,5 @@
 import {
+  celebration,
   closing,
   demoQuestions,
   journey,
@@ -15,6 +16,7 @@ import {
   tryLesson,
 } from "@/content/content";
 import type { SourceKey } from "@/content/sources";
+import { CelebrationSlide, celebrationSpot } from "./slides/CelebrationSlide";
 import { ChooseFoldSlide } from "./slides/ChooseFoldSlide";
 import { ClosingSlide, closingSpot } from "./slides/ClosingSlide";
 import { JourneySlide, journeySpot } from "./slides/JourneySlide";
@@ -49,12 +51,12 @@ const demoSources = Object.fromEntries(
 ) as Record<number, SourceKey[]>;
 
 export const slides: SlideDef[] = [
-  { name: "Title", steps: 1, seconds: 12, transition: "blend", nara: () => titleSpot, notes: title.notes, Content: TitleSlide },
+  { name: "Title", steps: 1, seconds: 18, transition: "blend", nara: () => titleSpot, notes: title.notes, Content: TitleSlide },
   {
     name: "Meet Nara",
     section: sections.character,
     steps: 3,
-    seconds: 22,
+    seconds: 20,
     transition: "blend",
     nara: meetNaraSpot,
     printSteps: [1, 3],
@@ -66,7 +68,7 @@ export const slides: SlideDef[] = [
     name: "Your visit, step by step",
     section: sections.journey,
     steps: journey.steps.length,
-    seconds: 29,
+    seconds: 28,
     transition: "push",
     nara: journeySpot,
     notes: journey.notes,
@@ -76,7 +78,7 @@ export const slides: SlideDef[] = [
     name: "Choose what to fold",
     section: sections.culture,
     steps: 1,
-    seconds: 16,
+    seconds: 14,
     transition: "zoom",
     sourcesByStep: { 1: ["sakura", "fuji", "senbazuru", "childrensDay"] },
     notes: options.notes,
@@ -96,7 +98,7 @@ export const slides: SlideDef[] = [
     name: "Our mini booth",
     section: sections.location,
     steps: 1,
-    seconds: 18,
+    seconds: 12,
     transition: "zoom",
     nara: () => miniBoothSpot,
     notes: miniBooth.notes,
@@ -106,7 +108,7 @@ export const slides: SlideDef[] = [
     name: "The 10-question lesson",
     section: sections.lesson,
     steps: 2,
-    seconds: 13,
+    seconds: 14,
     transition: "push",
     notes: lessonOverview.notes,
     Content: LessonOverviewSlide,
@@ -115,22 +117,33 @@ export const slides: SlideDef[] = [
     name: "Try the lesson",
     section: sections.lesson,
     steps: demoQuestions.length,
-    seconds: 40,
+    seconds: 34,
     transition: "zoom",
     printSteps: demoQuestions.map((_, i) => i + 1),
     sourcesByStep: demoSources,
     notes: tryLesson.notes,
     Content: TryLessonSlide,
   },
-  { name: "How Nara reacts", section: sections.reactions, steps: 2, seconds: 18, transition: "blend", notes: reactions.notes, Content: ReactionsSlide },
+  {
+    name: "You folded Mt. Fuji",
+    section: sections.journey,
+    steps: 2,
+    seconds: 20,
+    transition: "rise",
+    nara: celebrationSpot,
+    printSteps: [1, 2],
+    notes: celebration.notes,
+    Content: CelebrationSlide,
+  },
+  { name: "How Nara reacts", section: sections.reactions, steps: 2, seconds: 12, transition: "blend", notes: reactions.notes, Content: ReactionsSlide },
   {
     name: "The Duolingo Method in paper",
     section: sections.method,
     steps: 1,
-    seconds: 14,
+    seconds: 16,
     transition: "rise",
     nara: () => methodSpot,
-    sourcesByStep: { 1: ["duolingoPrompt", "retrieval"] },
+    sourcesByStep: { 1: ["duolingoPrompt"] },
     notes: method.notes,
     Content: MethodSlide,
   },

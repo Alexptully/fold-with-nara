@@ -8,7 +8,7 @@ import type { SourceKey } from "./sources";
 
 const nara = config.characterName;
 
-/* ---------- The lesson: five folds and ten questions ---------- */
+/* ---------- The lesson: three folds and ten questions ---------- */
 
 export type Guidance = "show" | "mark" | "try";
 
@@ -18,23 +18,24 @@ export type Fold = {
   guidance: Guidance;
 };
 
-// The origami Mt. Fuji from the team's fold sheet. The second crease repeats the
-// first, so the projector only marks the line; the last fold is the visitor's own.
+// The origami Mt. Fuji from the team's fold sheet. The sheet comes printed with its
+// dashed guide lines, so the visitor makes three folds; the last one is their own.
 export const folds: Fold[] = [
-  { n: 1, instruction: "Fold corner to corner, then unfold", guidance: "show" },
-  { n: 2, instruction: "Fold the other two corners together, then unfold", guidance: "mark" },
-  { n: 3, instruction: "Fold in half into a triangle, snow on top", guidance: "show" },
-  { n: 4, instruction: "Fold the left corner over to the right", guidance: "show" },
-  { n: 5, instruction: "Open it halfway so your mountain stands", guidance: "try" },
+  { n: 1, instruction: "Fold in half into a triangle, snow on top", guidance: "show" },
+  { n: 2, instruction: "Fold the left corner over to the right", guidance: "show" },
+  { n: 3, instruction: "Open it halfway so your mountain stands", guidance: "try" },
 ];
 
 /**
- * Two questions per fold: the first unlocks the fold, and the second comes while
- * the camera checks it. Question 1 unlocks fold 1, question 2 checks it, and so on.
+ * The ten questions come in three sets of three, one set before each fold: the
+ * third answer in a set unlocks the next fold. Question 10 comes once the mountain
+ * stands, just before the completion message.
  */
-export type QuestionRole = "unlock" | "check";
-export const foldFor = (questionNumber: number) => folds[Math.ceil(questionNumber / 2) - 1];
-export const roleFor = (questionNumber: number): QuestionRole => (questionNumber % 2 === 1 ? "unlock" : "check");
+export const QUESTIONS_PER_FOLD = 3;
+/** The fold a question unlocks, or null if it doesn't unlock one. */
+export const foldUnlockedBy = (n: number): Fold | null => (n % QUESTIONS_PER_FOLD === 0 ? (folds[n / QUESTIONS_PER_FOLD - 1] ?? null) : null);
+/** How many folds are already on the paper when a question is asked. */
+export const foldsDoneBefore = (n: number) => Math.min(Math.floor((n - 1) / QUESTIONS_PER_FOLD), folds.length);
 
 export type ExerciseKind = "speak" | "choose" | "word" | "match";
 
@@ -135,6 +136,21 @@ export const questions: Question[] = [
   {
     n: 5,
     kind: "choose",
+    place: "A kimono shop",
+    topic: { jp: "着物", romaji: "kimono", english: "a thing to wear" },
+    story: "One famous garment is the kimono. People wear kimonos for celebrations and ceremonies.",
+    clue: "One famous garment is the kimono",
+    prompt: "What is a kimono?",
+    options: ["A traditional Japanese garment", "A musical instrument", "A type of house", "A traditional dessert"],
+    correct: 0,
+    hint: "I called it a famous garment.",
+    explain: "A kimono is a traditional garment. The word means a thing to wear: ki (wear) plus mono (thing).",
+    fromDoc: true,
+    source: "kimono",
+  },
+  {
+    n: 6,
+    kind: "choose",
     place: "A tea house",
     topic: { jp: "茶道", romaji: "sadō", english: "tea ceremony" },
     story: "At this tea house, the host prepares tea for the guests, paying attention to every little detail.",
@@ -153,37 +169,7 @@ export const questions: Question[] = [
     source: "teaCeremony",
   },
   {
-    n: 6,
-    kind: "choose",
-    place: "A kimono shop",
-    topic: { jp: "着物", romaji: "kimono", english: "a thing to wear" },
-    story: "One famous garment is the kimono. People wear kimonos for celebrations and ceremonies.",
-    clue: "One famous garment is the kimono",
-    prompt: "What is a kimono?",
-    options: ["A traditional Japanese garment", "A musical instrument", "A type of house", "A traditional dessert"],
-    correct: 0,
-    hint: "I called it a famous garment.",
-    explain: "A kimono is a traditional garment. The word means a thing to wear: ki (wear) plus mono (thing).",
-    fromDoc: true,
-    source: "kimono",
-  },
-  {
     n: 7,
-    kind: "word",
-    place: "A print shop",
-    topic: { jp: "富士山", romaji: "Fujisan", english: "Mt. Fuji" },
-    story: "Look at this woodblock print! The tall mountain is 富士山 (Fujisan), Mt. Fuji, just like the one in your hands.",
-    clue: "The tall mountain is 富士山 (Fujisan), Mt. Fuji",
-    prompt: "Which word means Mt. Fuji?",
-    options: ["ふじさん Fujisan", "さくら sakura", "かみ kami", "きもの kimono"],
-    correct: 0,
-    hint: "It's the name I gave the tall mountain.",
-    explain: "富士山 (Fujisan) is Mt. Fuji. The other three are words from earlier on our walk.",
-    fromDoc: false,
-    source: "fuji",
-  },
-  {
-    n: 8,
     kind: "choose",
     place: "A shrine",
     topic: { jp: "神社", romaji: "jinja", english: "shrine" },
@@ -203,7 +189,7 @@ export const questions: Question[] = [
     source: "fuji",
   },
   {
-    n: 9,
+    n: 8,
     kind: "match",
     place: "A bench by the pond",
     topic: { jp: "復習", romaji: "fukushū", english: "review" },
@@ -214,12 +200,27 @@ export const questions: Question[] = [
       { word: "こんにちは", meaning: "hello" },
       { word: "お辞儀", meaning: "a bow" },
       { word: "桜", meaning: "cherry blossom" },
-      { word: "富士山", meaning: "Mt. Fuji" },
+      { word: "着物", meaning: "a thing to wear" },
       { word: "神社", meaning: "shrine" },
     ],
     hint: "Tap a word, then tap its meaning.",
     explain: "Every pair is a word from our walk.",
     fromDoc: false,
+  },
+  {
+    n: 9,
+    kind: "word",
+    place: "A print shop",
+    topic: { jp: "富士山", romaji: "Fujisan", english: "Mt. Fuji" },
+    story: "Look at this woodblock print! The tall mountain is 富士山 (Fujisan), Mt. Fuji, just like the one in your hands.",
+    clue: "The tall mountain is 富士山 (Fujisan), Mt. Fuji",
+    prompt: "Which word means Mt. Fuji?",
+    options: ["ふじさん Fujisan", "さくら sakura", "かみ kami", "きもの kimono"],
+    correct: 0,
+    hint: "It's the name I gave the tall mountain.",
+    explain: "富士山 (Fujisan) is Mt. Fuji. The other three are words from earlier on our walk.",
+    fromDoc: false,
+    source: "fuji",
   },
   {
     n: 10,
@@ -253,7 +254,8 @@ export const title = {
   welcome: "Konnichiwa! Want to fold with me?",
   notes: [
     "Hand out the paper squares before you start.",
-    `We're ${config.team.join(", ")}. Our Prompt 2 pitch is ${nara}, a sika deer who teaches a ten-question lesson you fold with your hands.`,
+    `We're ${config.team.join(", ")}. Our installation teaches origami along with Japanese history and culture.`,
+    "Origami is a hands-on way into that culture: you learn the Japanese name of what you make and the story behind it.",
   ],
 };
 
@@ -294,10 +296,10 @@ export const journey = {
   ] satisfies { icon: JourneyIcon; title: string; pose: Pose }[],
   notes: [
     "Press once per step. Nara walks the path with you.",
-    "Nara welcomes you. It's free at events and campuses, and airports may charge.",
-    "You choose a model and a level, the station prints paper for it, and you set it in the frame.",
-    "The projector outlines each fold on your paper, and each fold comes with a culture question you answer to move on.",
-    "At the end you scan for a Duolingo badge, then keep your origami or hang it in the installation.",
+    "Nara welcomes visitors. It's free at events, and airports may charge.",
+    "Visitors choose what to fold, and the station dispenses their paper and shows where it goes.",
+    "A projector draws each fold on the paper, and our proposed camera checks it and helps them adjust.",
+    "Questions unlock each fold. At the end they scan for a badge, then keep or hang their origami.",
   ],
 };
 
@@ -342,9 +344,8 @@ export const options = {
     },
   ] satisfies { name: string; rank: number; models: FoldOption[] }[],
   notes: [
-    "Three levels. Easy is sakura and Mt. Fuji, medium is the crane and the koi fish, and hard is the samurai helmet and a special Duo fold.",
     "Click a card to show what it stands for.",
-    "Each model has its own culture questions, and our example is Mt. Fuji.",
+    "There are three levels, from sakura and Mt. Fuji up to a samurai helmet and a special Duo fold. Each model has its own questions, and our example is Mt. Fuji.",
   ],
 };
 
@@ -358,14 +359,14 @@ export const places = {
   },
   tent: {
     name: "Event tent",
-    detail: "Many stations under one roof",
+    detail: "Many stations and a shared display",
     signJp: "折って つながろう",
     photoAlt: "Render of the event tent: a white folded-paper dome with folding stations inside and paper cranes hanging from the roof",
   },
   notes: [
     "Press once and both drawings flip over to our renders.",
-    "The kiosk fits airports and malls, with an overhead camera and projector, a touchscreen and a paper dispenser.",
-    "The tent is for events. Stations line the wall, and finished origami hangs from the roof. Inside the lesson, you walk through Nara Park.",
+    "Our concept comes in two versions: a compact kiosk for airports or malls, where one person folds at a time,",
+    "and a larger tent-style pop-up for events, with several folding stations and a shared display where visitors hang their finished origami.",
   ],
 };
 
@@ -384,13 +385,13 @@ export const miniBooth = {
 export const lessonOverview = {
   heading: "The 10-question lesson",
   notes: [
-    "Ten questions, each a stop in Nara Park. One question unlocks each of the five folds, and the next one comes while the camera checks it.",
-    "Question 9 reviews anything you missed.",
+    "Between folds, visitors get short lessons about Japanese history and culture tied to what they're making, each followed by a question.",
+    "Three right answers unlock each fold, and question 10 comes once Mt. Fuji stands.",
   ],
 };
 
 /** The questions shown live on "Try the lesson", one per build step. */
-export const demoQuestions = [1, 5, 10];
+export const demoQuestions = [3, 6, 9];
 
 export const tryLesson = {
   heading: "Try the lesson",
@@ -403,14 +404,33 @@ export const tryLesson = {
   correctTitle: "Nice work!",
   wrongTitle: "Almost!",
   unlockedLine: (fold: number) => `Fold ${fold} is lit up on your paper.`,
-  checkedLine: (fold: number) => `Fold ${fold} looks great.`,
+  towardLine: (left: number, fold: number) => `${left} more to light up fold ${fold}.`,
   finishedLine: "Your Mt. Fuji is finished.",
   lockedLabel: "Unlocks with a right answer",
-  checkingLabel: (fold: number) => `The camera is checking fold ${fold}`,
   notes: [
-    "Question 1: have the whole room say konnichiwa, then click 'Everyone said it'.",
-    "Question 5: pick a wrong answer first. Nara thinks it over and lights up the clue in her story. Then pick the right one.",
-    "Question 10: say arigatō gozaimasu together and click 'Finish Mt. Fuji'.",
+    "Between folds, Nara tells a short story and asks about it. A right answer unlocks the next fold, and the room folds along.",
+    "Question 3: answer it, then everyone folds their square in half into a triangle.",
+    "Question 6: pick a wrong answer first. Nara lights up the clue and you try again. Then fold the left corner over.",
+    "Question 9: answer, open your mountain so it stands, and click 'Finish Mt. Fuji'.",
+  ],
+};
+
+export const celebration = {
+  heading: "You folded Mt. Fuji!",
+  jp: "富士山",
+  romaji: "Fujisan",
+  stats: [
+    { label: "Total XP", value: "100", tone: "bee" },
+    { label: "Questions", value: "10 of 10", tone: "accent" },
+  ],
+  keepLabel: "Take it home",
+  keptLine: "It's yours to keep.",
+  hangLabel: "Hang it in the tent",
+  hungLine: "Your Mt. Fuji joins the others.",
+  tentAlt: "Inside the event tent, with origami hanging from the roof",
+  notes: [
+    "After the last fold, visitors see a completion message. The visit takes ten minutes or less, with no teacher.",
+    "Press once to hang it. They can add it to the tent's shared display or take it home, along with its Japanese name and the culture behind it.",
   ],
 };
 
@@ -429,24 +449,24 @@ export const reactions = {
   ] satisfies Reaction[],
   rule: "No hearts to lose and no lockout.",
   notes: [
-    `${nara} has an expression for every moment, so the encouragement shows on her face.`,
-    "A first miss gets a hint from the story, and a second miss gets the answer, which returns in the review. A wrong fold gets its corner marked.",
+    `${nara} has an expression for every moment. A first miss gets a hint, a second gets the answer, and either way visitors try again.`,
   ],
 };
 
 export const method = {
   heading: "The Duolingo Method in paper",
-  rows: [
-    { key: "Learn by doing", value: "Each right answer unlocks a real fold" },
-    { key: "Learn in a personalized way", value: "Pick your model and your level" },
-    { key: "Focus on what matters", value: "Hello, thank you and a bow" },
-    { key: "Stay motivated", value: "Mt. Fuji takes shape, then a badge" },
-    { key: "Feel the delight", value: "You leave holding what you made" },
-  ],
-  research: "A question between folds is retrieval practice, which beats rereading for long-term memory.",
+  panels: {
+    biteSized: { title: "Bite-sized lessons", steps: ["Story", "Question", "Fold"] },
+    feedback: { title: "Immediate feedback", right: "Nice work!", wrong: "Almost! Here's a hint." },
+    repetition: { title: "Repetition", words: ["こんにちは", "桜", "着物", "神社"], label: "Review round" },
+    progress: { title: "Visible progress" },
+  },
+  naraLine: "I'll guide you and cheer you on, start to finish!",
+  audience: "For Gen Z and Gen Alpha",
+  audienceLine: "Short, visual steps, and something real taking shape.",
   notes: [
-    "Every principle of the Duolingo Method has a physical version here.",
-    "The questions between folds are retrieval practice: Roediger and Karpicke found testing beats restudying. The whole visit takes about ten minutes, by our estimate.",
+    "Our installation uses the Duolingo Method: bite-sized lessons, immediate feedback, repetition and visible progress.",
+    "Nara guides and encourages visitors the whole way. For Gen Z and Gen Alpha, short visual steps meet an activity where something takes shape as they learn.",
   ],
 };
 

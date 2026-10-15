@@ -21,7 +21,7 @@ Every slide is drawn on a fixed 1920 by 1080 stage that scales to fit the window
 
 Keep the slides clean: no progress bar, dots or slide numbers. Each slide's footer carries only its sources and, if the assignment has a rubric, its rubric tag.
 
-The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:27, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
+The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:33, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
 
 ## Commands
 
@@ -29,7 +29,7 @@ The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides
 - `/print` (or the P key) is the print version, one landscape page per slide or build step, for PDF export
 - `npm run check` runs the type checker, the linter with its complexity limit, and the em dash scan. Run it before saying a task is done.
 - `npm run present` builds the static site and serves it at http://localhost:3000 (no dev server needed on presentation day).
-- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to the one reveal on "Where it pops up" (a pop as the cards flip). Changing slides is silent.
+- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to two reveals (a pop as the "Where it pops up" cards flip, and a pop as Mt. Fuji lands in the tent). Changing slides is silent. Use `useRevealSound` for any new reveal so it only plays when the presenter steps forward into it.
 - T resets the rehearsal clock in the notes panel.
 - Work on a branch and open a pull request. Never push straight to `main`.
 
@@ -62,6 +62,7 @@ The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides
 - The letter-spaced uppercase micro-label is banned, even when a library or reference recommends it. Small labels stay in sentence case at a readable size.
 - Use monospace only for real code, data or figures aligned in a column. Never use it to make headings, captions or labels feel technical.
 - Use the type scale (`text-sm`, not `text-[9px]`). Arbitrary values need a reason.
+- Animate inline elements (a `motion.span` inside text or a flex-wrap row) only after giving them `inline-block` or `block`. An inline span with a running transform can drop out of the paint in Chromium, which hid a word on the method slide.
 - Presented slides never show text smaller than 24 px on the 1920 by 1080 stage (`text-small`); footer sources are the one exception at 20 px (`text-cite`). Don't put tiny words inside drawings either: at slide size they read as noise.
 
 ### Define it once

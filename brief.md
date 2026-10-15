@@ -16,21 +16,22 @@ The pitch window is four minutes and should be interactive: the audience folds p
 
 ## Running order and timing
 
-Eleven timed slides, 3:27 in total, which leaves room for the room to answer out loud. Sources is the last page and isn't presented.
+Twelve timed slides, 3:33 in total, which leaves room for the room to answer and fold along. Sources is the last page and isn't presented. The speaker notes follow the team script (intro, installations, how visitors learn, the lesson, the Duolingo Method, takeaway).
 
-| # | Slide | Time |
-| --- | --- | --- |
-| 1 | Title | 0:12 |
-| 2 | Meet Nara | 0:22 |
-| 3 | Your visit, step by step | 0:29 |
-| 4 | Choose what to fold | 0:16 |
-| 5 | Where it pops up (drawings flip to the real renders) | 0:18 |
-| 6 | Our mini booth (point to the one on the table) | 0:18 |
-| 7 | The 10-question lesson | 0:13 |
-| 8 | Try the lesson (questions 1, 5 and 10) | 0:40 |
-| 9 | How Nara reacts | 0:18 |
-| 10 | The Duolingo Method in paper | 0:14 |
-| 11 | Thank you | 0:07 |
+| # | Slide | Time | Script section |
+| --- | --- | --- | --- |
+| 1 | Title | 0:18 | Intro |
+| 2 | Meet Nara | 0:20 | Character |
+| 3 | Your visit, step by step | 0:28 | How visitors learn |
+| 4 | Choose what to fold | 0:14 | Intro |
+| 5 | Where it pops up (drawings flip to the real renders) | 0:18 | Installations |
+| 6 | Our mini booth (point to the one on the table) | 0:12 | Installations |
+| 7 | The 10-question lesson | 0:14 | Historical lesson and questions |
+| 8 | Try the lesson (questions 3, 6 and 9: folds 1, 2 and 3) | 0:34 | Historical lesson and questions |
+| 9 | You folded Mt. Fuji (completion, then hang it in the tent) | 0:20 | Visitor takeaway |
+| 10 | How Nara reacts | 0:12 | Wrong answers and encouragement |
+| 11 | The Duolingo Method in paper | 0:16 | Duolingo Method |
+| 12 | Thank you | 0:07 | |
 
 Slides keep to a heading, one picture and a few words, and no presented text is smaller than 24 px on the 1920 by 1080 stage (footer sources are 20 px). Everything else is in the speaker notes.
 
@@ -47,7 +48,7 @@ Each slide's footer names the section it covers.
 | How the lesson corrects wrong answers | Try the lesson (question 5), How Nara reacts |
 | How the character encourages the learner to start and stay engaged | How Nara reacts (seven expressions, one per moment) |
 | How the installation teaches (team script, section 2) | Your visit, step by step; The Duolingo Method in paper |
-| Visitor journey and takeaway (team script, section 3) | Your visit, step by step |
+| Visitor journey and takeaway (team script, section 3) | Your visit, step by step; You folded Mt. Fuji |
 
 ## The user experience, in the team's order
 
@@ -77,15 +78,15 @@ Nara, a sika deer from Nara Park, walks a visitor through ten stops in the park 
 
 ## The lesson
 
-The featured model is Mt. Fuji, an easy model with five folds. Each fold gets two questions: the first unlocks it, and the second comes while the camera checks it (question 1 unlocks fold 1, question 2 checks it, and so on to question 10, which checks the finished mountain). The second crease repeats the first, so the projector only marks the line, and the last fold is the visitor's own.
+The featured model is Mt. Fuji, an easy model. The sheet comes printed with its dashed guide lines, so the visitor makes three folds, matching the team's fold photo. The ten questions come in three sets of three: questions 1 to 3 unlock fold 1, questions 4 to 6 unlock fold 2, and questions 7 to 9 unlock fold 3. Question 10 comes once the mountain stands, then the completion screen.
 
-| Fold | What the visitor does | Projector help |
-| --- | --- | --- |
-| 1 | Fold corner to corner, then unfold | Full demo |
-| 2 | Fold the other two corners together, then unfold | Lines only |
-| 3 | Fold in half into a triangle, snow on top | Full demo |
-| 4 | Fold the left corner over to the right | Full demo |
-| 5 | Open it halfway so the mountain stands | Your turn |
+"Try the lesson" plays the question that unlocks each fold, in order: question 3 (fold 1), question 6 (fold 2) and question 9 (fold 3). Finishing goes straight to the completion slide.
+
+| Fold | Unlocked by | What the visitor does | Projector help |
+| --- | --- | --- | --- |
+| 1 | Questions 1 to 3 | Fold in half into a triangle, snow on top | Full demo |
+| 2 | Questions 4 to 6 | Fold the left corner over to the right | Full demo |
+| 3 | Questions 7 to 9 | Open it halfway so the mountain stands | Your turn |
 
 Questions marked **doc** follow the team's wording from the shared doc (Tab 1), shortened to a sentence or two so they read at a glance. Questions marked **draft** were written for this deck in the same voice; Sophia owns the questions and should review or replace them.
 
@@ -95,11 +96,11 @@ Questions marked **doc** follow the team's wording from the shared doc (Tab 1), 
 | 2 | The deer lawn | お辞儀 ojigi, a bow | Multiple choice | draft | Coto Academy |
 | 3 | A paper shop | 折り紙 origami, folding paper | Multiple choice | draft | Merriam-Webster |
 | 4 | The sakura grove | 桜 sakura, cherry blossom | Multiple choice | doc | Embassy of Japan in Canada |
-| 5 | A tea house | 茶道 sadō, tea ceremony | Multiple choice | doc | Embassy of Japan in India |
-| 6 | A kimono shop | 着物 kimono, a thing to wear | Multiple choice | doc | Vocabulary.com |
-| 7 | A print shop | 富士山 Fujisan, Mt. Fuji | Pick the word | draft | UNESCO |
-| 8 | A shrine | 神社 jinja, shrine (why Mt. Fuji is special) | Multiple choice | draft | UNESCO |
-| 9 | A bench by the pond | 復習 fukushū, review | Match the pairs | draft | |
+| 5 | A kimono shop | 着物 kimono, a thing to wear | Multiple choice | doc | Vocabulary.com |
+| 6 | A tea house | 茶道 sadō, tea ceremony | Multiple choice | doc | Embassy of Japan in India |
+| 7 | A shrine | 神社 jinja, shrine (why Mt. Fuji is special) | Multiple choice | draft | UNESCO |
+| 8 | A bench by the pond | 復習 fukushū, review | Match the pairs | draft | |
+| 9 | A print shop | 富士山 Fujisan, Mt. Fuji | Pick the word | draft | UNESCO |
 | 10 | Back at the park gate | ありがとうございます arigatō gozaimasu | Say it out loud | doc | |
 
 Full story text, hints and explanations are in `src/content/content.ts`.
@@ -122,7 +123,6 @@ Every number and cultural claim on a slide, with its source key in `src/content/
 | Japanese is one of Duolingo's Top 9 courses; the five Duolingo Method principles; the character shape guide | `duolingoPrompt` |
 | Mt. Fuji is a sacred place: pilgrims have set off from its shrines since ancient times, and artists have painted it, including in woodblock prints (UNESCO World Heritage, 2013) | `fuji` |
 | Carp streamers stand for strength and perseverance; kabuto are displayed on Children's Day to inspire bravery | `childrensDay` |
-| Testing yourself beats restudying for long-term retention | `retrieval` |
 
 **Labeled estimates.** The ten-minute visit is a team estimate and appears only in the speaker notes. Replace it with timings from the prototype. The kiosk's 7 ft height and 2.5 ft footprint are the team's design targets from the render, not measurements.
 
@@ -138,7 +138,8 @@ All in `src/content/config.ts`:
 
 ## Open items for the team
 
-- Sophia: review or replace the five draft questions (2, 3, 7, 8, 9). Questions 7 and 8 are new, about Mt. Fuji.
+- Sophia: review or replace the five draft questions (2, 3, 7, 8, 9). Questions 7 and 9 are about Mt. Fuji.
+- The completion slide shows 100 XP (10 per question, as on the lesson card) and 10 of 10 questions. These are the demo's numbers, not measurements.
 - Add a photo of the mini booth to `public/renders/` and set `miniBoothPhoto`. The presenter should also say what the booth shows; the notes leave room for it.
 - Sophia: the vector Nara follows your character sheet. If you'd rather show your Illustrator file on the title and closing slides, export it and set `characterImage`.
 - Decide pricing for the paid locations (the deck only says "free or paid, depending on the location").

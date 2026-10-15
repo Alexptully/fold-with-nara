@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { Kiosk } from "@/components/art/Kiosk";
 import { TentExterior } from "@/components/art/Tent";
 import { config } from "@/content/config";
 import { places } from "@/content/content";
 import { asset } from "@/lib/paths";
-import { play } from "@/lib/sound";
 import { FlipCard } from "../FlipCard";
+import { useRevealSound } from "../useRevealSound";
 import { Reveal, SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
 
@@ -17,7 +16,7 @@ import type { SlideProps } from "../types";
  */
 export function PlacesSlide({ step, print }: SlideProps) {
   const real = step >= 2;
-  usePopOnReveal(real, print);
+  useRevealSound(real, print);
   return (
     <SlideShell heading={places.heading}>
       <div className="absolute left-[291px] top-[170px] h-[700px] w-[440px]">
@@ -44,15 +43,6 @@ export function PlacesSlide({ step, print }: SlideProps) {
       </Reveal>
     </SlideShell>
   );
-}
-
-/** A soft pop when the cards flip, only when the presenter presses forward into the reveal. */
-function usePopOnReveal(real: boolean, print: boolean) {
-  const wasReal = useRef(real);
-  useEffect(() => {
-    if (real && !wasReal.current && !print) play("pop");
-    wasReal.current = real;
-  }, [real, print]);
 }
 
 function KioskDrawing() {
