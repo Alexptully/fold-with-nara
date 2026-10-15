@@ -4,6 +4,9 @@ Our Prompt 2 deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 20
 
 You don't need to know how to code to run it or to change the words on a slide.
 
+- **Code:** https://github.com/Alexptully/fold-with-nara. The repo is private, so ask Alex to add you as a collaborator, then accept the email invite.
+- **Quick look:** https://claude.ai/artifact/759sAUHgHzFMTMnrpiiCGw is a hosted copy of the deck. It doesn't update when the code changes, so run the deck yourself (below) to see the latest version.
+
 ## Run it on your computer
 
 1. Install Node.js (version 20 or newer) from https://nodejs.org. Pick the "LTS" download.
