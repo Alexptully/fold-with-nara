@@ -19,11 +19,11 @@ export type Fold = {
 };
 
 // The origami Mt. Fuji from the team's fold sheet. The sheet comes printed with its
-// dashed guide lines, so the visitor makes three folds; the last one is their own.
+// dashed guide lines, so the visitor makes three folds, each shown as a projected demo.
 export const folds: Fold[] = [
   { n: 1, instruction: "Fold in half into a triangle, snow on top", guidance: "show" },
   { n: 2, instruction: "Fold the left corner over to the right", guidance: "show" },
-  { n: 3, instruction: "Open it halfway so your mountain stands", guidance: "try" },
+  { n: 3, instruction: "Open it halfway so your mountain stands", guidance: "show" },
 ];
 
 /**

@@ -85,10 +85,11 @@ const guides: Record<number, FoldGuide> = {
     arrows: [{ from: [38, 176], to: [202, 176], bend: -0.32 }],
     ghost: { from: [BASE_L, BASE_C, APEX], to: [BASE_R, BASE_C, APEX] },
   },
+  // The flap lying over the right half swings back out to the left, so the mountain stands.
   3: {
     lines: [centerLine],
-    arrows: [{ from: [84, 168], to: [40, 180], bend: 0.35 }],
-    ghost: { from: liftedFlap, to: [APEX, BASE_C, [44, 180]] },
+    arrows: [{ from: [168, 150], to: [56, 156], bend: 0.38 }],
+    ghost: { from: [APEX, BASE_C, [196, 180]], to: [APEX, BASE_C, [40, 180]] },
   },
 };
 

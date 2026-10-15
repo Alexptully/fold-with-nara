@@ -86,7 +86,7 @@ The featured model is Mt. Fuji, an easy model. The sheet comes printed with its 
 | --- | --- | --- | --- |
 | 1 | Questions 1 to 3 | Fold in half into a triangle, snow on top | Full demo |
 | 2 | Questions 4 to 6 | Fold the left corner over to the right | Full demo |
-| 3 | Questions 7 to 9 | Open it halfway so the mountain stands | Your turn |
+| 3 | Questions 7 to 9 | Open it halfway so the mountain stands | Full demo |
 
 Questions marked **doc** follow the team's wording from the shared doc (Tab 1), shortened to a sentence or two so they read at a glance. Questions marked **draft** were written for this deck in the same voice; Sophia owns the questions and should review or replace them.
 
