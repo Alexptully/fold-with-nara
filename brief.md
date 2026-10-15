@@ -16,22 +16,23 @@ The pitch window is four minutes and should be interactive: the audience folds p
 
 ## Running order and timing
 
-Ten timed slides, 3:25 in total, which leaves room for the room to answer out loud. Sources is the last page and isn't presented.
+Eleven timed slides, 3:27 in total, which leaves room for the room to answer out loud. Sources is the last page and isn't presented.
 
 | # | Slide | Time |
 | --- | --- | --- |
 | 1 | Title | 0:12 |
-| 2 | Meet Nara | 0:25 |
-| 3 | Your visit, step by step | 0:35 |
-| 4 | Choose what to fold | 0:18 |
-| 5 | Where it pops up | 0:18 |
-| 6 | The 10-question lesson | 0:15 |
-| 7 | Try the lesson (questions 1, 5 and 10) | 0:40 |
-| 8 | How Nara reacts | 0:20 |
-| 9 | The Duolingo Method in paper | 0:15 |
-| 10 | Thank you | 0:07 |
+| 2 | Meet Nara | 0:22 |
+| 3 | Your visit, step by step | 0:29 |
+| 4 | Choose what to fold | 0:16 |
+| 5 | Where it pops up (drawings flip to the real renders) | 0:18 |
+| 6 | Our mini booth (point to the one on the table) | 0:18 |
+| 7 | The 10-question lesson | 0:13 |
+| 8 | Try the lesson (questions 1, 5 and 10) | 0:40 |
+| 9 | How Nara reacts | 0:18 |
+| 10 | The Duolingo Method in paper | 0:14 |
+| 11 | Thank you | 0:07 |
 
-Slides keep to a heading, one picture and a few words. Everything else is in the speaker notes.
+Slides keep to a heading, one picture and a few words, and no presented text is smaller than 24 px on the 1920 by 1080 stage (footer sources are 20 px). Everything else is in the speaker notes.
 
 ## Required sections and where each one is covered
 
@@ -41,7 +42,7 @@ Each slide's footer names the section it covers.
 | --- | --- |
 | New world character, consistent with the simple illustration style (rounded square, circle, rounded triangle, semicircle) | Meet Nara |
 | Important cultural aspect of a country | Choose what to fold, The 10-question lesson |
-| Distinct location | Where it pops up (and Nara Park as the lesson's setting, one stop per question) |
+| Distinct location | Where it pops up, Our mini booth (and Nara Park as the lesson's setting, one stop per question) |
 | Concise 10-question lesson for beginners | The 10-question lesson, Try the lesson |
 | How the lesson corrects wrong answers | Try the lesson (question 5), How Nara reacts |
 | How the character encourages the learner to start and stay engaged | How Nara reacts (seven expressions, one per moment) |
@@ -65,18 +66,28 @@ Each slide's footer names the section it covers.
 ## Character and installation references
 
 - Nara follows the team's character sheet and its animation: the outline sketch, the colored figure and the expressions (wave, talk, present, think, love, laugh, cheer, bow, plus a resting smile). The deck draws Nara in vector, measured from the animation's frames, so every pose stays sharp and can move: she blinks, flicks her ears, hops when she laughs and walks from slide to slide.
-- The kiosk and tent follow the team's render: a wooden kiosk about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper dispenser and storage; and a white faceted dome tent with stations around the walls and origami hanging overhead.
-- Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo.
+- The kiosk and tent follow the team's render: a wooden kiosk about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper dispenser and storage; and a white faceted dome tent with stations around the walls and origami hanging overhead. "Where it pops up" shows our drawings first, then flips each one over to the render (`public/renders/kiosk-real.jpg` and `tent-real.jpg`, cropped from the render sheet).
+- Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo, so the renders have Duo and the wordmark painted out (the kiosk screen shows a green question mark for the Duo fold, as the deck does).
+- The mini booth is the desk-size physical version the team built. It gets its own slide right after the kiosk and tent, so the presenter can point to it in the room. Until a photo is added, the slide shows the kiosk drawn at desk size.
+- The Mt. Fuji model follows the team's fold sheet: a printed square (white sky, blue mountain with a jagged snowline), two diagonal creases, folded in half into a triangle with the snow on top, then folded down the middle and opened so it stands.
 
 ## The concept in one sentence
 
-Nara, a sika deer from Nara Park, walks a visitor through ten stops in the park; each right answer unlocks the next fold of a paper crane, so the visitor leaves with a crane they folded and ten pieces of Japanese language and culture.
+Nara, a sika deer from Nara Park, walks a visitor through ten stops in the park while they fold an origami Mt. Fuji; answers unlock each fold, so the visitor leaves with a mountain they folded and ten pieces of Japanese language and culture.
 
 ## The lesson
 
-The featured model is the traditional crane. Its ten steps line up one-to-one with the ten questions, and its kite and reverse folds repeat, which lets the projector give less help each time (see "Help fades as you learn").
+The featured model is Mt. Fuji, an easy model with five folds. Each fold gets two questions: the first unlocks it, and the second comes while the camera checks it (question 1 unlocks fold 1, question 2 checks it, and so on to question 10, which checks the finished mountain). The second crease repeats the first, so the projector only marks the line, and the last fold is the visitor's own.
 
-Questions marked **doc** are the team's wording from the shared doc (Tab 1). Questions marked **draft** were written for this deck in the same voice; Sophia owns the questions and should review or replace them.
+| Fold | What the visitor does | Projector help |
+| --- | --- | --- |
+| 1 | Fold corner to corner, then unfold | Full demo |
+| 2 | Fold the other two corners together, then unfold | Lines only |
+| 3 | Fold in half into a triangle, snow on top | Full demo |
+| 4 | Fold the left corner over to the right | Full demo |
+| 5 | Open it halfway so the mountain stands | Your turn |
+
+Questions marked **doc** follow the team's wording from the shared doc (Tab 1), shortened to a sentence or two so they read at a glance. Questions marked **draft** were written for this deck in the same voice; Sophia owns the questions and should review or replace them.
 
 | # | Stop | Topic | Exercise | Status | Source |
 | --- | --- | --- | --- | --- | --- |
@@ -86,8 +97,8 @@ Questions marked **doc** are the team's wording from the shared doc (Tab 1). Que
 | 4 | The sakura grove | 桜 sakura, cherry blossom | Multiple choice | doc | Embassy of Japan in Canada |
 | 5 | A tea house | 茶道 sadō, tea ceremony | Multiple choice | doc | Embassy of Japan in India |
 | 6 | A kimono shop | 着物 kimono, a thing to wear | Multiple choice | doc | Vocabulary.com |
-| 7 | The pond | 鶴 tsuru, crane | Pick the word | draft | |
-| 8 | A shrine | 千羽鶴 senbazuru, a thousand cranes | Multiple choice | draft | Wikipedia |
+| 7 | A print shop | 富士山 Fujisan, Mt. Fuji | Pick the word | draft | UNESCO |
+| 8 | A shrine | 神社 jinja, shrine (why Mt. Fuji is special) | Multiple choice | draft | UNESCO |
 | 9 | A bench by the pond | 復習 fukushū, review | Match the pairs | draft | |
 | 10 | Back at the park gate | ありがとうございます arigatō gozaimasu | Say it out loud | doc | |
 
@@ -107,12 +118,11 @@ Every number and cultural claim on a slide, with its source key in `src/content/
 | Sakura symbolize transience; blossoms last about a week to ten days | `sakura` |
 | The tea ceremony's principles: harmony, respect, purity, tranquility; the host's hospitality | `teaCeremony` |
 | Kimono is ki (wear) + mono (thing) | `kimono` |
-| Cranes symbolize long life; a thousand cranes is a wish for recovery | `senbazuru` |
+| Cranes symbolize long life (the crane card on "Choose what to fold") | `senbazuru` |
 | Japanese is one of Duolingo's Top 9 courses; the five Duolingo Method principles; the character shape guide | `duolingoPrompt` |
-| Mt. Fuji is a sacred place and an icon of Japan (UNESCO World Heritage, 2013) | `fuji` |
+| Mt. Fuji is a sacred place: pilgrims have set off from its shrines since ancient times, and artists have painted it, including in woodblock prints (UNESCO World Heritage, 2013) | `fuji` |
 | Carp streamers stand for strength and perseverance; kabuto are displayed on Children's Day to inspire bravery | `childrensDay` |
 | Testing yourself beats restudying for long-term retention | `retrieval` |
-| Fading worked steps helps learners move to solving alone | `fading` |
 
 **Labeled estimates.** The ten-minute visit is a team estimate and appears only in the speaker notes. Replace it with timings from the prototype. The kiosk's 7 ft height and 2.5 ft footprint are the team's design targets from the render, not measurements.
 
@@ -123,13 +133,14 @@ All in `src/content/config.ts`:
 - `productName`, `tagline`, `team`, `occasion`
 - `characterName` (Nara)
 - `characterImage`: Sophia's Illustrator drawing, once exported to `public/renders/`
-- `kioskRender`: Sam's render of the kiosk, once exported to `public/renders/`
+- `kioskPhoto`, `tentPhoto`: the cleaned renders the "Where it pops up" cards flip to
+- `miniBoothPhoto`: a photo of the mini booth, once it's in `public/renders/`
 
 ## Open items for the team
 
-- Sophia: review or replace the five draft questions (2, 3, 7, 8, 9).
+- Sophia: review or replace the five draft questions (2, 3, 7, 8, 9). Questions 7 and 8 are new, about Mt. Fuji.
+- Add a photo of the mini booth to `public/renders/` and set `miniBoothPhoto`. The presenter should also say what the booth shows; the notes leave room for it.
 - Sophia: the vector Nara follows your character sheet. If you'd rather show your Illustrator file on the title and closing slides, export it and set `characterImage`.
 - Decide pricing for the paid locations (the deck only says "free or paid, depending on the location").
-- Sam: drop the kiosk render into `public/renders/` and set `kioskRender`.
 - Tsion: the speaker notes (press N) are cut to the timing table above. Rehearse with the notes panel's clock and adjust a slide's `seconds` in `slides.ts` if a section runs long.
 - Decide whether Q1 is said out loud by the whole room (the notes assume yes).

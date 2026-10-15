@@ -29,13 +29,17 @@ On presentation day, use `npm run present` instead. It builds the finished site 
 
 On a touch screen, swipe left or right. The address bar shows the slide number (`/#7`), so you can jump straight to a slide to rehearse it.
 
-**Timing.** The pitch is planned at 3:25 across ten slides (see `brief.md`). Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
+**Timing.** The pitch is planned at 3:27 across eleven slides (see `brief.md`). Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
 
-**Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish the crane. Browsers only allow sound after your first click or key press. Press M to mute.
+**Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish Mt. Fuji. The kiosk and tent cards pop when they flip. Browsers only allow sound after your first click or key press. Press M to mute.
 
 **Nara moves with you.** She walks from slide to slide and changes expression as she goes. On "Your visit, step by step", each arrow press walks her to the next step. On "Choose what to fold", click a card to see what the model stands for.
 
-**The "Try the lesson" slide is interactive.** It shows questions 1, 5 and 10, one per arrow press. On question 1, ask the room to say konnichiwa together, then click **Everyone said it**. On question 5, pick a wrong answer first to show Nara's hint, then the right one. On question 10, say arigatō gozaimasu together and click **Finish the crane**. Clicking inside the lesson card never skips the slide.
+**Where it pops up.** The slide opens on our drawings of the kiosk and the tent. One arrow press flips both cards over to the real-life renders.
+
+**Our mini booth.** This slide is your cue to point to the physical mini booth on the table and show what it does.
+
+**The "Try the lesson" slide is interactive.** It shows questions 1, 5 and 10, one per arrow press. On question 1, ask the room to say konnichiwa together, then click **Everyone said it**. On question 5, pick a wrong answer first to show Nara's hint, then the right one. On question 10, say arigatō gozaimasu together and click **Finish Mt. Fuji**. The lesson is Mt. Fuji: one question unlocks each fold, and the next one comes while the camera checks it. Clicking inside the lesson card never skips the slide.
 
 ## Make a PDF
 
@@ -58,7 +62,8 @@ All the words live in three files. You can edit them in any text editor, or on G
 ### Swap in our own drawings
 
 - **Sophia's Nara:** the deck draws Nara from your character sheet and animation in every pose. To show your own file instead wherever Nara walks across the stage, export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
-- **Sam's kiosk render:** save it as `public/renders/kiosk.png` and set `kioskRender: "/renders/kiosk.png"`.
+- **The kiosk and tent renders:** "Where it pops up" flips to `public/renders/kiosk-real.jpg` and `tent-real.jpg`, cropped from our render sheet with Duo and the wordmark painted out. To use a different render, save it there and change `kioskPhoto` or `tentPhoto` in `config.ts`.
+- **The mini booth:** save a photo as `public/renders/mini-booth.jpg` and set `miniBoothPhoto: "/renders/mini-booth.jpg"`. Until then the slide shows the kiosk drawn at desk size.
 
 ## Before you push a change
 

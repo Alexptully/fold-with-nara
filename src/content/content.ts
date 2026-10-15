@@ -1,6 +1,6 @@
 // Every word, number and note in the deck. Slide components read from here.
-// Questions marked fromDoc: true are the team's wording from the shared doc;
-// the rest are drafts for Sophia to review (see brief.md).
+// Questions marked fromDoc: true follow the team's wording from the shared doc
+// (shortened to fit the lesson card); the rest are drafts for Sophia to review (see brief.md).
 
 import type { Pose } from "@/components/art/nara/geometry";
 import { config } from "./config";
@@ -8,32 +8,33 @@ import type { SourceKey } from "./sources";
 
 const nara = config.characterName;
 
-/* ---------- The lesson: ten folds and ten questions ---------- */
+/* ---------- The lesson: five folds and ten questions ---------- */
 
-export type Technique = "valley" | "collapse" | "kite" | "petal" | "reverse" | "open";
 export type Guidance = "show" | "mark" | "try";
 
 export type Fold = {
   n: number;
   instruction: string;
-  technique: Technique;
   guidance: Guidance;
 };
 
-// The traditional crane, split into ten steps. Kite and reverse folds repeat,
-// so the projector can give less help each time they come back.
+// The origami Mt. Fuji from the team's fold sheet. The second crease repeats the
+// first, so the projector only marks the line; the last fold is the visitor's own.
 export const folds: Fold[] = [
-  { n: 1, instruction: "Fold corner to corner, both ways, then unfold", technique: "valley", guidance: "show" },
-  { n: 2, instruction: "Turn over, fold edge to edge both ways, then unfold", technique: "valley", guidance: "mark" },
-  { n: 3, instruction: "Collapse the creases into a square base", technique: "collapse", guidance: "show" },
-  { n: 4, instruction: "Fold the lower edges to the center line", technique: "kite", guidance: "show" },
-  { n: 5, instruction: "Fold the top down, then unfold the last three folds", technique: "valley", guidance: "mark" },
-  { n: 6, instruction: "Petal fold: lift the bottom corner up along the creases", technique: "petal", guidance: "show" },
-  { n: 7, instruction: "Turn over and repeat the kite and petal folds", technique: "kite", guidance: "mark" },
-  { n: 8, instruction: "Narrow both legs to the center, front and back", technique: "kite", guidance: "try" },
-  { n: 9, instruction: "Inside reverse fold the neck and tail up", technique: "reverse", guidance: "show" },
-  { n: 10, instruction: "Reverse fold the head and open the wings", technique: "reverse", guidance: "try" },
+  { n: 1, instruction: "Fold corner to corner, then unfold", guidance: "show" },
+  { n: 2, instruction: "Fold the other two corners together, then unfold", guidance: "mark" },
+  { n: 3, instruction: "Fold in half into a triangle, snow on top", guidance: "show" },
+  { n: 4, instruction: "Fold the left corner over to the right", guidance: "show" },
+  { n: 5, instruction: "Open it halfway so your mountain stands", guidance: "try" },
 ];
+
+/**
+ * Two questions per fold: the first unlocks the fold, and the second comes while
+ * the camera checks it. Question 1 unlocks fold 1, question 2 checks it, and so on.
+ */
+export type QuestionRole = "unlock" | "check";
+export const foldFor = (questionNumber: number) => folds[Math.ceil(questionNumber / 2) - 1];
+export const roleFor = (questionNumber: number): QuestionRole => (questionNumber % 2 === 1 ? "unlock" : "check");
 
 export type ExerciseKind = "speak" | "choose" | "word" | "match";
 
@@ -66,14 +67,14 @@ export type MatchQuestion = QuestionBase & {
 };
 export type Question = SpeakQuestion | ChoiceQuestion | MatchQuestion;
 
+// Stories are kept to a sentence or two so they read at a glance on the lesson card.
 export const questions: Question[] = [
   {
     n: 1,
     kind: "speak",
     place: "The park gate",
     topic: { jp: "こんにちは", romaji: "konnichiwa", english: "hello" },
-    story:
-      "As you explore Japan with me, you'll meet new people along the way! In Japan, greeting someone politely is an important part of everyday life. Saying こんにちは is a great way to start a conversation!",
+    story: "You'll meet new people as we explore Japan. Saying こんにちは is a great way to start a conversation!",
     clue: "Saying こんにちは is a great way to start a conversation!",
     prompt: "How do you say \"hello\" in Japanese?",
     answer: { jp: "こんにちは", romaji: "konnichiwa" },
@@ -86,9 +87,8 @@ export const questions: Question[] = [
     kind: "choose",
     place: "The deer lawn",
     topic: { jp: "お辞儀", romaji: "ojigi", english: "a bow" },
-    story:
-      "Welcome to my home, Nara Park! Here even the deer bow. A bow is called お辞儀 (ojigi), and people bow to greet each other, to say thanks and to say sorry.",
-    clue: "people bow to greet each other, to say thanks and to say sorry",
+    story: "Welcome to Nara Park! People here bow, お辞儀 (ojigi), to greet, to say thanks and to say sorry.",
+    clue: "to greet, to say thanks and to say sorry",
     prompt: "What does a bow usually show in Japan?",
     options: ["Respect for the other person", "That you're in a hurry", "That you disagree", "That you're lost"],
     correct: 0,
@@ -102,8 +102,7 @@ export const questions: Question[] = [
     kind: "choose",
     place: "A paper shop",
     topic: { jp: "折り紙", romaji: "origami", english: "folding paper" },
-    story:
-      "This little shop sells paper! The sheet in your hands has a name too. 折り紙 (origami) joins two words: ori, to fold, and kami, paper.",
+    story: "This shop sells paper! 折り紙 (origami) joins two words: ori, to fold, and kami, paper.",
     clue: "ori, to fold, and kami, paper",
     prompt: "What does \"origami\" mean?",
     options: ["Folding paper", "Paper money", "Flying bird", "Paper lantern"],
@@ -118,8 +117,7 @@ export const questions: Question[] = [
     kind: "choose",
     place: "The sakura grove",
     topic: { jp: "桜", romaji: "sakura", english: "cherry blossom" },
-    story:
-      "Come with me! I want to show you one of Japan's most beautiful sights. Every spring, delicate pink cherry blossoms, called sakura, bloom across Japan. Their petals dance in the wind, but they don't stay for long. That's part of what makes them so special!",
+    story: "Every spring, pink cherry blossoms called sakura bloom across Japan. Their petals dance in the wind, but they don't stay for long.",
     clue: "they don't stay for long",
     prompt: "What do cherry blossoms symbolize in Japanese culture?",
     options: [
@@ -139,18 +137,17 @@ export const questions: Question[] = [
     kind: "choose",
     place: "A tea house",
     topic: { jp: "茶道", romaji: "sadō", english: "tea ceremony" },
-    story:
-      "As we continue our journey, I'm taking you to a traditional Japanese tea house! Here, the host carefully prepares tea for their guests, paying attention to every little detail. It's a special way to welcome others and enjoy a peaceful moment together.",
+    story: "At this tea house, the host prepares tea for the guests, paying attention to every little detail.",
     clue: "paying attention to every little detail",
-    prompt: "What is an important part of a traditional Japanese tea ceremony?",
+    prompt: "What is an important part of a Japanese tea ceremony?",
     options: [
-      "Drinking tea as quickly as possible",
-      "Practicing mindfulness and hospitality",
-      "Competing to make the most tea",
-      "Celebrating only the New Year",
+      "Drinking tea as fast as you can",
+      "Mindfulness and hospitality",
+      "Making the most tea",
+      "Celebrating only New Year",
     ],
     correct: 1,
-    hint: "The host pays attention to every little detail to welcome the guests.",
+    hint: "The host pays attention to every little detail.",
     explain: "The tea ceremony is about hospitality and calm attention to detail.",
     fromDoc: true,
     source: "teaCeremony",
@@ -160,8 +157,7 @@ export const questions: Question[] = [
     kind: "choose",
     place: "A kimono shop",
     topic: { jp: "着物", romaji: "kimono", english: "a thing to wear" },
-    story:
-      "Japan has a rich clothing tradition! One famous garment is the kimono, known for its elegant shape and beautiful patterns. People wear kimonos for celebrations, ceremonies, and other special occasions.",
+    story: "One famous garment is the kimono. People wear kimonos for celebrations and ceremonies.",
     clue: "One famous garment is the kimono",
     prompt: "What is a kimono?",
     options: ["A traditional Japanese garment", "A musical instrument", "A type of house", "A traditional dessert"],
@@ -174,53 +170,52 @@ export const questions: Question[] = [
   {
     n: 7,
     kind: "word",
-    place: "The pond",
-    topic: { jp: "鶴", romaji: "tsuru", english: "crane" },
-    story: "Look at what's taking shape in your hands! This bird is a 鶴 (tsuru), a crane.",
-    clue: "This bird is a 鶴 (tsuru), a crane",
-    prompt: "Which word means crane?",
-    options: ["つる tsuru", "さくら sakura", "かみ kami", "きもの kimono"],
+    place: "A print shop",
+    topic: { jp: "富士山", romaji: "Fujisan", english: "Mt. Fuji" },
+    story: "Look at this woodblock print! The tall mountain is 富士山 (Fujisan), Mt. Fuji, just like the one in your hands.",
+    clue: "The tall mountain is 富士山 (Fujisan), Mt. Fuji",
+    prompt: "Which word means Mt. Fuji?",
+    options: ["ふじさん Fujisan", "さくら sakura", "かみ kami", "きもの kimono"],
     correct: 0,
-    hint: "It's the word I just said with the bird.",
-    explain: "鶴 (tsuru) means crane. The other three are words from earlier on our walk.",
+    hint: "It's the name I gave the tall mountain.",
+    explain: "富士山 (Fujisan) is Mt. Fuji. The other three are words from earlier on our walk.",
     fromDoc: false,
+    source: "fuji",
   },
   {
     n: 8,
     kind: "choose",
     place: "A shrine",
-    topic: { jp: "千羽鶴", romaji: "senbazuru", english: "a thousand cranes" },
-    story:
-      "At shrines you'll often see strings of paper cranes. People say cranes live a thousand years, so friends fold 千羽鶴 (senbazuru), a thousand cranes, for someone they care about.",
-    clue: "People say cranes live a thousand years",
-    prompt: "Why do people fold a thousand paper cranes?",
+    topic: { jp: "神社", romaji: "jinja", english: "shrine" },
+    story: "Shrines are called 神社 (jinja). From Mt. Fuji's shrines, pilgrims have set off to climb it for centuries, and artists paint it again and again.",
+    clue: "pilgrims have set off to climb it for centuries, and artists paint it again and again",
+    prompt: "Why is Mt. Fuji special in Japan?",
     options: [
-      "To wish someone a long, healthy life",
-      "To decorate for winter",
-      "To win a folding contest",
-      "To count the days of spring",
+      "It's sacred and inspires artists",
+      "It's Japan's biggest city",
+      "It's where origami began",
+      "It only appears in winter",
     ],
     correct: 0,
-    hint: "People say cranes live a thousand years.",
-    explain: "The crane stands for long life, so a thousand cranes is a wish for health and recovery.",
+    hint: "Think about who climbs it and who paints it.",
+    explain: "Mt. Fuji is a sacred place for pilgrims and a favorite subject for artists.",
     fromDoc: false,
-    source: "senbazuru",
+    source: "fuji",
   },
   {
     n: 9,
     kind: "match",
     place: "A bench by the pond",
     topic: { jp: "復習", romaji: "fukushū", english: "review" },
-    story:
-      "Let's rest for a moment and look back at our walk. Anything you missed earlier comes back here.",
-    clue: "Anything you missed earlier comes back here",
+    story: "Let's rest here and look back at our walk. Anything you missed comes back here.",
+    clue: "Anything you missed comes back here",
     prompt: "Match each word to its meaning",
     pairs: [
       { word: "こんにちは", meaning: "hello" },
       { word: "お辞儀", meaning: "a bow" },
       { word: "桜", meaning: "cherry blossom" },
-      { word: "着物", meaning: "a thing to wear" },
-      { word: "鶴", meaning: "crane" },
+      { word: "富士山", meaning: "Mt. Fuji" },
+      { word: "神社", meaning: "shrine" },
     ],
     hint: "Tap a word, then tap its meaning.",
     explain: "Every pair is a word from our walk.",
@@ -231,8 +226,7 @@ export const questions: Question[] = [
     kind: "speak",
     place: "Back at the park gate",
     topic: { jp: "ありがとう", romaji: "arigatō", english: "thank you" },
-    story:
-      "You did it! You've completed your cultural journey with me and learned more about the beauty of Japanese culture along the way. Thank you for joining me on this adventure! Before we say goodbye, let's say ありがとうございます to express our gratitude. I hope you had fun learning with me!",
+    story: "You did it! Before we say goodbye, let's say ありがとうございます to thank each other.",
     clue: "let's say ありがとうございます",
     prompt: "How do you say \"thank you\" politely in Japanese?",
     answer: { jp: "ありがとうございます", romaji: "arigatō gozaimasu" },
@@ -277,7 +271,7 @@ export const meetNara = {
     { key: "Signature move", value: "A bow, like the deer of Nara Park" },
   ],
   notes: [
-    `${nara} starts as an outline of rounded shapes, the way Duolingo draws its characters: a rounded-square head, oval eyes, leaf ears and capsule antlers.`,
+    `${nara} starts as an outline of rounded shapes, the way Duolingo draws its characters.`,
     "Hover a shape to light up every part made from it.",
     `${nara} is a sika deer from Nara Park, where the deer bow to visitors. Bowing is one of the first things you learn in Japan, so her signature move is part of the lesson.`,
   ],
@@ -349,7 +343,8 @@ export const options = {
   ] satisfies { name: string; rank: number; models: FoldOption[] }[],
   notes: [
     "Three levels. Easy is sakura and Mt. Fuji, medium is the crane and the koi fish, and hard is the samurai helmet and a special Duo fold.",
-    "Each model brings its own culture questions. Click a card to see what it stands for. Our example lesson is the crane.",
+    "Click a card to show what it stands for.",
+    "Each model has its own culture questions, and our example is Mt. Fuji.",
   ],
 };
 
@@ -358,35 +353,39 @@ export const places = {
   kiosk: {
     name: "Airport kiosk",
     detail: "One visitor at a time",
-    callouts: {
-      head: "Camera and projector",
-      screen: "Touchscreen",
-      workspace: "Folding area",
-      dispenser: "Paper dispenser",
-      storage: "Storage",
-    },
-    height: "About 7 ft",
-    edge: "2.5 ft",
     sideJp: "折って 知って つながろう",
-    sideEn: "A small fold, a bigger world",
+    photoAlt: "Render of the kiosk in an airport: a wooden cabinet with a touchscreen, an overhead camera and projector, and a folding ledge",
   },
   tent: {
     name: "Event tent",
-    detail: "Stations around the wall, origami overhead",
+    detail: "Many stations under one roof",
     signJp: "折って つながろう",
-    signEn: "A small fold, a bigger world",
+    photoAlt: "Render of the event tent: a white folded-paper dome with folding stations inside and paper cranes hanging from the roof",
   },
   notes: [
+    "Press once and both drawings flip over to our renders.",
     "The kiosk fits airports and malls, with an overhead camera and projector, a touchscreen and a paper dispenser.",
-    `The tent is for events: stations line the wall, and finished origami hangs from the canopy. Inside the lesson, the setting is Nara Park, one stop per question on ${nara}'s walk.`,
+    "The tent is for events. Stations line the wall, and finished origami hangs from the roof. Inside the lesson, you walk through Nara Park.",
+  ],
+};
+
+export const miniBooth = {
+  heading: "Our mini booth",
+  line: "A desk-size version we built.",
+  invite: "Come try it after the pitch.",
+  badge: "Here today",
+  photoAlt: "Photo of the team's mini booth",
+  notes: [
+    "Point to the mini booth on the table and show what it does.",
+    "We built a desk-size version of the booth, and it's right here. Come try it after the pitch.",
   ],
 };
 
 export const lessonOverview = {
   heading: "The 10-question lesson",
   notes: [
-    "This is the crane lesson. Each question is a stop in Nara Park, and each right answer unlocks the next fold.",
-    "Kite folds come back with less help each time, and question 9 reviews what you missed.",
+    "Ten questions, each a stop in Nara Park. One question unlocks each of the five folds, and the next one comes while the camera checks it.",
+    "Question 9 reviews anything you missed.",
   ],
 };
 
@@ -398,16 +397,20 @@ export const tryLesson = {
   checkLabel: "Check",
   continueLabel: "Continue",
   retryLabel: "Try again",
-  finishLabel: "Finish the crane",
+  finishLabel: "Finish Mt. Fuji",
   speakLabel: "Everyone said it",
   revealLabel: "Show the answer",
   correctTitle: "Nice work!",
   wrongTitle: "Almost!",
   unlockedLine: (fold: number) => `Fold ${fold} is lit up on your paper.`,
+  checkedLine: (fold: number) => `Fold ${fold} looks great.`,
+  finishedLine: "Your Mt. Fuji is finished.",
+  lockedLabel: "Unlocks with a right answer",
+  checkingLabel: (fold: number) => `The camera is checking fold ${fold}`,
   notes: [
     "Question 1: have the whole room say konnichiwa, then click 'Everyone said it'.",
     "Question 5: pick a wrong answer first. Nara thinks it over and lights up the clue in her story. Then pick the right one.",
-    "Question 10: say arigatō gozaimasu together and click 'Finish the crane'.",
+    "Question 10: say arigatō gozaimasu together and click 'Finish Mt. Fuji'.",
   ],
 };
 
@@ -427,7 +430,7 @@ export const reactions = {
   rule: "No hearts to lose and no lockout.",
   notes: [
     `${nara} has an expression for every moment, so the encouragement shows on her face.`,
-    "A first miss gets a hint pointing back to the story. A second miss gets the answer, which returns in the review. Wrong folds work the same way: the projector marks the corner to fix.",
+    "A first miss gets a hint from the story, and a second miss gets the answer, which returns in the review. A wrong fold gets its corner marked.",
   ],
 };
 
@@ -437,7 +440,7 @@ export const method = {
     { key: "Learn by doing", value: "Each right answer unlocks a real fold" },
     { key: "Learn in a personalized way", value: "Pick your model and your level" },
     { key: "Focus on what matters", value: "Hello, thank you and a bow" },
-    { key: "Stay motivated", value: "A crane takes shape, then a badge" },
+    { key: "Stay motivated", value: "Mt. Fuji takes shape, then a badge" },
     { key: "Feel the delight", value: "You leave holding what you made" },
   ],
   research: "A question between folds is retrieval practice, which beats rereading for long-term memory.",

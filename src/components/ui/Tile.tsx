@@ -43,7 +43,7 @@ export function Tile({
       disabled={disabled}
       animate={motions[state]}
       transition={{ duration: 0.35 }}
-      className={`rounded-tile px-6 py-4 text-left text-small font-bold transition-colors active:translate-y-1 ${looks[state]} ${className}`}
+      className={`rounded-tile px-6 py-4 text-left text-body font-bold transition-colors active:translate-y-1 ${looks[state]} ${className}`}
     >
       {children}
     </motion.button>

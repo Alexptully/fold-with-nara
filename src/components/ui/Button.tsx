@@ -31,7 +31,7 @@ export function Button({
         if (sound) play(sound);
         onClick?.(event);
       }}
-      className={`shrink-0 whitespace-nowrap rounded-tile px-9 py-4 text-small font-extrabold transition-transform ${variants[variant]} ${disabledLook} ${className}`}
+      className={`shrink-0 whitespace-nowrap rounded-tile px-9 py-4 text-body font-extrabold transition-transform ${variants[variant]} ${disabledLook} ${className}`}
     />
   );
 }

@@ -36,10 +36,10 @@ function Column({ item, index, dim, showFix }: { item: Reaction; index: number; 
       transition={{ ...spring, delay: dim ? 0 : 0.1 + index * 0.08, opacity: { duration: duration.base } }}
     >
       <Nara pose={item.pose} className="h-[380px] w-[262px]" />
-      <p className="mt-2 text-small font-extrabold text-ink">{item.moment}</p>
+      <p className="mt-2 text-body font-extrabold text-ink">{item.moment}</p>
       {item.fix ? (
         <motion.p
-          className="mt-4 rounded-tile bg-wrong-soft px-4 py-2 text-small font-bold text-wrong-ink"
+          className="mt-4 rounded-tile bg-wrong-soft px-4 py-2 text-body font-bold text-wrong-ink"
           initial={false}
           animate={{ opacity: showFix ? 1 : 0, scale: showFix ? 1 : 0.8 }}
           transition={spring}

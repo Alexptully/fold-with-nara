@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Nara, type Pose } from "@/components/art/nara/Nara";
 import { Button } from "@/components/ui/Button";
 import { SpeechBubble } from "@/components/ui/SpeechBubble";
-import { exerciseLabels, folds, questions, tryLesson, type Question } from "@/content/content";
+import { exerciseLabels, foldFor, questions, roleFor, tryLesson, type Question } from "@/content/content";
 import { duration, ease, spring } from "@/lib/motion";
 import { play } from "@/lib/sound";
 import { ChoiceExercise, MatchExercise, SpeakExercise, type ExerciseOutcome } from "./Exercises";
@@ -122,9 +122,9 @@ function ProgressBar({ value }: { value: number }) {
 /** Nara's story, with the clue phrase marked once the visitor has missed. */
 function StoryText({ story, clue, lit }: { story: string; clue: string; lit: boolean }) {
   const start = story.indexOf(clue);
-  if (start < 0) return <p className="text-small text-ink">{story}</p>;
+  if (start < 0) return <p className="text-body text-ink">{story}</p>;
   return (
-    <p className="text-small text-ink">
+    <p className="text-body text-ink">
       {story.slice(0, start)}
       <motion.mark
         className={`rounded-md text-ink ${lit ? "-mx-1 px-1" : ""}`}
@@ -164,12 +164,18 @@ function Footer(props: FooterProps) {
   );
 }
 
+/** After a right answer: the fold it unlocked, the fold the camera just checked, or the finished model. */
+function solvedLine(question: Question): string {
+  const fold = foldFor(question.n);
+  if (roleFor(question.n) === "unlock") return tryLesson.unlockedLine(fold.n);
+  return question.n === questions.length ? tryLesson.finishedLine : tryLesson.checkedLine(fold.n);
+}
+
 function FooterMessage({ question, outcome }: { question: Question; outcome: ExerciseOutcome }) {
-  const fold = folds[question.n - 1];
   if (outcome === "solved") {
     return (
       <Message good title={tryLesson.correctTitle}>
-        {tryLesson.unlockedLine(fold.n)}
+        {solvedLine(question)}
       </Message>
     );
   }
@@ -188,7 +194,7 @@ function Message({ good = false, title, children }: { good?: boolean; title: str
       </span>
       <div>
         <p className={`font-display text-h3 ${tone}`}>{title}</p>
-        <p className={`text-small ${tone}`}>{children}</p>
+        <p className={`text-body ${tone}`}>{children}</p>
       </div>
     </motion.div>
   );
@@ -210,7 +216,7 @@ function FooterAction({ question, outcome, canCheck, onCheck, onRetry, onAdvance
   return null;
 }
 
-/** The last Continue finishes the crane with the lesson-complete fanfare. */
+/** The last Continue finishes Mt. Fuji with the lesson-complete fanfare. */
 function finish(onAdvance: () => void) {
   play("complete");
   onAdvance();

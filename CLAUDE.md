@@ -1,6 +1,6 @@
 # Fold with Nara
 
-A web slide deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 2026 (Prompt 2: New World Character). The deck pitches Nara, a sika deer from Nara Park who teaches a 10-question lesson on Japanese culture while the visitor folds a paper crane at an origami pop-up.
+A web slide deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 2026 (Prompt 2: New World Character). The deck pitches Nara, a sika deer from Nara Park who teaches a 10-question lesson on Japanese culture while the visitor folds an origami Mt. Fuji at an origami pop-up.
 
 `brief.md` is the master brief. It sets the slide content, the required sections, the statistics and their sources, and the placeholders. When the brief and this file disagree on design or tooling, this file wins. When they disagree on content or required coverage, the brief wins.
 
@@ -21,7 +21,7 @@ Every slide is drawn on a fixed 1920 by 1080 stage that scales to fit the window
 
 Keep the slides clean: no progress bar, dots or slide numbers. Each slide's footer carries only its sources and, if the assignment has a rubric, its rubric tag.
 
-The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:25, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
+The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:27, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
 
 ## Commands
 
@@ -29,7 +29,7 @@ The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides
 - `/print` (or the P key) is the print version, one landscape page per slide or build step, for PDF export
 - `npm run check` runs the type checker, the linter with its complexity limit, and the em dash scan. Run it before saying a task is done.
 - `npm run present` builds the static site and serves it at http://localhost:3000 (no dev server needed on presentation day).
-- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare). Changing slides is silent.
+- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to the one reveal on "Where it pops up" (a pop as the cards flip). Changing slides is silent.
 - T resets the rehearsal clock in the notes panel.
 - Work on a branch and open a pull request. Never push straight to `main`.
 
@@ -62,6 +62,7 @@ The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides
 - The letter-spaced uppercase micro-label is banned, even when a library or reference recommends it. Small labels stay in sentence case at a readable size.
 - Use monospace only for real code, data or figures aligned in a column. Never use it to make headings, captions or labels feel technical.
 - Use the type scale (`text-sm`, not `text-[9px]`). Arbitrary values need a reason.
+- Presented slides never show text smaller than 24 px on the 1920 by 1080 stage (`text-small`); footer sources are the one exception at 20 px (`text-cite`). Don't put tiny words inside drawings either: at slide size they read as noise.
 
 ### Define it once
 
@@ -103,7 +104,7 @@ These rules target reflexes, not accessibility. Accessible names, alt text and s
 
 The deck should look like a design textbook or a designer's portfolio. Take on the big version of the task.
 
-- Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only.
+- Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only. The kiosk and tent renders in `public/renders/` come from the team's render sheet with Duo and the wordmark painted out; keep them that way.
 - Use animation and interactivity, and check animations frame by frame instead of assuming the CSS is right.
 - Carry detail all the way through: grain, texture, edge treatment and weight.
 - Repeat one motif across the whole deck, the way strong writers and photographers repeat an image. This deck's motif: the dashed green crease line that Nara's projector draws on paper. It appears as the `Crease` primitive on diagrams, joins the steps of the journey path and links each question to its fold. Green is reserved for projected light, right answers and progress.

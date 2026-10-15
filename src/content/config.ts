@@ -8,7 +8,7 @@ export const config = {
   tagline: "A new Duolingo character and a 10-question lesson you fold with your hands",
 
   // Title slide and closing slide, in speaking order.
-  team: ["Sam", "Alex", "Tsion", "Sophia", "Langston"],
+  team: ["Sam", "Alex", "Tsion", "Sophia", "Ledger"],
 
   // Title slide, under the team names.
   occasion: "Duolingo x Iovine and Young Innovator's Forum, Fall 2026",
@@ -22,7 +22,12 @@ export const config = {
   // drawing. The lesson card and "How Nara reacts" always use the built-in poses.
   characterImage: "",
 
-  // Optional: Sam's render of the kiosk. Put it in /public/renders/ and set the path.
-  // Leave empty to use the built-in isometric drawing.
-  kioskRender: "",
+  // Real-life renders of the kiosk and the tent, cropped from the team's render sheet with
+  // Duo and the wordmark painted out. "Where it pops up" flips each drawing over to its render.
+  kioskPhoto: "/renders/kiosk-real.jpg",
+  tentPhoto: "/renders/tent-real.jpg",
+
+  // Optional: a photo of the mini booth we built. Put it in /public/renders/ and set the
+  // path, for example "/renders/mini-booth.jpg". Until then the slide shows a drawing of it.
+  miniBoothPhoto: "",
 } as const;

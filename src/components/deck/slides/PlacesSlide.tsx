@@ -1,47 +1,78 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Kiosk } from "@/components/art/Kiosk";
 import { TentExterior } from "@/components/art/Tent";
 import { config } from "@/content/config";
 import { places } from "@/content/content";
 import { asset } from "@/lib/paths";
+import { play } from "@/lib/sound";
+import { FlipCard } from "../FlipCard";
 import { Reveal, SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
 
-/** The same folding station in two sizes: a kiosk first, then the event tent. */
-export function PlacesSlide({ step }: SlideProps) {
+/**
+ * Step 1: our drawings of the kiosk and the tent. Step 2: each card flips over to
+ * the team's real-life render, with a pop and a burst of sparkles.
+ */
+export function PlacesSlide({ step, print }: SlideProps) {
+  const real = step >= 2;
+  usePopOnReveal(real, print);
   return (
     <SlideShell heading={places.heading}>
-      <Reveal className="absolute left-[20px] top-[140px] h-[760px] w-[970px]">
-        <KioskArt />
-      </Reveal>
-      <Reveal delay={0.2} className="absolute left-[150px] top-[900px]">
+      <div className="absolute left-[291px] top-[170px] h-[700px] w-[440px]">
+        <FlipCard print={print} flipped={real} front={<KioskDrawing />} back={<Photo src={config.kioskPhoto} alt={places.kiosk.photoAlt} />} />
+      </div>
+      <div className="absolute left-[821px] top-[170px] h-[700px] w-[808px]">
+        <FlipCard
+          print={print}
+          flipped={real}
+          delay={0.18}
+          front={
+            <div className="grid h-full w-full place-items-center p-6">
+              <TentExterior jp={places.tent.signJp} />
+            </div>
+          }
+          back={<Photo src={config.tentPhoto} alt={places.tent.photoAlt} />}
+        />
+      </div>
+      <Reveal delay={0.2} className="absolute left-[291px] top-[892px] w-[440px]">
         <Label name={places.kiosk.name} detail={places.kiosk.detail} />
       </Reveal>
-      <Reveal show={step >= 2} className="absolute left-[1010px] top-[270px] h-[560px] w-[875px]">
-        <TentExterior jp={places.tent.signJp} en={places.tent.signEn} />
-      </Reveal>
-      <Reveal show={step >= 2} delay={0.2} className="absolute left-[1090px] top-[900px]">
+      <Reveal delay={0.3} className="absolute left-[821px] top-[892px] w-[808px]">
         <Label name={places.tent.name} detail={places.tent.detail} />
       </Reveal>
     </SlideShell>
   );
 }
 
+/** A soft pop when the cards flip, only when the presenter presses forward into the reveal. */
+function usePopOnReveal(real: boolean, print: boolean) {
+  const wasReal = useRef(real);
+  useEffect(() => {
+    if (real && !wasReal.current && !print) play("pop");
+    wasReal.current = real;
+  }, [real, print]);
+}
+
+function KioskDrawing() {
+  const { kiosk } = places;
+  return (
+    <div className="h-full w-full p-6">
+      <Kiosk sideJp={kiosk.sideJp} />
+    </div>
+  );
+}
+
+function Photo({ src, alt }: { src: string; alt: string }) {
+  return <img src={asset(src)} alt={alt} className="h-full w-full object-cover" draggable={false} />;
+}
+
 function Label({ name, detail }: { name: string; detail: string }) {
   return (
     <>
       <h2 className="text-h3 text-ink">{name}</h2>
-      <p className="mt-1 text-small text-ink-muted">{detail}</p>
+      <p className="mt-1 text-body text-ink-muted">{detail}</p>
     </>
   );
-}
-
-/** Sam's render replaces the drawing as soon as config.kioskRender is set. */
-function KioskArt() {
-  if (config.kioskRender) {
-    return <img src={asset(config.kioskRender)} alt="Render of the kiosk" className="h-full w-full object-contain" />;
-  }
-  const { kiosk } = places;
-  return <Kiosk labels={kiosk.callouts} sideJp={kiosk.sideJp} sideEn={kiosk.sideEn} height={kiosk.height} edge={kiosk.edge} />;
 }

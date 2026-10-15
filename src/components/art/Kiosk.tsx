@@ -55,12 +55,9 @@ function ScreenContent() {
     <>
       <rect x={-3} y={-3} width={60} height={78} rx={3} fill="var(--color-screen-frame)" />
       <rect x={0} y={0} width={54} height={72} rx={1.5} fill="var(--color-screen)" />
-      <text x={27} y={8.5} textAnchor="middle" fontSize={4.4} fontWeight={800} fill="var(--color-ink)" fontFamily="var(--font-display)">
-        What do you want to fold?
-      </text>
       {screenModels.map((model, i) => (
         <g key={model}>
-          <rect x={3 + (i % 3) * 16.5} y={13 + Math.floor(i / 3) * 19} width={15} height={17} rx={2} fill={model === "crane" ? "var(--color-macaw-soft)" : "var(--color-paper-sunk)"} />
+          <rect x={3 + (i % 3) * 16.5} y={13 + Math.floor(i / 3) * 19} width={15} height={17} rx={2} fill={model === "fuji" ? "var(--color-macaw-soft)" : "var(--color-paper-sunk)"} />
           {model === "duo" ? (
             <text x={10.5 + (i % 3) * 16.5} y={25 + Math.floor(i / 3) * 19} textAnchor="middle" fontSize={9} fontWeight={800} fill="var(--color-accent)">
               ?
@@ -73,14 +70,11 @@ function ScreenContent() {
         </g>
       ))}
       <rect x={4} y={56} width={46} height={7} rx={3.5} fill="var(--color-accent)" />
-      <text x={27} y={61.2} textAnchor="middle" fontSize={3.8} fontWeight={800} fill="var(--color-paper)">
-        Start folding
-      </text>
     </>
   );
 }
 
-function SidePanel({ jp, en }: { jp: string; en: string }) {
+function SidePanel({ jp }: { jp: string }) {
   const lines = jp.split(" ");
   return (
     <>
@@ -89,9 +83,6 @@ function SidePanel({ jp, en }: { jp: string; en: string }) {
           {line}
         </text>
       ))}
-      <text x={8} y={14 + lines.length * 11 + 2} fontSize={4.2} fontWeight={700} fill="var(--color-ink-muted)">
-        {en}
-      </text>
       {[
         [56, 62, 4.5],
         [64, 70, 3.5],
@@ -104,6 +95,8 @@ function SidePanel({ jp, en }: { jp: string; en: string }) {
     </>
   );
 }
+
+const COMPACT_VIEWBOX = "105 70 554 860";
 
 const sheetCorners: Vec3[] = [[22, 56, 95.6], [54, 56, 95.6], [54, 86, 95.6], [22, 86, 95.6]];
 const lensCorners: Vec3[] = [[32, 62, 206], [44, 62, 206], [44, 74, 206], [32, 74, 206]];
@@ -118,10 +111,14 @@ export const kioskAnchors: Record<keyof KioskLabels, Pt> = {
   storage: iso.project([60, D, 36]),
 };
 
-export function Kiosk({ labels, sideJp, sideEn, height, edge }: { labels: KioskLabels; sideJp: string; sideEn: string; height: string; edge: string }) {
+type KioskProps = { labels?: KioskLabels; sideJp: string; height?: string; edge?: string };
+
+/** With labels, the drawing carries callouts and dimensions; without them, it's the kiosk alone, framed tight. */
+export function Kiosk({ labels, sideJp, height, edge }: KioskProps) {
   const cone = hull([...sheetCorners, ...lensCorners].map(iso.project));
+  const viewBox = labels ? "0 0 1150 900" : COMPACT_VIEWBOX;
   return (
-    <svg viewBox="0 0 1150 900" className="h-full w-full" role="img" aria-label="Kiosk: a tall wooden cabinet with a touchscreen, an overhead camera and projector, a folding ledge, a paper dispenser and storage">
+    <svg viewBox={viewBox} className="h-full w-full" role="img" aria-label="Kiosk: a tall wooden cabinet with a touchscreen, an overhead camera and projector, a folding ledge, a paper dispenser and storage">
       <polygon points={polygon(iso.floorRect(-14, -14, W + 28, D + 44, 0))} fill="var(--color-line)" opacity={0.7} />
       <Box at={[0, 0, 0]} size={[W, D, 6]} colors={dark} />
       <Box at={[0, 0, 6]} size={[W, D, 84]} colors={wood} />
@@ -134,7 +131,7 @@ export function Kiosk({ labels, sideJp, sideEn, height, edge }: { labels: KioskL
       </FrontFace>
       <polygon points={polygon(iso.floorRect(24, D, 28, 16, 77))} fill="var(--color-sakura)" />
       <SideFace y={D} z={88}>
-        <SidePanel jp={sideJp} en={sideEn} />
+        <SidePanel jp={sideJp} />
       </SideFace>
       <Box at={[0, 0, 90]} size={[W, 96, 5]} colors={wood} />
       <polygon points={polygon(iso.floorRect(12, 48, 52, 42, 95.2))} fill="var(--color-paper-sunk)" />
@@ -148,8 +145,8 @@ export function Kiosk({ labels, sideJp, sideEn, height, edge }: { labels: KioskL
       <Box at={[34, 6, 221]} size={[8, 68, 6]} colors={dark} />
       <Box at={[26, 56, 206]} size={[24, 24, 16]} colors={dark} />
       <circle cx={iso.project([38, 80, 214])[0]} cy={iso.project([38, 80, 214])[1]} r={6} fill="var(--color-accent)" className="projected" />
-      <Dimensions height={height} edge={edge} />
-      <Callouts labels={labels} />
+      {height && edge ? <Dimensions height={height} edge={edge} /> : null}
+      {labels ? <Callouts labels={labels} /> : null}
     </svg>
   );
 }

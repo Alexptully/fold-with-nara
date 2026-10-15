@@ -10,7 +10,7 @@ import { Jp, SlideShell } from "../primitives";
 
 /** The kiosk's first screen: pick a model at one of three levels. Click a card to see what it stands for. */
 export function ChooseFoldSlide() {
-  const [selected, setSelected] = useState<OrigamiModel>("crane");
+  const [selected, setSelected] = useState<OrigamiModel>("fuji");
   const select = (model: OrigamiModel) => {
     play("tap");
     setSelected(model);

@@ -158,7 +158,7 @@ function Lantern({ x, y }: { x: number; y: number }) {
 }
 
 /** Painted blossoms on the lower walls, and the sign on the left facet. */
-function Decoration({ jp, en }: { jp: string; en: string }) {
+function Decoration({ jp }: { jp: string }) {
   const blossoms: Pt[] = [[90, 580], [150, 584], [70, 470], [258, 576], [880, 560], [910, 520], [846, 540], [930, 580], [780, 572]];
   return (
     <g>
@@ -174,9 +174,6 @@ function Decoration({ jp, en }: { jp: string; en: string }) {
       <g transform="rotate(-10 190 520)">
         <text x={86} y={512} fontSize={30} fontWeight={800} fill="var(--color-ink)" fontFamily="var(--font-jp)">
           {jp}
-        </text>
-        <text x={86} y={542} fontSize={17} fontWeight={700} fill="var(--color-ink-muted)">
-          {en}
         </text>
       </g>
       <text x={150} y={360} fontSize={44} fontWeight={700} fill="var(--color-accent)" fontFamily="var(--font-display)" transform="rotate(-38 210 340)">
@@ -195,7 +192,7 @@ function Visitor({ x, tone }: { x: number; tone: string }) {
   );
 }
 
-export function TentExterior({ jp, en }: { jp: string; en: string }) {
+export function TentExterior({ jp }: { jp: string }) {
   return (
     <motion.svg
       viewBox="0 0 1000 640"
@@ -210,7 +207,7 @@ export function TentExterior({ jp, en }: { jp: string; en: string }) {
       <Facets tris={upper} band="upper" />
       <Facets tris={lower} band="lower" />
       <Interior />
-      <Decoration jp={jp} en={en} />
+      <Decoration jp={jp} />
       <Lantern x={300} y={440} />
       <Lantern x={716} y={450} />
       <Visitor x={760} tone="var(--color-macaw-ring)" />
