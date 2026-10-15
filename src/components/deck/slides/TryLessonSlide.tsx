@@ -3,7 +3,7 @@
 import { CheckCircle, LockSimple } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
-import { FujiPaper } from "@/components/art/FujiPaper";
+import { FoldPlayer, FujiPaper } from "@/components/art/FujiPaper";
 import type { ExerciseOutcome } from "@/components/lesson/Exercises";
 import { LessonCard } from "@/components/lesson/LessonCard";
 import { demoQuestions, foldUnlockedBy, foldsDoneBefore, questions, tryLesson, type Fold, type Guidance } from "@/content/content";
@@ -12,7 +12,7 @@ import { SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
 
 const guidanceLabel: Record<Guidance, string> = {
-  show: "Full demo on the paper",
+  show: "Watch it fold on your paper",
   mark: "Lines only this time",
   try: "Your turn, hints if you pause",
 };
@@ -47,7 +47,7 @@ function LessonStage({ questionIndex, finishing, print, advance }: { questionInd
           Stop {question.n}: {question.place}
         </p>
         <div className="relative mt-2 h-[560px] w-[560px]">
-          <FujiPaper state={foldsDoneBefore(question.n)} guide={answered && fold ? fold.n : null} guidance={fold?.guidance} />
+          <LessonPaper fold={fold?.n ?? null} done={foldsDoneBefore(question.n)} play={answered} print={print} />
           <StatusBadge answered={answered} />
         </div>
         {fold ? <FoldCaption fold={fold} answered={answered} /> : null}
@@ -57,6 +57,15 @@ function LessonStage({ questionIndex, finishing, print, advance }: { questionInd
       </div>
     </>
   );
+}
+
+/**
+ * The paper starts as the last fold left it, without popping in again. A right
+ * answer plays the next fold on it: crease, flap, and the new shape.
+ */
+function LessonPaper({ fold, done, play, print }: { fold: number | null; done: number; play: boolean; print: boolean }) {
+  if (fold === null) return <FujiPaper state={done} appear={false} className="h-full w-full" />;
+  return <FoldPlayer fold={fold} play={play} instant={print} className="h-full w-full" />;
 }
 
 function StatusBadge({ answered }: { answered: boolean }) {

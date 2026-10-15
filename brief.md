@@ -80,7 +80,7 @@ Nara, a sika deer from Nara Park, walks a visitor through ten stops in the park 
 
 The featured model is Mt. Fuji, an easy model. The sheet comes printed with its dashed guide lines, so the visitor makes three folds, matching the team's fold photo. The ten questions come in three sets of three: questions 1 to 3 unlock fold 1, questions 4 to 6 unlock fold 2, and questions 7 to 9 unlock fold 3. Question 10 comes once the mountain stands, then the completion screen.
 
-"Try the lesson" plays the question that unlocks each fold, in order: question 3 (fold 1), question 6 (fold 2) and question 9 (fold 3). Finishing goes straight to the completion slide.
+"Try the lesson" plays the question that unlocks each fold, in order: question 3 (fold 1), question 6 (fold 2) and question 9 (fold 3). Each question opens with the paper as the previous fold left it; a right answer animates the next fold (projected crease and arrow, the flap folding over, then the new shape). Finishing goes straight to the completion slide.
 
 | Fold | Unlocked by | What the visitor does | Projector help |
 | --- | --- | --- | --- |
