@@ -1,18 +1,19 @@
 "use client";
 
-import { CheckCircle, LockSimple } from "@phosphor-icons/react";
+import { ArrowCounterClockwise, CheckCircle, LockSimple } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { useState } from "react";
 import { FoldPlayer, FujiPaper } from "@/components/art/FujiPaper";
 import type { ExerciseOutcome } from "@/components/lesson/Exercises";
 import { LessonCard } from "@/components/lesson/LessonCard";
+import { Button } from "@/components/ui/Button";
 import { demoQuestions, foldUnlockedBy, foldsDoneBefore, questions, tryLesson, type Fold, type Guidance } from "@/content/content";
 import { duration, ease } from "@/lib/motion";
 import { SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
 
 const guidanceLabel: Record<Guidance, string> = {
-  show: "Watch it fold on your paper",
+  show: "Watch the fold",
   mark: "Lines only this time",
   try: "Your turn, hints if you pause",
 };
@@ -39,6 +40,8 @@ function LessonStage({ questionIndex, finishing, print, advance }: { questionInd
   const question = questions[questionIndex];
   const fold = foldUnlockedBy(question.n);
   const [outcome, setOutcome] = useState<ExerciseOutcome>(print ? "solved" : "open");
+  // Each replay remounts the paper, so the fold plays again from the last step.
+  const [runs, setRuns] = useState(0);
   const answered = isAnswered(outcome);
   return (
     <>
@@ -47,10 +50,10 @@ function LessonStage({ questionIndex, finishing, print, advance }: { questionInd
           Stop {question.n}: {question.place}
         </p>
         <div className="relative mt-2 h-[560px] w-[560px]">
-          <LessonPaper fold={fold?.n ?? null} done={foldsDoneBefore(question.n)} play={answered} print={print} />
+          <LessonPaper key={runs} fold={fold?.n ?? null} done={foldsDoneBefore(question.n)} play={answered} print={print} />
           <StatusBadge answered={answered} />
         </div>
-        {fold ? <FoldCaption fold={fold} answered={answered} /> : null}
+        {fold ? <FoldCaption fold={fold} answered={answered} onReplay={print ? null : () => setRuns((count) => count + 1)} /> : null}
       </div>
       <div className="absolute right-24 top-[176px] h-[836px] w-[1050px]">
         <LessonCard question={question} print={print} finishing={finishing} onAdvance={advance} onOutcome={setOutcome} />
@@ -83,15 +86,28 @@ function StatusBadge({ answered }: { answered: boolean }) {
   );
 }
 
-function FoldCaption({ fold, answered }: { fold: Fold; answered: boolean }) {
+function FoldCaption({ fold, answered, onReplay }: { fold: Fold; answered: boolean; onReplay: (() => void) | null }) {
   return (
     <motion.div key={String(answered)} className="mt-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
       <p className={`text-h3 ${answered ? "text-ink" : "text-ink-faint"}`}>
         Fold {fold.n}: {fold.instruction}
       </p>
-      <p className={`mt-2 text-body font-bold ${answered ? "text-accent-ink" : "text-ink-faint"}`}>
-        {answered ? guidanceLabel[fold.guidance] : tryLesson.lockedLabel}
-      </p>
+      <div className="mt-3 flex min-h-[72px] items-center justify-between gap-6">
+        <p className={`text-body font-bold ${answered ? "text-accent-ink" : "text-ink-faint"}`}>
+          {answered ? guidanceLabel[fold.guidance] : tryLesson.lockedLabel}
+        </p>
+        {answered && onReplay ? <ReplayButton onReplay={onReplay} /> : null}
+      </div>
     </motion.div>
+  );
+}
+
+/** Plays the fold again from the last step, as many times as the presenter likes. */
+function ReplayButton({ onReplay }: { onReplay: () => void }) {
+  return (
+    <Button variant="chunky" onClick={onReplay} className="flex items-center gap-3 px-6" data-no-advance>
+      <ArrowCounterClockwise size={30} weight="bold" aria-hidden="true" />
+      {tryLesson.replayLabel}
+    </Button>
   );
 }

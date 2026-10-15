@@ -407,6 +407,7 @@ export const tryLesson = {
   towardLine: (left: number, fold: number) => `${left} more to light up fold ${fold}.`,
   finishedLine: "Your Mt. Fuji is finished.",
   lockedLabel: "Unlocks with a right answer",
+  replayLabel: "Replay fold",
   notes: [
     "Between folds, Nara tells a short story and asks about it. A right answer unlocks the next fold, and the room folds along.",
     "Question 3: answer it, then everyone folds their square in half into a triangle.",
