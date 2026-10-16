@@ -32,7 +32,7 @@ The speaker notes are our script. Press **N** while presenting: each slide shows
 | Example lesson | The 10-question lesson, Try the lesson, You folded Mt. Fuji | Ledger |
 | Arigatō gozaimasu | Thank you | Everyone |
 
-To change a line, edit that slide's `notes` in `src/content/content.ts`.
+The same script, with the running order and times, is in our doc [Fold with Nara script](https://claude.ai/artifact/7DthhUU9jAQG1f8PiGaogY) for reading and printing. The deck's notes are the source: to change a line, edit that slide's `notes` in `src/content/content.ts`, then update the doc to match.
 
 ## Keys while presenting
 
