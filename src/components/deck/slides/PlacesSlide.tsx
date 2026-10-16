@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import { Kiosk } from "@/components/art/Kiosk";
 import { TENT_DOOR_VIEW, TENT_FRAME, TentExterior } from "@/components/art/Tent";
-import { FEATURED_KIOSK, INSIDE, KIOSK_SCALE, TentInside, insideKiosks } from "@/components/art/TentInside";
+import { INSIDE, KIOSK_SCALE, TentInside, featuredKiosk } from "@/components/art/TentInside";
 import { places } from "@/content/content";
 import { ease } from "@/lib/motion";
 import { SlideShell } from "../primitives";
@@ -36,7 +36,7 @@ const insideZoom = 1 / doorWindow.scale;
 // cabinet and callouts centered. The compact kiosk inside the tent starts at (105, 70).
 const labeledScale = VIEW.height / 900;
 const labeled = { left: VIEW.width / 2 - 552 * labeledScale, width: 1150 * labeledScale };
-const [kioskLeft, kioskTop] = insideKiosks[FEATURED_KIOSK];
+const [kioskLeft, kioskTop] = featuredKiosk;
 const kioskZoom = labeledScale / KIOSK_SCALE;
 const kioskShift = { x: labeled.left + 105 * labeledScale - kioskZoom * kioskLeft, y: 70 * labeledScale - kioskZoom * kioskTop };
 
