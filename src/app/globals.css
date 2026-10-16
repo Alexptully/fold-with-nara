@@ -1,0 +1,235 @@
+@import "tailwindcss";
+
+/*
+  Every color, type style, radius, shadow and easing in the deck is defined here.
+  Components use the generated classes (bg-paper, text-ink-muted, text-h1, shadow-tile)
+  and never raw hex values. The palette follows Duolingo's own colors: a white canvas,
+  feather green for progress and right answers, and the bright secondary colors for
+  Nara's effects (yellow sparkles, blue thoughts, pink hearts).
+*/
+@theme {
+  --font-sans: "Nunito Variable", "Nunito", "M PLUS Rounded 1c", ui-rounded, system-ui, sans-serif;
+  --font-display: "Fredoka Variable", "Fredoka", "Nunito Variable", "Nunito", ui-rounded, sans-serif;
+  --font-jp: "M PLUS Rounded 1c", "Nunito Variable", "Nunito", sans-serif;
+
+  /* Canvas and ink */
+  --color-paper: #ffffff;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunk: #f7f7f7;
+  --color-line: #e5e5e5;
+  --color-line-strong: #cecece;
+  --color-ink: #3c3c3c;
+  --color-ink-muted: #777777;
+  --color-ink-faint: #afafaf;
+
+  /* Feather green: progress, right answers, projected light */
+  --color-accent: #58cc02;
+  --color-accent-ink: #58a700;
+  --color-accent-soft: #d7ffb8;
+  --color-accent-glow: rgb(88 204 2 / 0.3);
+  --color-accent-bright: #89e219;
+
+  /* Wrong answers */
+  --color-wrong: #ff4b4b;
+  --color-wrong-ink: #ea2b2b;
+  --color-wrong-soft: #ffdfe0;
+
+  /* Selection and Nara's thinking marks */
+  --color-macaw: #1cb0f6;
+  --color-macaw-ink: #1899d6;
+  --color-macaw-soft: #ddf4ff;
+  --color-macaw-ring: #84d8ff;
+
+  /* Sparkles, badges and the kabuto */
+  --color-bee: #ffc800;
+  --color-bee-ink: #e0a500;
+  --color-fox: #ff9600;
+  --color-love: #ff6f91;
+  --color-love-soft: #ffd3de;
+
+  /* The custom-printed origami sheet */
+  --color-sheet: #e9f8dc;
+  --color-sheet-fold: #cdeeb1;
+  --color-sheet-shade: #b4e08d;
+  --color-sheet-edge: #8fc464;
+
+  /* Nara, the sika deer, sampled from the team's animation frames */
+  --color-deer: #b26f3f;
+  --color-deer-cream: #eccba5;
+  --color-deer-antler: #733e2b;
+  --color-deer-dark: #50352a;
+  --color-deer-line: #a2623a;
+  --color-deer-eye-white: #fdf8f3;
+  --color-deer-mouth: #4f3429;
+  --color-deer-tongue: #e35550;
+  --color-deer-shadow: #e8e6e2;
+  --color-spark: #f2bb56;
+  --color-motion: #90c6e7;
+  --color-sketch: #a8a8a8;
+
+  /* Origami options */
+  --color-sakura: #ffb7cb;
+  --color-sakura-deep: #ff8fb0;
+  --color-fuji: #1cb0f6;
+  --color-fuji-light: #84d8ff;
+  /* The printed Mt. Fuji sheet (blue with snowy corners) and its two folded faces */
+  --color-fuji-paper: #279ceb;
+  --color-fuji-lit: #4ca2eb;
+  --color-fuji-shade: #1d80d3;
+  --color-snow: #ffffff;
+  --color-koi: #ff4b4b;
+  --color-koi-light: #ff9600;
+  --color-kabuto: #ffc800;
+  --color-kabuto-shade: #e0a500;
+  --color-kabuto-band: #8a5a2b;
+  --color-crane: #b8e4ff;
+  --color-crane-shade: #49b6f0;
+
+  /* Wood, tent shell and lanterns in the installation drawings */
+  --color-wood-top: #efd6ac;
+  --color-wood-left: #dfbb87;
+  --color-wood-right: #c9a06b;
+  --color-wood-dark: #a9804e;
+  --color-shell-top: #ffffff;
+  --color-shell-left: #f2f0eb;
+  --color-shell-right: #e3dfd7;
+  --color-shell-deep: #cdc7bb;
+  --color-lantern: #fff1c7;
+  --color-lantern-glow: #ffd27a;
+  --color-device: #3a3833;
+  --color-device-face: #4a4842;
+  --color-screen: #ffffff;
+  --color-screen-frame: #2b2b2b;
+
+  /* Type scale at 1080p. Headlines 48px and up, body 24px and up. */
+  --text-display: 156px;
+  --text-display--line-height: 0.98;
+  --text-display--font-weight: 700;
+  --text-h1: 78px;
+  --text-h1--line-height: 1.04;
+  --text-h1--font-weight: 700;
+  --text-h2: 50px;
+  --text-h2--line-height: 1.12;
+  --text-h2--font-weight: 600;
+  --text-h3: 36px;
+  --text-h3--line-height: 1.18;
+  --text-h3--font-weight: 600;
+  --text-h4: 30px;
+  --text-h4--line-height: 1.15;
+  --text-h4--font-weight: 600;
+  --text-lead: 34px;
+  --text-lead--line-height: 1.32;
+  --text-body: 28px;
+  --text-body--line-height: 1.38;
+  --text-small: 24px;
+  --text-small--line-height: 1.35;
+  --text-panel: 18px;
+  --text-panel--line-height: 1.5;
+  --text-cite: 20px;
+  --text-cite--line-height: 1.35;
+  --text-fine: 17px;
+  --text-fine--line-height: 1.35;
+  --text-jp-xl: 168px;
+  --text-jp-xl--line-height: 1.05;
+  --text-jp-lg: 88px;
+  --text-jp-lg--line-height: 1.1;
+  --text-jp-md: 46px;
+  --text-jp-md--line-height: 1.15;
+  --text-jp-sm: 28px;
+  --text-jp-sm--line-height: 1.2;
+
+  /* Radii, shadows and motion. Tiles and buttons sit on a 4px "ledge", like Duolingo's. */
+  --radius-tile: 16px;
+  --radius-card: 24px;
+  --radius-pill: 999px;
+  --shadow-tile: inset 0 0 0 2px var(--color-line), 0 4px 0 var(--color-line);
+  --shadow-tile-selected: inset 0 0 0 2px var(--color-macaw-ring), 0 4px 0 var(--color-macaw-ring);
+  --shadow-tile-correct: inset 0 0 0 2px var(--color-accent), 0 4px 0 var(--color-accent);
+  --shadow-tile-wrong: inset 0 0 0 2px var(--color-wrong), 0 4px 0 var(--color-wrong);
+  --shadow-button-green: 0 4px 0 var(--color-accent-ink);
+  --shadow-button-red: 0 4px 0 var(--color-wrong-ink);
+  --shadow-button-blue: 0 6px 0 var(--color-macaw-ink);
+  --shadow-badge: 0 4px 0 var(--color-bee-ink);
+  --shadow-node: 0 8px 0 var(--color-accent-ink);
+  --shadow-node-locked: 0 8px 0 var(--color-line-strong);
+  --shadow-divider: inset 0 2px 0 var(--color-line);
+  --shadow-clue: inset 0 -4px 0 var(--color-accent);
+  --shadow-well: inset 0 0 0 2px var(--color-line);
+  --shadow-card: inset 0 0 0 2px var(--color-line), 0 4px 0 var(--color-line);
+  --shadow-float: 0 18px 40px -18px rgb(60 60 60 / 0.3);
+  --shadow-drop-sheet: drop-shadow(0 6px 8px rgb(60 60 60 / 0.16));
+  --shadow-drop-poster: drop-shadow(0 30px 40px rgb(60 60 60 / 0.18));
+  --ease-fold: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html,
+  body {
+    height: 100%;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  h1,
+  h2,
+  h3,
+  .font-display {
+    font-family: var(--font-display);
+  }
+  :lang(ja),
+  .jp {
+    font-family: var(--font-jp);
+  }
+  button {
+    font: inherit;
+    cursor: pointer;
+  }
+}
+
+/* The deck hides the cursor after a few idle seconds while presenting. */
+.cursor-idle,
+.cursor-idle * {
+  cursor: none !important;
+}
+
+/* Projected light on the paper glows softly, the way a projector would. */
+.projected {
+  filter: drop-shadow(0 0 6px var(--color-accent-glow));
+}
+
+@media print {
+  @page {
+    size: 1920px 1080px;
+    margin: 0;
+  }
+  html,
+  body {
+    background: var(--color-paper);
+  }
+}
+
+.print-page {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+}
+.print-page:last-child {
+  page-break-after: auto;
+  break-after: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
