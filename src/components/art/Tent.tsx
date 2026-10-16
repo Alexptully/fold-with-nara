@@ -20,6 +20,14 @@ const B: Pt[] = [
   [130, 470], [230, 360], [330, 330], [420, 300], [520, 320], [610, 290], [700, 322], [800, 322], [880, 420],
 ];
 const E: Pt[] = [[330, 600], [322, 468], [382, 390], [480, 350], [580, 360], [660, 410], [692, 500], [692, 600]];
+
+/**
+ * The drawing's frame, and a window that sits wholly inside the arched entrance
+ * (for a viewer about 2.4 times wider than tall). Zooming until it fills the viewer
+ * carries the camera through the door.
+ */
+export const TENT_FRAME = { width: 1000, height: 640 };
+export const TENT_DOOR_VIEW = { left: 357, top: 470, width: 300 };
 const C1: Pt = [200, 600];
 const C3: Pt = [830, 600];
 
@@ -137,7 +145,7 @@ function HangingOrigami({ model, x, drop, index }: { model: OrigamiModel; x: num
   );
 }
 
-function Lantern({ x, y }: { x: number; y: number }) {
+export function Lantern({ x, y }: { x: number; y: number }) {
   return (
     <g>
       <line x1={x} y1={y - 40} x2={x} y2={y - 14} stroke="var(--color-device)" strokeWidth={2} />

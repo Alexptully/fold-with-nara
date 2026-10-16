@@ -17,6 +17,23 @@ You don't need to know how to code to run it or to change the words on a slide.
 
 On presentation day, use `npm run present` instead. It builds the finished site once and serves it, so nothing recompiles while you're on stage.
 
+## Who says what
+
+The speaker notes are our script. Press **N** while presenting: each slide shows whose part it is, the lines to say, and cues in brackets (press, click, point). At every handoff the notes name the next speaker.
+
+| Part | Slides | Speaker |
+| --- | --- | --- |
+| Intro | Title | Everyone |
+| Why we did it | Why origami | Sam |
+| What we did | Where it pops up, Our mini booth | Alex |
+| Meet Nara | Meet Nara, How Nara reacts | Sophia |
+| User experience | Your visit, Choose what to fold | Tsion |
+| Duolingo in paper | The Duolingo Method in paper | Alex |
+| Example lesson | The 10-question lesson, Try the lesson, You folded Mt. Fuji | Ledger |
+| Arigatō gozaimasu | Thank you | Everyone |
+
+To change a line, edit that slide's `notes` in `src/content/content.ts`.
+
 ## Keys while presenting
 
 | Key | What it does |
@@ -32,9 +49,9 @@ On presentation day, use `npm run present` instead. It builds the finished site 
 
 On a touch screen, swipe left or right. The address bar shows the slide number (`/#7`), so you can jump straight to a slide to rehearse it.
 
-**Timing.** The pitch is planned at 3:39 across thirteen slides (see `brief.md`). The speaker notes follow our script. Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
+**Timing.** The pitch is planned at 3:44 across thirteen slides (see `brief.md`). Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
 
-**Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish Mt. Fuji. The tent and kiosk cards pop when they flip, and Nara pops when she's revealed. Browsers only allow sound after your first click or key press. Press M to mute.
+**Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish Mt. Fuji. Nara pops when she's revealed, and Mt. Fuji pops when it lands in the tent. Browsers only allow sound after your first click or key press. Press M to mute.
 
 **Nara is a reveal.** She stays off stage through the title, "Why origami" and the booth slides. "Meet Nara" opens on her outline; one arrow press pops her into color, and "How Nara reacts" follows right after.
 
@@ -42,7 +59,7 @@ On a touch screen, swipe left or right. The address bar shows the slide number (
 
 **Why origami.** One arrow press sends the Mt. Fuji home: a copy flies along the dashed line to a shelf, and the study about why people keep what they fold appears.
 
-**Where it pops up.** The pop-up lives at events only: a tent with folding kiosks inside. The slide opens on our drawings of the tent and one of its kiosks. One arrow press flips both cards over to the real-life renders.
+**Where it pops up.** The pop-up is a tent at events, free for everyone. The slide is one camera move in drawings: it opens on the tent, the first arrow press flies in through the door to the kiosks along the walls, and the second closes in on one kiosk with its parts labeled.
 
 **Our mini booth.** This slide is your cue to point to the physical mini booth on the table and show what it does.
 
@@ -71,7 +88,7 @@ All the words live in three files. You can edit them in any text editor, or on G
 ### Swap in our own drawings
 
 - **Sophia's Nara:** the deck draws Nara from your character sheet and animation in every pose. To show your own file instead wherever Nara walks across the stage, export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
-- **The kiosk and tent renders:** "Where it pops up" flips to `public/renders/kiosk-real.jpg` and `tent-real.jpg`, cropped from our render sheet with Duo and the wordmark painted out. The kiosk's airport background is replaced with a blurred view of the tent's inside, since the kiosks live in the tent. To use a different render, save it there and change `kioskPhoto` or `tentPhoto` in `config.ts`.
+- **The tent render:** "You folded Mt. Fuji" hangs the finished model inside `public/renders/tent-real.jpg`, cropped from our render sheet with Duo and the wordmark painted out. To use a different render, save it there and change `tentPhoto` in `config.ts`.
 - **The mini booth:** save a photo as `public/renders/mini-booth.jpg` and set `miniBoothPhoto: "/renders/mini-booth.jpg"`. Until then the slide shows the kiosk drawn at desk size.
 
 ## Before you push a change

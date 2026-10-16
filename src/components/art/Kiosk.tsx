@@ -60,9 +60,7 @@ function ScreenContent() {
         <g key={model}>
           <rect x={3 + (i % 3) * 16.5} y={13 + Math.floor(i / 3) * 19} width={15} height={17} rx={2} fill={model === "fuji" ? "var(--color-macaw-soft)" : "var(--color-paper-sunk)"} />
           {model === "duo" ? (
-            <text x={10.5 + (i % 3) * 16.5} y={25 + Math.floor(i / 3) * 19} textAnchor="middle" fontSize={9} fontWeight={800} fill="var(--color-accent)">
-              ?
-            </text>
+            <circle cx={10.5 + (i % 3) * 16.5} cy={21.5 + Math.floor(i / 3) * 19} r={4} fill="var(--color-accent)" />
           ) : (
             <svg x={4.5 + (i % 3) * 16.5} y={14 + Math.floor(i / 3) * 19} width={12} height={12} viewBox="0 0 200 200" overflow="visible">
               <OrigamiIcon model={model} label="" className="" />
@@ -75,15 +73,10 @@ function ScreenContent() {
   );
 }
 
-function SidePanel({ jp }: { jp: string }) {
-  const lines = jp.split(" ");
+/** Painted blossoms on the side of the cabinet. */
+function SidePanel() {
   return (
     <>
-      {lines.map((line, i) => (
-        <text key={line} x={8} y={14 + i * 11} fontSize={9} fontWeight={800} fill="var(--color-ink)" fontFamily="var(--font-jp)">
-          {line}
-        </text>
-      ))}
       {[
         [56, 62, 4.5],
         [64, 70, 3.5],
@@ -112,10 +105,10 @@ export const kioskAnchors: Record<keyof KioskLabels, Pt> = {
   storage: iso.project([60, D, 36]),
 };
 
-type KioskProps = { labels?: KioskLabels; sideJp: string; height?: string; edge?: string };
+type KioskProps = { labels?: KioskLabels; height?: string; edge?: string };
 
 /** With labels, the drawing carries callouts and dimensions; without them, it's the kiosk alone, framed tight. */
-export function Kiosk({ labels, sideJp, height, edge }: KioskProps) {
+export function Kiosk({ labels, height, edge }: KioskProps = {}) {
   const cone = hull([...sheetCorners, ...lensCorners].map(iso.project));
   const viewBox = labels ? "0 0 1150 900" : COMPACT_VIEWBOX;
   return (
@@ -132,7 +125,7 @@ export function Kiosk({ labels, sideJp, height, edge }: KioskProps) {
       </FrontFace>
       <polygon points={polygon(iso.floorRect(24, D, 28, 16, 77))} fill="var(--color-sakura)" />
       <SideFace y={D} z={88}>
-        <SidePanel jp={sideJp} />
+        <SidePanel />
       </SideFace>
       <Box at={[0, 0, 90]} size={[W, 96, 5]} colors={wood} />
       <polygon points={polygon(iso.floorRect(12, 48, 52, 42, 95.2))} fill="var(--color-paper-sunk)" />

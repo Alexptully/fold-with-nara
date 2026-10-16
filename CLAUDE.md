@@ -23,7 +23,9 @@ Every slide is drawn on a fixed 1920 by 1080 stage that scales to fit the window
 
 Keep the slides clean: no progress bar, dots or slide numbers. Each slide's footer carries only its sources and, if the assignment has a rubric, its rubric tag.
 
-The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:39, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
+The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:44, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
+
+The speaker notes are the presentation script. Each slide names its `speaker` in `content.ts`, and its notes are `say(...)` lines (with `who` when someone else says them) and `cue(...)` stage directions. The slide order follows the team's speaking parts: everyone (intro), Sam (why origami), Alex (the tent and mini booth), Sophia (Meet Nara and reactions), Tsion (the visit and choosing a fold), Alex (the Duolingo Method), Ledger (the example lesson) and everyone (arigatō gozaimasu). Keep that order unless the team changes the parts.
 
 ## Commands
 
@@ -31,7 +33,7 @@ The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides
 - `/print` (or the P key) is the print version, one landscape page per slide or build step, for PDF export
 - `npm run check` runs the type checker, the linter with its complexity limit, and the em dash scan. Run it before saying a task is done.
 - `npm run present` builds the static site and serves it at http://localhost:3000 (no dev server needed on presentation day).
-- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to three reveals (a pop as the "Where it pops up" cards flip, a pop as Nara is revealed on "Meet Nara", and a pop as Mt. Fuji lands in the tent). Changing slides is silent. Use `useRevealSound` for any new reveal so it only plays when the presenter steps forward into it.
+- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to two reveals (a pop as Nara is revealed on "Meet Nara", and a pop as Mt. Fuji lands in the tent). Changing slides is silent. Use `useRevealSound` for any new reveal so it only plays when the presenter steps forward into it.
 - T resets the rehearsal clock in the notes panel.
 - Work on a branch and open a pull request. Never push straight to `main`.
 
@@ -107,7 +109,7 @@ These rules target reflexes, not accessibility. Accessible names, alt text and s
 
 The deck should look like a design textbook or a designer's portfolio. Take on the big version of the task.
 
-- Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only. The kiosk and tent renders in `public/renders/` come from the team's render sheet with Duo and the wordmark painted out; keep them that way. The pop-up is for events only, so the kiosk render sits inside the tent (its airport background was swapped for a blurred view of the tent's inside). Don't bring airports back.
+- Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only. The tent render in `public/renders/` (used on "You folded Mt. Fuji") comes from the team's render sheet with Duo and the wordmark painted out; keep it that way. "Where it pops up" is drawings only: one camera move from the tent, through its door, to one kiosk. The pop-up is a tent at events and free for everyone, so don't bring back airports or a paid version.
 - Use animation and interactivity, and check animations frame by frame instead of assuming the CSS is right.
 - Carry detail all the way through: grain, texture, edge treatment and weight.
 - Repeat one motif across the whole deck, the way strong writers and photographers repeat an image. This deck's motif: the dashed green crease line that Nara's projector draws on paper. It appears as the `Crease` primitive on diagrams, joins the steps of the journey path and links each question to its fold. Green is reserved for projected light, right answers and progress.

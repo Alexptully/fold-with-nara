@@ -6,7 +6,7 @@ import { ShapeKit } from "@/components/art/ShapeKit";
 import { config } from "@/content/config";
 import { meetNara } from "@/content/content";
 import { duration } from "@/lib/motion";
-import { SparkleBurst } from "../FlipCard";
+import { SparkleBurst } from "../SparkleBurst";
 import { headBox, useNaraHighlight, type NaraSpot } from "../NaraActor";
 import { KeyValueList, Reveal, SlideShell } from "../primitives";
 import type { SlideProps } from "../types";

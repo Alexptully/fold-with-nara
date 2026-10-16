@@ -22,9 +22,8 @@ export const config = {
   // drawing. The lesson card and "How Nara reacts" always use the built-in poses.
   characterImage: "",
 
-  // Real-life renders of the kiosk and the tent, cropped from the team's render sheet with
-  // Duo and the wordmark painted out. "Where it pops up" flips each drawing over to its render.
-  kioskPhoto: "/renders/kiosk-real.jpg",
+  // The real-life render of the tent, cropped from the team's render sheet with Duo and
+  // the wordmark painted out. "You folded Mt. Fuji" hangs the finished model inside it.
   tentPhoto: "/renders/tent-real.jpg",
 
   // Optional: a photo of the mini booth we built. Put it in /public/renders/ and set the

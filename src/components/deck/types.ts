@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import type { Note } from "@/content/content";
 import type { SourceKey } from "@/content/sources";
 import type { NaraSpot } from "./NaraActor";
 import type { TransitionKind } from "./SlideTransition";
@@ -27,7 +28,10 @@ export type SlideDef = {
   printSteps?: number[];
   /** Sources shown in the footer, keyed by the first step they apply to. */
   sourcesByStep?: Record<number, SourceKey[]>;
-  notes: string[];
+  /** Who presents this slide, from the team or "Everyone". */
+  speaker?: string;
+  /** The script for this slide: lines to say and cues for the presenter. */
+  notes: Note[];
   Content: ComponentType<SlideProps>;
 };
 

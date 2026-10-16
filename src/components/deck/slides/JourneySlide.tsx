@@ -10,7 +10,6 @@ import {
   HandWaving,
   Printer,
   ProjectorScreen,
-  Ticket,
   type Icon,
 } from "@phosphor-icons/react";
 import { motion } from "motion/react";
@@ -28,7 +27,6 @@ import type { SlideProps } from "../types";
 
 const icons: Record<JourneyIcon, Icon> = {
   wave: HandWaving,
-  ticket: Ticket,
   choose: CursorClick,
   print: Printer,
   frame: FrameCorners,
@@ -40,16 +38,16 @@ const icons: Record<JourneyIcon, Icon> = {
 
 const ROW_1 = 360;
 const ROW_2 = 760;
+// Eight steps: four along the top, then back along the bottom.
 const nodes: Pt[] = [
   [260, ROW_1],
-  [605, ROW_1],
-  [950, ROW_1],
-  [1295, ROW_1],
+  [713, ROW_1],
+  [1167, ROW_1],
   [1620, ROW_1],
   [1530, ROW_2],
-  [1185, ROW_2],
-  [840, ROW_2],
-  [495, ROW_2],
+  [1107, ROW_2],
+  [683, ROW_2],
+  [260, ROW_2],
 ];
 const R = 58;
 

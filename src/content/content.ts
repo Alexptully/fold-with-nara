@@ -248,13 +248,27 @@ export const exerciseLabels: Record<ExerciseKind, string> = {
 // Slides keep to a heading, one picture and a few words. The talk lives in the notes,
 // and each slide's `seconds` budget keeps the whole pitch under four minutes.
 
+/** Who presents each part of the script. "Everyone" speaks together. */
+export const everyone = "Everyone";
+const [sam, alex, tsion, sophia, ledger] = config.team;
+
+/**
+ * One line of the script: words to say (by the slide's speaker unless `who` says
+ * otherwise), or a cue for the presenter, like a click or something to point at.
+ */
+export type Note = { say: string; who?: string } | { cue: string };
+const say = (text: string, who?: string): Note => ({ say: text, who });
+const cue = (text: string): Note => ({ cue: text });
+
 export const title = {
   headline: config.productName,
   tagline: config.tagline,
   sheetLabel: "The printed paper square for an origami Mt. Fuji, with a green fold line",
+  speaker: everyone,
   notes: [
-    "Hand out the paper squares before you start.",
-    `We're ${config.team.join(", ")}. Our installation teaches origami along with Japanese history and culture, and you'll meet our guide in a minute.`,
+    cue("Hand out the paper squares before you start. Each person says their own name."),
+    ...config.team.map((name, i) => say(i === config.team.length - 1 ? `And I'm ${name}.` : `Hi, I'm ${name}.`, name)),
+    say(`And this is ${config.productName}!`, everyone),
   ],
 };
 
@@ -265,10 +279,11 @@ export const whyOrigami = {
   // Norton, Mochon and Ariely (2012), experiment 1B: builders bid 23 cents on their own origami, strangers 5 cents.
   study: "In one study, people valued origami they folded almost 5 times more than strangers did.",
   shelfLabel: "A shelf at home with the folded Mt. Fuji standing next to two books",
+  speaker: sam,
   notes: [
-    "Press once to send Mt. Fuji home.",
-    "We chose origami because it's a Japanese art you learn with your hands.",
-    "We also wanted visitors to leave with a reminder of the event. People value origami they fold themselves, so they keep it.",
+    say("Our pop-up teaches Japanese culture through origami. We chose origami because it's a Japanese art you learn with your hands."),
+    cue("Press once to send Mt. Fuji home."),
+    say("It also gives everyone something to take home. People value origami they folded almost five times more than strangers do, so it becomes a reminder of the event."),
   ],
 };
 
@@ -285,20 +300,22 @@ export const meetNara = {
     { key: "Home", value: "Nara Park, with 1,687 deer counted in July 2026" },
     { key: "Signature move", value: "A bow, like the deer of Nara Park" },
   ],
+  speaker: sophia,
   notes: [
-    "Our guide starts as an outline. Press once to reveal her.",
-    `${nara} is built from rounded shapes, the way Duolingo draws its characters. Hover a shape to light up its parts.`,
-    "She's a sika deer from Nara Park, where the deer bow to visitors, so her signature move is part of the lesson.",
+    say("Every kiosk has a guide, and she starts as an outline."),
+    cue("Press once to reveal her."),
+    say(`Meet ${nara}! She's built from Duolingo's shapes: rounded squares, circles, rounded triangles and semicircles.`),
+    cue("Hover a shape to light up its parts. Press once for her profile."),
+    say(`${nara} is a sika deer from Nara Park, where the deer bow to visitors. Bowing is her signature move, and it's part of the lesson.`),
   ],
 };
 
-export type JourneyIcon = "wave" | "ticket" | "choose" | "print" | "frame" | "projector" | "question" | "phone" | "bird";
+export type JourneyIcon = "wave" | "choose" | "print" | "frame" | "projector" | "question" | "phone" | "bird";
 
 export const journey = {
   heading: "Your visit, step by step",
   steps: [
     { icon: "wave", title: "Say hi to Nara", pose: "wave" },
-    { icon: "ticket", title: "Free or paid", pose: "smile" },
     { icon: "choose", title: "Choose your fold", pose: "think" },
     { icon: "print", title: "Print your paper", pose: "present" },
     { icon: "frame", title: "Place your paper", pose: "smile" },
@@ -307,12 +324,12 @@ export const journey = {
     { icon: "phone", title: "Scan for a badge", pose: "cheer" },
     { icon: "bird", title: "Keep it or hang it", pose: "love" },
   ] satisfies { icon: JourneyIcon; title: string; pose: Pose }[],
+  speaker: tsion,
   notes: [
-    "Press once per step. Nara walks the path with you.",
-    "Nara welcomes visitors. Entry is free or paid, depending on the event.",
-    "Visitors choose what to fold, and the station dispenses their paper and shows where it goes.",
-    "A projector draws each fold on the paper, and our proposed camera checks it and helps them adjust.",
-    "Questions unlock each fold. At the end they scan for a badge, then keep or hang their origami.",
+    cue("Press once per step. Nara walks the path with you."),
+    say("Here's a visit. You say hi to Nara, pick what to fold, and the kiosk prints paper made for that model."),
+    say("You place it in the frame, and the projector shows each fold on your paper. A right answer unlocks each fold."),
+    say("At the end, you scan for a badge on your Duolingo account and keep your origami or hang it in the tent."),
   ],
 };
 
@@ -356,30 +373,39 @@ export const options = {
       ],
     },
   ] satisfies { name: string; rank: number; models: FoldOption[] }[],
+  speaker: tsion,
   notes: [
-    "Click a card to show what it stands for.",
-    "There are three levels, from sakura and Mt. Fuji up to a samurai helmet and a special Duo fold. Each model has its own questions, and our example is Mt. Fuji.",
+    cue("Click a card to show what the model stands for."),
+    say("There are three levels. Sakura and Mt. Fuji are easy, the crane and koi are medium, and the samurai helmet and a special Duo fold are hard. Today we're folding Mt. Fuji."),
   ],
 };
 
-// The pop-up lives at events only: a tent with folding kiosks inside.
+// The pop-up lives at events only, free for everyone: a tent with folding kiosks inside.
+// The slide is one camera move: the tent, then inside it, then one kiosk.
 export const places = {
   heading: "Where it pops up",
-  tent: {
-    name: "Event tent",
-    detail: "Kiosks inside and a shared display",
-    signJp: "折って つながろう",
-    photoAlt: "Render of the event tent: a white folded-paper dome with folding stations inside and paper cranes hanging from the roof",
-  },
+  steps: [
+    { name: "Event tent", detail: "A pop-up at events, free for everyone" },
+    { name: "Inside the tent", detail: "Kiosks line the walls, and finished origami hangs overhead" },
+    { name: "Kiosk", detail: "One visitor at each" },
+  ],
+  tent: { signJp: "折って つながろう" },
   kiosk: {
-    name: "Kiosk",
-    detail: "One visitor at each",
-    sideJp: "折って 知って つながろう",
-    photoAlt: "Render of a kiosk inside the event tent: a wooden cabinet with a touchscreen, an overhead camera and projector, and a folding ledge",
+    parts: {
+      head: "Camera and projector",
+      screen: "Touchscreen with Nara",
+      workspace: "Folding ledge",
+      dispenser: "Paper printer",
+      storage: "Storage",
+    },
   },
+  speaker: alex,
   notes: [
-    "Press once and both drawings flip over to our renders.",
-    "Our installation is a tent-style pop-up for events. Inside, each visitor folds at their own kiosk, and finished origami hangs on a shared display.",
+    say(`Here's what we built. ${config.productName} is a pop-up tent at events, and it's free for everyone.`),
+    cue("Press once to fly inside."),
+    say("Inside, kiosks line the walls, and finished origami hangs from the ceiling."),
+    cue("Press once to zoom in on a kiosk."),
+    say("Each visitor gets a kiosk: a touchscreen with Nara, a printer for the paper, and a camera and projector over the folding ledge."),
   ],
 };
 
@@ -389,17 +415,20 @@ export const miniBooth = {
   invite: "Come try it after the pitch.",
   badge: "Here today",
   photoAlt: "Photo of the team's mini booth",
+  speaker: alex,
   notes: [
-    "Point to the mini booth on the table and show what it does.",
-    "We built a desk-size version of the booth, and it's right here. Come try it after the pitch.",
+    cue("Point to the mini booth on the table."),
+    say("We also built a desk-size kiosk, and it's right here. Come try it after the pitch."),
   ],
 };
 
 export const lessonOverview = {
   heading: "The 10-question lesson",
+  speaker: ledger,
   notes: [
-    "Between folds, visitors get short lessons about Japanese history and culture tied to what they're making, each followed by a question.",
-    "Three right answers unlock each fold, and question 10 comes once Mt. Fuji stands.",
+    say("Here's our example lesson: Mt. Fuji. It has ten questions on Japanese culture, at ten stops around Nara Park."),
+    cue("Press once."),
+    say("Every three right answers unlock a fold, and question 10 comes once your mountain stands."),
   ],
 };
 
@@ -421,11 +450,16 @@ export const tryLesson = {
   finishedLine: "Your Mt. Fuji is finished.",
   lockedLabel: "Unlocks with a right answer",
   replayLabel: "Replay fold",
+  speaker: ledger,
   notes: [
-    "Between folds, Nara tells a short story and asks about it. A right answer unlocks the next fold, and the room folds along.",
-    "Question 3: answer it, then everyone folds their square in half into a triangle.",
-    "Question 6: pick a wrong answer first. Nara lights up the clue and you try again. Then fold the left corner over.",
-    "Question 9: answer, open your mountain so it stands, and click 'Finish Mt. Fuji'.",
+    say("Grab your paper and fold with us!"),
+    cue("Question 3: click Folding paper, then Check."),
+    say("Origami means folding paper. Fold 1: fold your square in half into a triangle, with the snow on the outside."),
+    cue("Press once. Question 6: pick a wrong answer first, then Try again."),
+    say("Almost! Nara lights up the clue so you can try again. It's mindfulness and hospitality. Fold 2: fold the left corner over to the right."),
+    cue("Press once. Question 9."),
+    say("Fujisan means Mt. Fuji. Fold 3: open it halfway so your mountain stands."),
+    cue("Click Finish Mt. Fuji."),
   ],
 };
 
@@ -442,9 +476,11 @@ export const celebration = {
   hangLabel: "Hang it in the tent",
   hungLine: "Your Mt. Fuji joins the others.",
   tentAlt: "Inside the event tent, with origami hanging from the roof",
+  speaker: ledger,
   notes: [
-    "After the last fold, visitors see a completion message. The visit takes ten minutes or less, with no teacher.",
-    "Press once to hang it. They can add it to the tent's shared display or take it home, along with its Japanese name and the culture behind it.",
+    say("You folded Mt. Fuji! The kiosk shows your XP and your score, and you choose what happens next."),
+    cue("Press once to hang it."),
+    say("You can take it home or hang it in the tent with everyone else's. We estimate a visit takes ten minutes or less, with no teacher needed."),
   ],
 };
 
@@ -462,8 +498,11 @@ export const reactions = {
     { pose: "bow", moment: "The end" },
   ] satisfies Reaction[],
   rule: "No hearts to lose and no lockout.",
+  speaker: sophia,
   notes: [
-    `${nara} has an expression for every moment of the lesson. Press once for mistakes: a first miss gets a hint, a second gets the answer, and either way visitors try again.`,
+    say(`${nara} has an expression for every moment.`),
+    cue("Press once for mistakes."),
+    say("If you miss, she points to the clue. Miss again, and she explains the answer and brings it back later. There are no hearts to lose and no lockout."),
   ],
 };
 
@@ -478,9 +517,11 @@ export const method = {
   naraLine: "I'll guide you and cheer you on, start to finish!",
   audience: "For Gen Z and Gen Alpha",
   audienceLine: "Short, visual steps, and something real taking shape.",
+  speaker: alex,
   notes: [
-    "Our installation uses the Duolingo Method: bite-sized lessons, immediate feedback, repetition and visible progress.",
-    "Nara guides and encourages visitors the whole way. For Gen Z and Gen Alpha, short visual steps meet an activity where something takes shape as they learn.",
+    say("This is the Duolingo Method in paper. Lessons are bite-sized: a story, a question, then a fold."),
+    say("Nara gives feedback right away, words come back in a review round, and you watch your progress take shape in your hands."),
+    say("It's built for Gen Z and Gen Alpha."),
   ],
 };
 
@@ -488,10 +529,11 @@ export const closing = {
   jp: "ありがとうございます",
   romaji: "Arigatō gozaimasu",
   line: "Thank you for folding with us.",
-  notes: ["Bow with Nara, say arigatō gozaimasu together, and open for questions."],
+  speaker: everyone,
+  notes: [cue("Everyone bows with Nara."), say("Arigatō gozaimasu!", everyone), cue("Open for questions.")],
 };
 
 export const sourcesSlide = {
   heading: "Sources",
-  notes: ["Every number and cultural fact in the deck is listed here. Not part of the timed pitch."],
+  notes: [cue("Every number and cultural fact in the deck is listed here. Not part of the timed pitch.")],
 };

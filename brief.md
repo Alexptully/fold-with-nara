@@ -16,25 +16,27 @@ The pitch window is four minutes and should be interactive: the audience folds p
 
 ## Running order and timing
 
-Thirteen timed slides, 3:39 in total, which leaves room for the room to answer and fold along. Sources is the last page and isn't presented. The speaker notes follow the team script (intro, installations, how visitors learn, the lesson, the Duolingo Method, takeaway).
+Thirteen timed slides, 3:44 in total, which leaves room for the room to answer and fold along. Sources is the last page and isn't presented.
+
+The order follows the team's speaking parts. Each slide's speaker notes are its script: the lines to say, who says them, and cues in brackets (press, click, point). The notes panel (N) shows the speaker for each slide and names the next speaker at every handoff.
 
 Nara is a reveal. She stays off stage through the title, "Why origami" and both booth slides, and first appears on "Meet Nara", right after the mini booth. "How Nara reacts" follows straight after, so the audience meets her personality before they see her teach.
 
-| # | Slide | Time | Script section |
-| --- | --- | --- | --- |
-| 1 | Title (no Nara yet: the printed paper square) | 0:12 | Intro |
-| 2 | Why origami (a Japanese art you learn by doing, and a reminder you take home) | 0:16 | Intro |
-| 3 | Where it pops up (the event tent and its kiosks; drawings flip to the real renders) | 0:16 | Installations |
-| 4 | Our mini booth (point to the one on the table) | 0:12 | Installations |
-| 5 | Meet Nara (the reveal: her outline, then she pops into color) | 0:20 | Character |
-| 6 | How Nara reacts | 0:12 | Wrong answers and encouragement |
-| 7 | Your visit, step by step | 0:26 | How visitors learn |
-| 8 | Choose what to fold | 0:14 | How visitors learn |
-| 9 | The 10-question lesson | 0:14 | Historical lesson and questions |
-| 10 | Try the lesson (questions 3, 6 and 9: folds 1, 2 and 3) | 0:34 | Historical lesson and questions |
-| 11 | You folded Mt. Fuji (completion, then hang it in the tent) | 0:20 | Visitor takeaway |
-| 12 | The Duolingo Method in paper | 0:16 | Duolingo Method |
-| 13 | Thank you | 0:07 | |
+| # | Slide | Speaker | Time | Part |
+| --- | --- | --- | --- | --- |
+| 1 | Title (no Nara yet: the printed paper square) | Everyone | 0:10 | Intro |
+| 2 | Why origami (a Japanese art you learn by doing, and a reminder you take home) | Sam | 0:20 | Why we did it |
+| 3 | Where it pops up (the tent, then inside it, then one kiosk) | Alex | 0:22 | What we did |
+| 4 | Our mini booth (point to the one on the table) | Alex | 0:10 | What we did |
+| 5 | Meet Nara (the reveal: her outline, then she pops into color) | Sophia | 0:20 | Meet Nara |
+| 6 | How Nara reacts | Sophia | 0:14 | Meet Nara |
+| 7 | Your visit, step by step | Tsion | 0:25 | User experience |
+| 8 | Choose what to fold | Tsion | 0:14 | User experience |
+| 9 | The Duolingo Method in paper | Alex | 0:18 | Duolingo in paper |
+| 10 | The 10-question lesson | Ledger | 0:14 | Example lesson |
+| 11 | Try the lesson (questions 3, 6 and 9: folds 1, 2 and 3) | Ledger | 0:32 | Example lesson |
+| 12 | You folded Mt. Fuji (completion, then hang it in the tent) | Ledger | 0:18 | Example lesson |
+| 13 | Thank you (everyone says arigatō gozaimasu and bows) | Everyone | 0:07 | Arigatō gozaimasu |
 
 Slides keep to a heading, one picture and a few words, and no presented text is smaller than 24 px on the 1920 by 1080 stage (footer sources are 20 px). Everything else is in the speaker notes.
 
@@ -55,23 +57,22 @@ Each slide's footer names the section it covers.
 
 ## The user experience, in the team's order
 
-"Your visit, step by step" follows this list from the team doc exactly, one path node per item:
+"Your visit, step by step" follows this list from the team doc, one path node per item. The pop-up is free for everyone, so the doc's "free or paid" step is gone.
 
 1. Welcome screen with fun animations, starring Nara the sika deer from Nara Park.
-2. Free or paid, depending on the event.
-3. Choose what to fold, at three levels. Easy: Sakura and Mt. Fuji. Medium: Crane and Koi fish. Hard: Samurai helmet and the special Duo fold.
-4. The station prints paper designed for that model.
-5. Place the paper in the frame, as the screen in front of you shows.
-6. The projector outlines where to fold, right on the paper.
-7. Each fold comes with a question on the screen, and you answer it to move on. The questions are about the culture behind the item you're folding.
-8. Scan with your phone to get a badge on your Duolingo account.
-9. Keep the origami, or hang it in the installation.
+2. Choose what to fold, at three levels. Easy: Sakura and Mt. Fuji. Medium: Crane and Koi fish. Hard: Samurai helmet and the special Duo fold.
+3. The station prints paper designed for that model.
+4. Place the paper in the frame, as the screen in front of you shows.
+5. The projector outlines where to fold, right on the paper.
+6. Each fold comes with a question on the screen, and you answer it to move on. The questions are about the culture behind the item you're folding.
+7. Scan with your phone to get a badge on your Duolingo account.
+8. Keep the origami, or hang it in the installation.
 
 ## Character and installation references
 
 - Nara follows the team's character sheet and its animation: the outline sketch, the colored figure and the expressions (wave, talk, present, think, love, laugh, cheer, bow, plus a resting smile). The deck draws Nara in vector, measured from the animation's frames, so every pose stays sharp and can move: she blinks, flicks her ears, hops when she laughs and walks from slide to slide.
-- The pop-up is for events only, with no airport version. The tent and kiosk follow the team's render: a white faceted dome tent with origami hanging overhead, and inside it the folding kiosks, wooden cabinets about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper dispenser and storage. "Where it pops up" shows our drawings of the tent and one kiosk first, then flips each one over to the render (`public/renders/tent-real.jpg` and `kiosk-real.jpg`, cropped from the render sheet). The kiosk render's airport background is replaced with a blurred view of the tent's inside, taken from the tent render.
-- Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo, so the renders have Duo and the wordmark painted out (the kiosk screen shows a green question mark for the Duo fold, as the deck does).
+- The pop-up is a tent at events, free for everyone, with no airport or paid version. The tent and kiosk follow the team's render: a white faceted dome tent with origami hanging overhead, and inside it the folding kiosks, wooden cabinets about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper printer and storage. "Where it pops up" is all drawings, one camera move in three steps: the tent from outside, then through the door to the kiosks along the walls, then onto one kiosk with its parts labeled. The only real render left is the tent (`public/renders/tent-real.jpg`) on "You folded Mt. Fuji", where the finished model hangs.
+- Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo, so the tent render has Duo and the wordmark painted out, and the kiosk drawings show a green dot for the locked Duo fold.
 - The mini booth is the desk-size physical version the team built. It gets its own slide right after the kiosk and tent, so the presenter can point to it in the room. Until a photo is added, the slide shows the kiosk drawn at desk size.
 - The Mt. Fuji paper follows the team's sketch of the sheet: a blue square with dashed creases on both diagonals and a zigzag snowline across two opposite corners (top right and bottom left). Fold 1 folds it in half on the diagonal with the snowy corners on the outside, so both meet at the peak. Then it's folded down the middle and opened so it stands.
 
@@ -137,7 +138,7 @@ All in `src/content/config.ts`:
 - `productName`, `tagline`, `team`, `occasion`
 - `characterName` (Nara)
 - `characterImage`: Sophia's Illustrator drawing, once exported to `public/renders/`
-- `kioskPhoto`, `tentPhoto`: the cleaned renders the "Where it pops up" cards flip to
+- `tentPhoto`: the cleaned tent render the finished Mt. Fuji hangs in on "You folded Mt. Fuji"
 - `miniBoothPhoto`: a photo of the mini booth, once it's in `public/renders/`
 
 ## Open items for the team
@@ -146,6 +147,5 @@ All in `src/content/config.ts`:
 - The completion slide shows 100 XP (10 per question, as on the lesson card) and 10 of 10 questions. These are the demo's numbers, not measurements.
 - Add a photo of the mini booth to `public/renders/` and set `miniBoothPhoto`. The presenter should also say what the booth shows; the notes leave room for it.
 - Sophia: the vector Nara follows your character sheet. If you'd rather show your Illustrator file on the title and closing slides, export it and set `characterImage`.
-- Decide pricing for paid events (the deck only says "free or paid, depending on the event").
-- Tsion: the speaker notes (press N) are cut to the timing table above. Rehearse with the notes panel's clock and adjust a slide's `seconds` in `slides.ts` if a section runs long.
+- Everyone: the speaker notes (press N) are the script, cut to the timing table above. Rehearse your part with the notes panel's clock, and change a line in `src/content/content.ts` (or a slide's `seconds` in `slides.ts`) if a part runs long.
 - Decide whether Q1 is said out loud by the whole room (the notes assume yes).

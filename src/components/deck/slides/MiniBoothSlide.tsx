@@ -3,7 +3,7 @@
 import { motion } from "motion/react";
 import { Kiosk } from "@/components/art/Kiosk";
 import { config } from "@/content/config";
-import { miniBooth, places } from "@/content/content";
+import { miniBooth } from "@/content/content";
 import { asset } from "@/lib/paths";
 import { Reveal, SlideShell } from "../primitives";
 
@@ -33,7 +33,7 @@ function BoothPicture() {
   return (
     <div className="relative h-full w-full" role="img" aria-label="Drawing of a desk-size version of the kiosk on a tabletop">
       <div className="absolute left-1/2 top-[70px] h-[560px] w-[360px] -translate-x-1/2">
-        <Kiosk sideJp={places.kiosk.sideJp} />
+        <Kiosk />
       </div>
       <div className="absolute inset-x-0 bottom-0 h-[120px] bg-wood-top shadow-divider" />
       <div className="absolute inset-x-0 bottom-[96px] h-[24px] bg-wood-left" />
