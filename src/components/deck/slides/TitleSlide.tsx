@@ -1,25 +1,27 @@
 "use client";
 
 import { motion } from "motion/react";
+import { FujiPaper } from "@/components/art/FujiPaper";
 import { OrigamiIcon } from "@/components/art/OrigamiIcon";
-import { SpeechBubble } from "@/components/ui/SpeechBubble";
 import { config } from "@/content/config";
 import { title, type OrigamiModel } from "@/content/content";
 import { spring } from "@/lib/motion";
-import type { NaraSpot } from "../NaraActor";
-import { Reveal } from "../primitives";
+import { Crease, Reveal } from "../primitives";
 
-/** Nara waves from the right; the stage-level Nara stands here (see NaraActor). */
-export const titleSpot: NaraSpot = { x: 1040, y: 190, h: 800, pose: "wave" };
+/**
+ * The welcome screen. Nara stays hidden until "Meet Nara", so the title shows the
+ * paper the room is holding: the printed Mt. Fuji square, with the projector's
+ * green fold line drawn across it and the other fold options drifting around it.
+ */
 
-// The welcome screen: Nara says hello while the fold options drift around her like paper in the air.
 const floaters: { model: OrigamiModel; x: number; y: number; size: number; delay: number }[] = [
-  { model: "sakura", x: 1010, y: 110, size: 110, delay: 0.5 },
-  { model: "crane", x: 1690, y: 110, size: 150, delay: 0.7 },
-  { model: "fuji", x: 1700, y: 590, size: 130, delay: 0.9 },
-  { model: "koi", x: 990, y: 770, size: 120, delay: 1.1 },
-  { model: "kabuto", x: 1720, y: 830, size: 110, delay: 1.3 },
+  { model: "sakura", x: 1060, y: 150, size: 120, delay: 0.7 },
+  { model: "crane", x: 1660, y: 120, size: 160, delay: 0.85 },
+  { model: "koi", x: 1050, y: 800, size: 130, delay: 1.0 },
+  { model: "kabuto", x: 1690, y: 820, size: 120, delay: 1.15 },
 ];
+
+const SHEET = { left: 1100, top: 220, size: 640 };
 
 export function TitleSlide() {
   return (
@@ -36,21 +38,35 @@ export function TitleSlide() {
           <p className="mt-2 text-small text-ink-muted">{config.occasion}</p>
         </Reveal>
       </div>
+      <Sheet />
       {floaters.map((item) => (
         <Floater key={item.model} {...item} />
       ))}
-      <motion.div
-        className="absolute left-[1560px] top-[300px] w-[320px]"
-        initial={{ opacity: 0, scale: 0.6, x: -40 }}
-        animate={{ opacity: 1, scale: 1, x: 0 }}
-        transition={{ ...spring, delay: 1.1 }}
-        style={{ transformOrigin: "0% 80%" }}
-      >
-        <SpeechBubble>
-          <p className="text-body font-bold text-ink">{title.welcome}</p>
-        </SpeechBubble>
-      </motion.div>
     </div>
+  );
+}
+
+/** The printed square drops in at a tilt, then the fold line is drawn corner to corner. */
+function Sheet() {
+  return (
+    <motion.div
+      className="absolute"
+      style={{ left: SHEET.left, top: SHEET.top, width: SHEET.size, height: SHEET.size }}
+      initial={{ opacity: 0, scale: 0.7, rotate: -20 }}
+      animate={{ opacity: 1, scale: 1, rotate: -8 }}
+      transition={{ ...spring, delay: 0.35 }}
+    >
+      <motion.div
+        className="relative h-full w-full"
+        animate={{ y: [0, -12, 0] }}
+        transition={{ duration: 4.2, repeat: Infinity, ease: "easeInOut", delay: 1.4 }}
+      >
+        <FujiPaper state={0} appear={false} className="absolute inset-0 h-full w-full" label={title.sheetLabel} />
+        <svg viewBox="0 0 240 240" className="absolute inset-0 h-full w-full overflow-visible" aria-hidden="true">
+          <Crease from={[30, 30]} to={[210, 210]} width={3} delay={1.2} />
+        </svg>
+      </motion.div>
+    </motion.div>
   );
 }
 

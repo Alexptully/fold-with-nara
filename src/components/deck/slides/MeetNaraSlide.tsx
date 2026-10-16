@@ -6,15 +6,18 @@ import { ShapeKit } from "@/components/art/ShapeKit";
 import { config } from "@/content/config";
 import { meetNara } from "@/content/content";
 import { duration } from "@/lib/motion";
+import { SparkleBurst } from "../FlipCard";
 import { headBox, useNaraHighlight, type NaraSpot } from "../NaraActor";
 import { KeyValueList, Reveal, SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
+import { useRevealSound } from "../useRevealSound";
 
 const place = { x: 80, y: 170, h: 840 };
 
 /**
- * Step 1: Nara walks in and turns into her outline sketch. Step 2: color fills
- * back in and the shape kit appears. Step 3: she starts talking and the facts come in.
+ * The reveal. Nara stays off stage until here. Step 1: only her outline sketch.
+ * Step 2: she pops into color with sparkles and a pop, and the shape kit appears.
+ * Step 3: she starts talking and the facts come in.
  */
 export function meetNaraSpot(step: number): NaraSpot {
   if (step === 1) return { ...place, pose: "smile", hidden: true };
@@ -23,9 +26,11 @@ export function meetNaraSpot(step: number): NaraSpot {
 
 const head = headBox(meetNaraSpot(1));
 
-export function MeetNaraSlide({ step }: SlideProps) {
+export function MeetNaraSlide({ step, print }: SlideProps) {
   const { highlight, setHighlight } = useNaraHighlight();
   const pose = meetNaraSpot(step).pose;
+  const revealed = step >= 2;
+  useRevealSound(revealed, print, "pop", 250);
   return (
     <SlideShell heading={meetNara.heading}>
       <motion.div
@@ -37,6 +42,9 @@ export function MeetNaraSlide({ step }: SlideProps) {
       >
         <NaraSketch highlight={highlight} className="h-full w-full" title={`${config.characterName}, outline sketch`} />
       </motion.div>
+      <div className="absolute" style={{ left: head.left, top: head.top, width: head.width, height: head.height }}>
+        <SparkleBurst on={revealed && !print} delay={0.25} />
+      </div>
       <Reveal show={step >= 2} delay={0.3} className="absolute left-[720px] top-[250px] w-[340px]">
         <div data-no-advance>
           <ShapeKit labels={meetNara.shapeLabels} counts={shapeCounts(pose)} active={highlight} onHover={setHighlight} />

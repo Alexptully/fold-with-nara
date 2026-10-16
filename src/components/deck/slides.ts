@@ -14,6 +14,7 @@ import {
   sourcesSlide,
   title,
   tryLesson,
+  whyOrigami,
 } from "@/content/content";
 import type { SourceKey } from "@/content/sources";
 import { CelebrationSlide, celebrationSpot } from "./slides/CelebrationSlide";
@@ -23,12 +24,13 @@ import { JourneySlide, journeySpot } from "./slides/JourneySlide";
 import { LessonOverviewSlide } from "./slides/LessonOverviewSlide";
 import { MeetNaraSlide, meetNaraSpot } from "./slides/MeetNaraSlide";
 import { MethodSlide, methodSpot } from "./slides/MethodSlide";
-import { MiniBoothSlide, miniBoothSpot } from "./slides/MiniBoothSlide";
+import { MiniBoothSlide } from "./slides/MiniBoothSlide";
 import { PlacesSlide } from "./slides/PlacesSlide";
 import { ReactionsSlide } from "./slides/ReactionsSlide";
 import { SourcesSlide } from "./slides/SourcesSlide";
-import { TitleSlide, titleSpot } from "./slides/TitleSlide";
+import { TitleSlide } from "./slides/TitleSlide";
 import { TryLessonSlide } from "./slides/TryLessonSlide";
+import { WhyOrigamiSlide } from "./slides/WhyOrigamiSlide";
 import type { SlideDef } from "./types";
 
 // Footer tags name the brief's required sections (see brief.md).
@@ -50,8 +52,30 @@ const demoSources = Object.fromEntries(
   }),
 ) as Record<number, SourceKey[]>;
 
+// Nara stays off stage until "Meet Nara", so her arrival after the booth is a reveal.
 export const slides: SlideDef[] = [
-  { name: "Title", steps: 1, seconds: 18, transition: "blend", nara: () => titleSpot, notes: title.notes, Content: TitleSlide },
+  { name: "Title", steps: 1, seconds: 12, transition: "blend", notes: title.notes, Content: TitleSlide },
+  {
+    name: "Why origami",
+    section: sections.culture,
+    steps: 2,
+    seconds: 16,
+    transition: "push",
+    sourcesByStep: { 2: ["ikeaEffect"] },
+    notes: whyOrigami.notes,
+    Content: WhyOrigamiSlide,
+  },
+  {
+    name: "Where it pops up",
+    section: sections.location,
+    steps: 2,
+    seconds: 16,
+    transition: "rise",
+    printSteps: [1, 2],
+    notes: places.notes,
+    Content: PlacesSlide,
+  },
+  { name: "Our mini booth", section: sections.location, steps: 1, seconds: 12, transition: "zoom", notes: miniBooth.notes, Content: MiniBoothSlide },
   {
     name: "Meet Nara",
     section: sections.character,
@@ -64,11 +88,12 @@ export const slides: SlideDef[] = [
     notes: meetNara.notes,
     Content: MeetNaraSlide,
   },
+  { name: "How Nara reacts", section: sections.reactions, steps: 2, seconds: 12, transition: "rise", notes: reactions.notes, Content: ReactionsSlide },
   {
     name: "Your visit, step by step",
     section: sections.journey,
     steps: journey.steps.length,
-    seconds: 28,
+    seconds: 26,
     transition: "push",
     nara: journeySpot,
     notes: journey.notes,
@@ -83,26 +108,6 @@ export const slides: SlideDef[] = [
     sourcesByStep: { 1: ["sakura", "fuji", "senbazuru", "childrensDay"] },
     notes: options.notes,
     Content: ChooseFoldSlide,
-  },
-  {
-    name: "Where it pops up",
-    section: sections.location,
-    steps: 2,
-    seconds: 18,
-    transition: "rise",
-    printSteps: [1, 2],
-    notes: places.notes,
-    Content: PlacesSlide,
-  },
-  {
-    name: "Our mini booth",
-    section: sections.location,
-    steps: 1,
-    seconds: 12,
-    transition: "zoom",
-    nara: () => miniBoothSpot,
-    notes: miniBooth.notes,
-    Content: MiniBoothSlide,
   },
   {
     name: "The 10-question lesson",
@@ -135,19 +140,18 @@ export const slides: SlideDef[] = [
     notes: celebration.notes,
     Content: CelebrationSlide,
   },
-  { name: "How Nara reacts", section: sections.reactions, steps: 2, seconds: 12, transition: "blend", notes: reactions.notes, Content: ReactionsSlide },
   {
     name: "The Duolingo Method in paper",
     section: sections.method,
     steps: 1,
     seconds: 16,
-    transition: "rise",
+    transition: "blend",
     nara: () => methodSpot,
     sourcesByStep: { 1: ["duolingoPrompt"] },
     notes: method.notes,
     Content: MethodSlide,
   },
-  { name: "Thank you", steps: 1, seconds: 7, transition: "blend", nara: () => closingSpot, notes: closing.notes, Content: ClosingSlide },
+  { name: "Thank you", steps: 1, seconds: 7, transition: "zoom", nara: () => closingSpot, notes: closing.notes, Content: ClosingSlide },
   { name: "Sources", steps: 1, seconds: 0, transition: "rise", notes: sourcesSlide.notes, Content: SourcesSlide },
 ];
 

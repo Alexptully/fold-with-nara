@@ -5,12 +5,9 @@ import { Kiosk } from "@/components/art/Kiosk";
 import { config } from "@/content/config";
 import { miniBooth, places } from "@/content/content";
 import { asset } from "@/lib/paths";
-import type { NaraSpot } from "../NaraActor";
 import { Reveal, SlideShell } from "../primitives";
 
-/** Nara presents the booth from the right while the presenter points to the real one in the room. */
-export const miniBoothSpot: NaraSpot = { x: 1300, y: 400, h: 600, pose: "present" };
-
+/** The presenter points to the real booth in the room. Nara isn't on stage yet: she's revealed on the next slide. */
 export function MiniBoothSlide() {
   return (
     <SlideShell heading={miniBooth.heading}>
@@ -19,7 +16,7 @@ export function MiniBoothSlide() {
           <BoothPicture />
         </div>
       </Reveal>
-      <Reveal delay={0.25} className="absolute left-[1240px] top-[190px] w-[600px]">
+      <Reveal delay={0.25} className="absolute left-[1240px] top-[420px] w-[600px]">
         <HereToday />
         <p className="mt-6 text-lead text-ink">{miniBooth.line}</p>
         <p className="mt-2 text-lead text-ink-muted">{miniBooth.invite}</p>

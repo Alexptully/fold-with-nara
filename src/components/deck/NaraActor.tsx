@@ -5,7 +5,7 @@ import { createContext, useContext, useState } from "react";
 import { BODY_VIEWBOX, HEAD_VIEWBOX } from "@/components/art/nara/geometry";
 import { Nara, type Pose, type ShapeKind } from "@/components/art/nara/Nara";
 import { config } from "@/content/config";
-import { duration, ease } from "@/lib/motion";
+import { duration, ease, spring } from "@/lib/motion";
 import { asset } from "@/lib/paths";
 
 /**
@@ -91,19 +91,28 @@ export function NaraActor({ spot, cut = false }: { spot: NaraSpot | null; cut?: 
       animate={{ x: place.x, y: place.y, scale: scaleOf(place), opacity: shown ? 1 : 0 }}
       transition={cut ? instant : moves[move]}
     >
-      <AnimatePresence initial={false}>
-        <motion.div
-          key={place.pose}
-          className="absolute inset-0"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          // The old expression stays solid underneath until the new one fully covers it.
-          exit={{ opacity: 0, transition: { delay: duration.quick, duration: 0.05 } }}
-          transition={{ duration: duration.quick }}
-        >
-          <Figure pose={place.pose} highlight={highlight} />
-        </motion.div>
-      </AnimatePresence>
+      {/* She pops up from her feet whenever she appears, like a Duolingo character arriving. */}
+      <motion.div
+        className="absolute inset-0"
+        style={{ transformOrigin: "50% 100%" }}
+        initial={false}
+        animate={{ scale: shown ? 1 : 0.8 }}
+        transition={cut ? instant : { ...spring, delay: shown ? 0.2 : 0 }}
+      >
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={place.pose}
+            className="absolute inset-0"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            // The old expression stays solid underneath until the new one fully covers it.
+            exit={{ opacity: 0, transition: { delay: duration.quick, duration: 0.05 } }}
+            transition={{ duration: duration.quick }}
+          >
+            <Figure pose={place.pose} highlight={highlight} />
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
     </motion.div>
   );
 }

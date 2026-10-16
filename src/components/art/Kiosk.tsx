@@ -9,9 +9,10 @@ import { OrigamiIcon } from "./OrigamiIcon";
 import type { OrigamiModel } from "@/content/content";
 
 /**
- * The airport kiosk from the team's render: a wooden cabinet about 7 ft tall on a
- * 2.5 ft square footprint, a touchscreen tower, an overhead camera and projector
- * arm, a folding ledge where the light lands, a paper dispenser and storage below.
+ * A folding kiosk inside the event tent, from the team's render: a wooden cabinet
+ * about 7 ft tall on a 2.5 ft square footprint, a touchscreen tower, an overhead
+ * camera and projector arm, a folding ledge where the light lands, a paper
+ * dispenser and storage below.
  * World units are centimeters; x runs to the back right, y toward the viewer, z up.
  */
 

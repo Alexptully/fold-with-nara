@@ -32,17 +32,21 @@ On presentation day, use `npm run present` instead. It builds the finished site 
 
 On a touch screen, swipe left or right. The address bar shows the slide number (`/#7`), so you can jump straight to a slide to rehearse it.
 
-**Timing.** The pitch is planned at 3:33 across twelve slides (see `brief.md`). The speaker notes follow our script. Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
+**Timing.** The pitch is planned at 3:39 across thirteen slides (see `brief.md`). The speaker notes follow our script. Press N for the notes: each slide shows its time budget and a clock that starts with your first key press, green while you're on time and red when you're behind. Press T to reset it between run-throughs.
 
-**Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish Mt. Fuji. The kiosk and tent cards pop when they flip. Browsers only allow sound after your first click or key press. Press M to mute.
+**Sound.** Changing slides is silent. The lesson plays short sound effects: a tap, a ding for a right answer, a bonk for a wrong one and a fanfare when you finish Mt. Fuji. The tent and kiosk cards pop when they flip, and Nara pops when she's revealed. Browsers only allow sound after your first click or key press. Press M to mute.
 
-**Nara moves with you.** She walks from slide to slide and changes expression as she goes. On "Your visit, step by step", each arrow press walks her to the next step. On "Choose what to fold", click a card to see what the model stands for.
+**Nara is a reveal.** She stays off stage through the title, "Why origami" and the booth slides. "Meet Nara" opens on her outline; one arrow press pops her into color, and "How Nara reacts" follows right after.
 
-**Where it pops up.** The slide opens on our drawings of the kiosk and the tent. One arrow press flips both cards over to the real-life renders.
+**Nara moves with you.** From then on she walks from slide to slide and changes expression as she goes. On "Your visit, step by step", each arrow press walks her to the next step. On "Choose what to fold", click a card to see what the model stands for.
+
+**Why origami.** One arrow press sends the Mt. Fuji home: a copy flies along the dashed line to a shelf, and the study about why people keep what they fold appears.
+
+**Where it pops up.** The pop-up lives at events only: a tent with folding kiosks inside. The slide opens on our drawings of the tent and one of its kiosks. One arrow press flips both cards over to the real-life renders.
 
 **Our mini booth.** This slide is your cue to point to the physical mini booth on the table and show what it does.
 
-**The "Try the lesson" slide is interactive.** The lesson is Mt. Fuji: three questions unlock each of its three folds. The slide plays the question that unlocks each fold, one per arrow press, and the room folds along. Each question opens with the paper as the last fold left it; a right answer has the projector draw the crease and arrow, then the paper folds over into its new shape. Click **Replay fold** to play it again from the last step. Question 3 unlocks fold 1 (fold in half into a triangle). On question 6, pick a wrong answer first to show Nara's hint, then the right one, and fold the left corner over. Question 9 unlocks fold 3 (open it so it stands); click **Finish Mt. Fuji** for the fanfare. Clicking inside the lesson card never skips the slide.
+**The "Try the lesson" slide is interactive.** The lesson is Mt. Fuji: three questions unlock each of its three folds. The slide plays the question that unlocks each fold, one per arrow press, and the room folds along. Each question opens with the paper as the last fold left it; a right answer has the projector draw the crease and arrow, then the paper folds over into its new shape. Click **Replay fold** to play it again from the last step. Question 3 unlocks fold 1 (fold in half into a triangle, with the snowy corners on the outside). On question 6, pick a wrong answer first to show Nara's hint, then the right one, and fold the left corner over. Question 9 unlocks fold 3 (open it so it stands); click **Finish Mt. Fuji** for the fanfare. Clicking inside the lesson card never skips the slide.
 
 **You folded Mt. Fuji.** The completion screen shows the finished mountain with Nara cheering. Click **Take it home** to show that choice, or **Hang it in the tent** (or press the arrow) to watch the mountain fly up and hang in the tent.
 
@@ -67,7 +71,7 @@ All the words live in three files. You can edit them in any text editor, or on G
 ### Swap in our own drawings
 
 - **Sophia's Nara:** the deck draws Nara from your character sheet and animation in every pose. To show your own file instead wherever Nara walks across the stage, export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
-- **The kiosk and tent renders:** "Where it pops up" flips to `public/renders/kiosk-real.jpg` and `tent-real.jpg`, cropped from our render sheet with Duo and the wordmark painted out. To use a different render, save it there and change `kioskPhoto` or `tentPhoto` in `config.ts`.
+- **The kiosk and tent renders:** "Where it pops up" flips to `public/renders/kiosk-real.jpg` and `tent-real.jpg`, cropped from our render sheet with Duo and the wordmark painted out. The kiosk's airport background is replaced with a blurred view of the tent's inside, since the kiosks live in the tent. To use a different render, save it there and change `kioskPhoto` or `tentPhoto` in `config.ts`.
 - **The mini booth:** save a photo as `public/renders/mini-booth.jpg` and set `miniBoothPhoto: "/renders/mini-booth.jpg"`. Until then the slide shows the kiosk drawn at desk size.
 
 ## Before you push a change

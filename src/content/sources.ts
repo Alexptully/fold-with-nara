@@ -58,6 +58,12 @@ export const sources = {
     title: "Fujisan, sacred place and source of artistic inspiration (a pilgrimage site and an internationally recognized icon of Japan)",
     url: "https://whc.unesco.org/en/list/1418",
   },
+  ikeaEffect: {
+    cite: "Norton, Mochon and Ariely, 2012",
+    title:
+      "The IKEA effect: When labor leads to love, Journal of Consumer Psychology 22(3). Experiment 1B: people bid 23 cents on origami they folded and 5 cents on origami a stranger folded",
+    url: "https://doi.org/10.1016/j.jcps.2011.08.002",
+  },
   childrensDay: {
     cite: "Japan House Los Angeles, 2022",
     title: "The Colorful Traditions of Children's Day (carp streamers for strength and perseverance; kabuto displayed to inspire bravery)",

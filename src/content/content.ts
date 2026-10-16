@@ -21,7 +21,7 @@ export type Fold = {
 // The origami Mt. Fuji from the team's fold sheet. The sheet comes printed with its
 // dashed guide lines, so the visitor makes three folds, each shown as a projected demo.
 export const folds: Fold[] = [
-  { n: 1, instruction: "Fold in half into a triangle, snow on top", guidance: "show" },
+  { n: 1, instruction: "Fold in half into a triangle, snow outside", guidance: "show" },
   { n: 2, instruction: "Fold the left corner over to the right", guidance: "show" },
   { n: 3, instruction: "Open it halfway so your mountain stands", guidance: "show" },
 ];
@@ -251,11 +251,24 @@ export const exerciseLabels: Record<ExerciseKind, string> = {
 export const title = {
   headline: config.productName,
   tagline: config.tagline,
-  welcome: "Konnichiwa! Want to fold with me?",
+  sheetLabel: "The printed paper square for an origami Mt. Fuji, with a green fold line",
   notes: [
     "Hand out the paper squares before you start.",
-    `We're ${config.team.join(", ")}. Our installation teaches origami along with Japanese history and culture.`,
-    "Origami is a hands-on way into that culture: you learn the Japanese name of what you make and the story behind it.",
+    `We're ${config.team.join(", ")}. Our installation teaches origami along with Japanese history and culture, and you'll meet our guide in a minute.`,
+  ],
+};
+
+export const whyOrigami = {
+  heading: "Why origami",
+  doing: "A Japanese art you learn by doing",
+  keepsake: "A reminder you take home",
+  // Norton, Mochon and Ariely (2012), experiment 1B: builders bid 23 cents on their own origami, strangers 5 cents.
+  study: "In one study, people valued origami they folded almost 5 times more than strangers did.",
+  shelfLabel: "A shelf at home with the folded Mt. Fuji standing next to two books",
+  notes: [
+    "Press once to send Mt. Fuji home.",
+    "We chose origami because it's a Japanese art you learn with your hands.",
+    "We also wanted visitors to leave with a reminder of the event. People value origami they fold themselves, so they keep it.",
   ],
 };
 
@@ -273,9 +286,9 @@ export const meetNara = {
     { key: "Signature move", value: "A bow, like the deer of Nara Park" },
   ],
   notes: [
-    `${nara} starts as an outline of rounded shapes, the way Duolingo draws its characters.`,
-    "Hover a shape to light up every part made from it.",
-    `${nara} is a sika deer from Nara Park, where the deer bow to visitors. Bowing is one of the first things you learn in Japan, so her signature move is part of the lesson.`,
+    "Our guide starts as an outline. Press once to reveal her.",
+    `${nara} is built from rounded shapes, the way Duolingo draws its characters. Hover a shape to light up its parts.`,
+    "She's a sika deer from Nara Park, where the deer bow to visitors, so her signature move is part of the lesson.",
   ],
 };
 
@@ -296,7 +309,7 @@ export const journey = {
   ] satisfies { icon: JourneyIcon; title: string; pose: Pose }[],
   notes: [
     "Press once per step. Nara walks the path with you.",
-    "Nara welcomes visitors. It's free at events, and airports may charge.",
+    "Nara welcomes visitors. Entry is free or paid, depending on the event.",
     "Visitors choose what to fold, and the station dispenses their paper and shows where it goes.",
     "A projector draws each fold on the paper, and our proposed camera checks it and helps them adjust.",
     "Questions unlock each fold. At the end they scan for a badge, then keep or hang their origami.",
@@ -349,24 +362,24 @@ export const options = {
   ],
 };
 
+// The pop-up lives at events only: a tent with folding kiosks inside.
 export const places = {
   heading: "Where it pops up",
-  kiosk: {
-    name: "Airport kiosk",
-    detail: "One visitor at a time",
-    sideJp: "折って 知って つながろう",
-    photoAlt: "Render of the kiosk in an airport: a wooden cabinet with a touchscreen, an overhead camera and projector, and a folding ledge",
-  },
   tent: {
     name: "Event tent",
-    detail: "Many stations and a shared display",
+    detail: "Kiosks inside and a shared display",
     signJp: "折って つながろう",
     photoAlt: "Render of the event tent: a white folded-paper dome with folding stations inside and paper cranes hanging from the roof",
   },
+  kiosk: {
+    name: "Kiosk",
+    detail: "One visitor at each",
+    sideJp: "折って 知って つながろう",
+    photoAlt: "Render of a kiosk inside the event tent: a wooden cabinet with a touchscreen, an overhead camera and projector, and a folding ledge",
+  },
   notes: [
     "Press once and both drawings flip over to our renders.",
-    "Our concept comes in two versions: a compact kiosk for airports or malls, where one person folds at a time,",
-    "and a larger tent-style pop-up for events, with several folding stations and a shared display where visitors hang their finished origami.",
+    "Our installation is a tent-style pop-up for events. Inside, each visitor folds at their own kiosk, and finished origami hangs on a shared display.",
   ],
 };
 
@@ -450,7 +463,7 @@ export const reactions = {
   ] satisfies Reaction[],
   rule: "No hearts to lose and no lockout.",
   notes: [
-    `${nara} has an expression for every moment. A first miss gets a hint, a second gets the answer, and either way visitors try again.`,
+    `${nara} has an expression for every moment of the lesson. Press once for mistakes: a first miss gets a hint, a second gets the answer, and either way visitors try again.`,
   ],
 };
 

@@ -1,6 +1,6 @@
 # Fold with Nara
 
-A web slide deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 2026 (Prompt 2: New World Character). The deck pitches Nara, a sika deer from Nara Park who teaches a 10-question lesson on Japanese culture while the visitor folds an origami Mt. Fuji at an origami pop-up.
+A web slide deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 2026 (Prompt 2: New World Character). The deck pitches Nara, a sika deer from Nara Park who teaches a 10-question lesson on Japanese culture while the visitor folds an origami Mt. Fuji at an origami pop-up at events.
 
 `brief.md` is the master brief. It sets the slide content, the required sections, the statistics and their sources, and the placeholders. When the brief and this file disagree on design or tooling, this file wins. When they disagree on content or required coverage, the brief wins.
 
@@ -15,13 +15,15 @@ The visual reference is Duolingo's own look, laid out like the Standard Physics 
 
 Nara is drawn in `src/components/art/nara/` from the team's character sheet and animation (measured from its frames: flat colors, no shading). Every pose (smile, wave, talk, present, think, love, laugh, cheer, bow) reuses the same parts, so change her anatomy in `geometry.ts`, never per slide. `NaraSketch` is the head-only outline from the construction sheet.
 
+Nara is a reveal: she stays off stage until "Meet Nara", which comes after the booth slides, so don't put her on the title, "Why origami", "Where it pops up" or "Our mini booth".
+
 Nara lives on the stage, not inside slides (`src/components/deck/NaraActor.tsx`). Each slide in `slides.ts` says where she stands and which pose she wears at each build step (`nara`), and she walks, grows and changes expression between spots while the slides blend underneath. Draw a separate Nara inside a slide only when she is part of a picture of the product (the lesson card) or a lineup of expressions.
 
 Every slide is drawn on a fixed 1920 by 1080 stage that scales to fit the window, so sizes in code are real pixels at 1080p.
 
 Keep the slides clean: no progress bar, dots or slide numbers. Each slide's footer carries only its sources and, if the assignment has a rubric, its rubric tag.
 
-The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:33, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
+The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides.ts`; the timed slides add up to 3:39, and the total must stay under 4:00. Speaker notes are written to those budgets at about 150 words a minute, and the notes panel shows a running clock against the plan.
 
 ## Commands
 
@@ -29,7 +31,7 @@ The pitch must fit in four minutes. Each slide has a `seconds` budget in `slides
 - `/print` (or the P key) is the print version, one landscape page per slide or build step, for PDF export
 - `npm run check` runs the type checker, the linter with its complexity limit, and the em dash scan. Run it before saying a task is done.
 - `npm run present` builds the static site and serves it at http://localhost:3000 (no dev server needed on presentation day).
-- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to two reveals (a pop as the "Where it pops up" cards flip, and a pop as Mt. Fuji lands in the tent). Changing slides is silent. Use `useRevealSound` for any new reveal so it only plays when the presenter steps forward into it.
+- M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to three reveals (a pop as the "Where it pops up" cards flip, a pop as Nara is revealed on "Meet Nara", and a pop as Mt. Fuji lands in the tent). Changing slides is silent. Use `useRevealSound` for any new reveal so it only plays when the presenter steps forward into it.
 - T resets the rehearsal clock in the notes panel.
 - Work on a branch and open a pull request. Never push straight to `main`.
 
@@ -105,7 +107,7 @@ These rules target reflexes, not accessibility. Accessible names, alt text and s
 
 The deck should look like a design textbook or a designer's portfolio. Take on the big version of the task.
 
-- Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only. The kiosk and tent renders in `public/renders/` come from the team's render sheet with Duo and the wordmark painted out; keep them that way.
+- Use real imagery: generated images, or models built in Blender or Inkscape. No stock photos and no real company logos. Refer to companies by name in text only. The kiosk and tent renders in `public/renders/` come from the team's render sheet with Duo and the wordmark painted out; keep them that way. The pop-up is for events only, so the kiosk render sits inside the tent (its airport background was swapped for a blurred view of the tent's inside). Don't bring airports back.
 - Use animation and interactivity, and check animations frame by frame instead of assuming the CSS is right.
 - Carry detail all the way through: grain, texture, edge treatment and weight.
 - Repeat one motif across the whole deck, the way strong writers and photographers repeat an image. This deck's motif: the dashed green crease line that Nara's projector draws on paper. It appears as the `Crease` primitive on diagrams, joins the steps of the journey path and links each question to its fold. Green is reserved for projected light, right answers and progress.
