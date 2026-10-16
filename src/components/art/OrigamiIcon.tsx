@@ -11,9 +11,12 @@ import type { Pt } from "@/lib/shapes";
 
 type Facet = { pts: Pt[]; fill: string };
 
+// Rounded to hundredths: the server and the browser can disagree in the last digit
+// of a sine, which made the page's first render mismatch.
+const round = (n: number) => Math.round(n * 100) / 100;
 const polar = (angleDeg: number, r: number): Pt => {
   const a = (angleDeg * Math.PI) / 180;
-  return [100 + r * Math.cos(a), 100 + r * Math.sin(a)];
+  return [round(100 + r * Math.cos(a)), round(100 + r * Math.sin(a))];
 };
 
 function sakuraFacets(): Facet[] {

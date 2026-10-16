@@ -48,18 +48,24 @@ export function useDeckNavigation(slides: SlideDef[]) {
   );
 
   // Start from the slide in the address bar, and follow manual hash edits, without a transition.
+  const [hashRead, setHashRead] = useState(false);
   useEffect(() => {
-    const sync = () => goTo(readHash(slides.length), false);
+    const sync = () => {
+      goTo(readHash(slides.length), false);
+      setHashRead(true);
+    };
     sync();
     window.addEventListener("hashchange", sync);
     return () => window.removeEventListener("hashchange", sync);
   }, [goTo, slides.length]);
 
-  // Keep the address bar on the current slide so one section can be rehearsed.
+  // Keep the address bar on the current slide so one section can be rehearsed. Waiting
+  // for the first read stops the dev server's double effect run from resetting it to #1.
   useEffect(() => {
+    if (!hashRead) return;
     const hash = `#${position.slide + 1}`;
     if (window.location.hash !== hash) window.history.replaceState(null, "", hash);
-  }, [position.slide]);
+  }, [position.slide, hashRead]);
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
