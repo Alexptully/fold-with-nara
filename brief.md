@@ -50,7 +50,7 @@ Each slide's footer names the section it covers.
 | Important cultural aspect of a country | Why origami, Choose what to fold, The 10-question lesson |
 | Distinct location | Where it pops up, Our mini booth (and Nara Park as the lesson's setting, one stop per question) |
 | Concise 10-question lesson for beginners | The 10-question lesson, Try the lesson |
-| How the lesson corrects wrong answers | How Nara reacts, Try the lesson (question 6) |
+| How the lesson corrects wrong answers | How Nara reacts, Try the lesson (question 5) |
 | How the character encourages the learner to start and stay engaged | How Nara reacts (seven expressions, one per moment) |
 | How the installation teaches (team script, section 2) | Your visit, step by step; The Duolingo Method in paper |
 | Visitor journey and takeaway (team script, section 3) | Why origami (the reminder you take home); Your visit, step by step; You folded Mt. Fuji |
@@ -71,8 +71,8 @@ Each slide's footer names the section it covers.
 ## Character and installation references
 
 - Nara follows the team's character sheet and its animation: the outline sketch, the colored figure and the expressions (wave, talk, present, think, love, laugh, cheer, bow, plus a resting smile). The deck draws Nara in vector, measured from the animation's frames, so every pose stays sharp and can move: she blinks, flicks her ears, hops when she laughs and walks from slide to slide.
-- The pop-up is a tent at events, free for everyone, with no airport or paid version. The tent and kiosk follow the team's render: a white faceted dome tent with origami hanging overhead, and inside it the folding kiosks, wooden cabinets about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper printer and storage. "Where it pops up" is all drawings, one camera move in three steps: the tent from outside, then through the door to the kiosks along the walls, then onto one kiosk with its parts labeled. The only real render left is the tent (`public/renders/tent-real.jpg`) on "You folded Mt. Fuji", where the finished model hangs.
-- Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo, so the tent render has Duo and the wordmark painted out, and the kiosk drawings show a green dot for the locked Duo fold.
+- The pop-up is a tent at events, free for everyone, with no airport or paid version. The tent and kiosk follow the team's render: a white faceted dome tent with origami hanging overhead, and inside it the folding kiosks, wooden cabinets about 7 ft tall on a 2.5 ft square footprint with an overhead camera and projector, touchscreen, folding area, paper printer and storage. "Where it pops up" is all drawings, one camera move in three steps: the tent from outside, then through the door to the kiosks along the walls, then onto one kiosk with its parts labeled. The deck has no real renders left: "You folded Mt. Fuji" hangs the finished model in the same drawing of the tent's inside, above its back corner.
+- Duo appears in text only, as a locked "special" option. The deck never draws Duolingo's characters or logo, so the kiosk drawings show a green dot for the locked Duo fold.
 - The mini booth is the desk-size physical version the team built. It gets its own slide right after the kiosk and tent, so the presenter can point to it in the room. Until a photo is added, the slide shows the kiosk drawn at desk size.
 - The Mt. Fuji paper follows the team's sketch of the sheet: a blue square with dashed creases on both diagonals and a zigzag snowline across two opposite corners (top right and bottom left). Fold 1 folds it in half on the diagonal with the snowy corners on the outside, so both meet at the peak. Then it's folded down the middle and opened so it stands.
 
@@ -82,15 +82,15 @@ Nara, a sika deer from Nara Park, walks a visitor through ten stops in the park 
 
 ## The lesson
 
-The featured model is Mt. Fuji, an easy model. The sheet comes printed with its dashed guide lines, so the visitor makes three folds, matching the team's fold photo. The ten questions come in three sets of three: questions 1 to 3 unlock fold 1, questions 4 to 6 unlock fold 2, and questions 7 to 9 unlock fold 3. Question 10 comes once the mountain stands, then the completion screen.
+The featured model is Mt. Fuji, an easy model. The sheet comes printed with its dashed guide lines, so the visitor makes three folds, matching the team's fold photo. Saying hello (question 1) unlocks fold 1, so everyone starts folding right away. Questions 2 to 5 then unlock fold 2 and questions 6 to 9 unlock fold 3. Question 10 comes once the mountain stands, then the completion screen.
 
-"Try the lesson" plays the question that unlocks each fold, in order: question 3 (fold 1), question 6 (fold 2) and question 9 (fold 3). Each question opens with the paper as the previous fold left it; a right answer animates the next fold (projected crease and arrow, the flap folding over, then the new shape), and a Replay fold button plays it again. Finishing goes straight to the completion slide.
+"Try the lesson" plays the question that unlocks each fold, in order: question 1, where the whole room says konnichiwa (fold 1), question 5 on what origami means, with a wrong answer first to show the hint (fold 2), and question 9 (fold 3). Each question opens with the paper as the previous fold left it; a right answer animates the next fold (projected crease and arrow, the flap folding over, then the new shape), and a Replay fold button plays it again. Finishing goes straight to the completion slide.
 
 | Fold | Unlocked by | What the visitor does | Projector help |
 | --- | --- | --- | --- |
-| 1 | Questions 1 to 3 | Fold in half into a triangle, snow outside | Full demo |
-| 2 | Questions 4 to 6 | Fold the left corner over to the right | Full demo |
-| 3 | Questions 7 to 9 | Open it halfway so the mountain stands | Full demo |
+| 1 | Question 1 | Fold in half into a triangle, snow outside | Full demo |
+| 2 | Questions 2 to 5 | Fold the left corner over to the right | Full demo |
+| 3 | Questions 6 to 9 | Open it halfway so the mountain stands | Full demo |
 
 Questions marked **doc** follow the team's wording from the shared doc (Tab 1), shortened to a sentence or two so they read at a glance. Questions marked **draft** were written for this deck in the same voice; Sophia owns the questions and should review or replace them.
 
@@ -98,9 +98,9 @@ Questions marked **doc** follow the team's wording from the shared doc (Tab 1), 
 | --- | --- | --- | --- | --- | --- |
 | 1 | The park gate | こんにちは konnichiwa, hello | Say it out loud | doc | |
 | 2 | The deer lawn | お辞儀 ojigi, a bow | Multiple choice | draft | Coto Academy |
-| 3 | A paper shop | 折り紙 origami, folding paper | Multiple choice | draft | Merriam-Webster |
-| 4 | The sakura grove | 桜 sakura, cherry blossom | Multiple choice | doc | Embassy of Japan in Canada |
-| 5 | A kimono shop | 着物 kimono, a thing to wear | Multiple choice | doc | Vocabulary.com |
+| 3 | The sakura grove | 桜 sakura, cherry blossom | Multiple choice | doc | Embassy of Japan in Canada |
+| 4 | A kimono shop | 着物 kimono, a thing to wear | Multiple choice | doc | Vocabulary.com |
+| 5 | A paper shop | 折り紙 origami, folding paper | Multiple choice | draft | Merriam-Webster |
 | 6 | A tea house | 茶道 sadō, tea ceremony | Multiple choice | doc | Embassy of Japan in India |
 | 7 | A shrine | 神社 jinja, shrine (why Mt. Fuji is special) | Multiple choice | draft | UNESCO |
 | 8 | A bench by the pond | 復習 fukushū, review | Match the pairs | draft | |
@@ -138,7 +138,6 @@ All in `src/content/config.ts`:
 - `productName`, `tagline`, `team`, `occasion`
 - `characterName` (Nara)
 - `characterImage`: Sophia's Illustrator drawing, once exported to `public/renders/`
-- `tentPhoto`: the cleaned tent render the finished Mt. Fuji hangs in on "You folded Mt. Fuji"
 - `miniBoothPhoto`: a photo of the mini booth, once it's in `public/renders/`
 
 ## Open items for the team

@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Nara, type Pose } from "@/components/art/nara/Nara";
 import { Button } from "@/components/ui/Button";
 import { SpeechBubble } from "@/components/ui/SpeechBubble";
-import { exerciseLabels, folds, foldUnlockedBy, foldsDoneBefore, questions, QUESTIONS_PER_FOLD, tryLesson, type Question } from "@/content/content";
+import { exerciseLabels, folds, foldUnlockedBy, foldsDoneBefore, questions, tryLesson, type Question } from "@/content/content";
 import { duration, ease, spring } from "@/lib/motion";
 import { play } from "@/lib/sound";
 import { ChoiceExercise, MatchExercise, SpeakExercise, type ExerciseOutcome } from "./Exercises";
@@ -173,7 +173,7 @@ function solvedLine(question: Question): string {
   if (fold) return tryLesson.unlockedLine(fold.n);
   if (question.n === questions.length) return tryLesson.finishedLine;
   const next = folds[foldsDoneBefore(question.n)];
-  return tryLesson.towardLine(QUESTIONS_PER_FOLD - (question.n % QUESTIONS_PER_FOLD), next.n);
+  return tryLesson.towardLine(next.unlockedBy - question.n, next.n);
 }
 
 function FooterMessage({ question, outcome }: { question: Question; outcome: ExerciseOutcome }) {

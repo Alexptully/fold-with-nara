@@ -14,28 +14,29 @@ export type Guidance = "show" | "mark" | "try";
 
 export type Fold = {
   n: number;
+  /** The question whose right answer unlocks this fold. */
+  unlockedBy: number;
   instruction: string;
   guidance: Guidance;
 };
 
 // The origami Mt. Fuji from the team's fold sheet. The sheet comes printed with its
 // dashed guide lines, so the visitor makes three folds, each shown as a projected demo.
+// Saying hello (question 1) unlocks the first fold, so everyone starts folding right
+// away; after that, every four right answers unlock the next fold. Question 10 comes
+// once the mountain stands, just before the completion message.
 export const folds: Fold[] = [
-  { n: 1, instruction: "Fold in half into a triangle, snow outside", guidance: "show" },
-  { n: 2, instruction: "Fold the left corner over to the right", guidance: "show" },
-  { n: 3, instruction: "Open it halfway so your mountain stands", guidance: "show" },
+  { n: 1, unlockedBy: 1, instruction: "Fold in half into a triangle, snow outside", guidance: "show" },
+  { n: 2, unlockedBy: 5, instruction: "Fold the left corner over to the right", guidance: "show" },
+  { n: 3, unlockedBy: 9, instruction: "Open it halfway so your mountain stands", guidance: "show" },
 ];
 
-/**
- * The ten questions come in three sets of three, one set before each fold: the
- * third answer in a set unlocks the next fold. Question 10 comes once the mountain
- * stands, just before the completion message.
- */
-export const QUESTIONS_PER_FOLD = 3;
 /** The fold a question unlocks, or null if it doesn't unlock one. */
-export const foldUnlockedBy = (n: number): Fold | null => (n % QUESTIONS_PER_FOLD === 0 ? (folds[n / QUESTIONS_PER_FOLD - 1] ?? null) : null);
+export const foldUnlockedBy = (n: number): Fold | null => folds.find((fold) => fold.unlockedBy === n) ?? null;
 /** How many folds are already on the paper when a question is asked. */
-export const foldsDoneBefore = (n: number) => Math.min(Math.floor((n - 1) / QUESTIONS_PER_FOLD), folds.length);
+export const foldsDoneBefore = (n: number) => folds.filter((fold) => fold.unlockedBy < n).length;
+/** The questions that unlock each fold, in order. */
+export const unlockingQuestions = folds.map((fold) => fold.unlockedBy);
 
 export type ExerciseKind = "speak" | "choose" | "word" | "match";
 
@@ -101,21 +102,6 @@ export const questions: Question[] = [
   {
     n: 3,
     kind: "choose",
-    place: "A paper shop",
-    topic: { jp: "折り紙", romaji: "origami", english: "folding paper" },
-    story: "This shop sells paper! 折り紙 (origami) joins two words: ori, to fold, and kami, paper.",
-    clue: "ori, to fold, and kami, paper",
-    prompt: "What does \"origami\" mean?",
-    options: ["Folding paper", "Paper money", "Flying bird", "Paper lantern"],
-    correct: 0,
-    hint: "Ori means to fold. Kami means paper.",
-    explain: "Origami means folding paper: ori (fold) plus kami (paper).",
-    fromDoc: false,
-    source: "origamiWord",
-  },
-  {
-    n: 4,
-    kind: "choose",
     place: "The sakura grove",
     topic: { jp: "桜", romaji: "sakura", english: "cherry blossom" },
     story: "Every spring, pink cherry blossoms called sakura bloom across Japan. Their petals dance in the wind, but they don't stay for long.",
@@ -134,7 +120,7 @@ export const questions: Question[] = [
     source: "sakura",
   },
   {
-    n: 5,
+    n: 4,
     kind: "choose",
     place: "A kimono shop",
     topic: { jp: "着物", romaji: "kimono", english: "a thing to wear" },
@@ -147,6 +133,21 @@ export const questions: Question[] = [
     explain: "A kimono is a traditional garment. The word means a thing to wear: ki (wear) plus mono (thing).",
     fromDoc: true,
     source: "kimono",
+  },
+  {
+    n: 5,
+    kind: "choose",
+    place: "A paper shop",
+    topic: { jp: "折り紙", romaji: "origami", english: "folding paper" },
+    story: "This shop sells paper! 折り紙 (origami) joins two words: ori, to fold, and kami, paper.",
+    clue: "ori, to fold, and kami, paper",
+    prompt: "What does \"origami\" mean?",
+    options: ["Folding paper", "Paper money", "Flying bird", "Paper lantern"],
+    correct: 0,
+    hint: "Ori means to fold. Kami means paper.",
+    explain: "Origami means folding paper: ori (fold) plus kami (paper).",
+    fromDoc: false,
+    source: "origamiWord",
   },
   {
     n: 6,
@@ -426,14 +427,14 @@ export const lessonOverview = {
   heading: "The 10-question lesson",
   speaker: ledger,
   notes: [
-    say("Here's our example lesson: Mt. Fuji. It has ten questions on Japanese culture, at ten stops around Nara Park."),
+    say("Here's our example lesson: Mt. Fuji, with ten questions on Japanese culture at ten stops around Nara Park."),
     cue("Press once."),
-    say("Every three right answers unlock a fold, and question 10 comes once your mountain stands."),
+    say("Saying hello unlocks your first fold right away, and then every four right answers unlock the next one."),
   ],
 };
 
-/** The questions shown live on "Try the lesson", one per build step. */
-export const demoQuestions = [3, 6, 9];
+/** The questions shown live on "Try the lesson", one per build step: the ones that unlock each fold. */
+export const demoQuestions = unlockingQuestions;
 
 export const tryLesson = {
   heading: "Try the lesson",
@@ -452,11 +453,11 @@ export const tryLesson = {
   replayLabel: "Replay fold",
   speaker: ledger,
   notes: [
-    say("Grab your paper and fold with us!"),
-    cue("Question 3: click Folding paper, then Check."),
-    say("Origami means folding paper. Fold 1: fold your square in half into a triangle, with the snow on the outside."),
-    cue("Press once. Question 6: pick a wrong answer first, then Try again."),
-    say("Almost! Nara lights up the clue so you can try again. It's mindfulness and hospitality. Fold 2: fold the left corner over to the right."),
+    say("Grab your paper and fold with us! First, let's all say hello in Japanese."),
+    cue("Question 1: everyone says konnichiwa together, then click Everyone said it."),
+    say("Konnichiwa! Fold 1: fold your square in half into a triangle, with the snow on the outside."),
+    cue("Press once. Question 5: pick a wrong answer first, then Try again."),
+    say("Almost! Nara lights up the clue so you can try again. Ori means fold and kami means paper, so origami means folding paper. Fold 2: fold the left corner over to the right."),
     cue("Press once. Question 9."),
     say("Fujisan means Mt. Fuji. Fold 3: open it halfway so your mountain stands."),
     cue("Click Finish Mt. Fuji."),
@@ -475,7 +476,6 @@ export const celebration = {
   keptLine: "It's yours to keep.",
   hangLabel: "Hang it in the tent",
   hungLine: "Your Mt. Fuji joins the others.",
-  tentAlt: "Inside the event tent, with origami hanging from the roof",
   speaker: ledger,
   notes: [
     say("You folded Mt. Fuji! The kiosk shows your XP and your score, and you choose what happens next."),

@@ -28,6 +28,8 @@ const KIOSK_ORIGIN = { x: 295 * KIOSK_SCALE, mirroredX: (554 - 295) * KIOSK_SCAL
 const SCALE = 2.6 * KIOSK_SCALE;
 const COS30 = Math.cos(Math.PI / 6);
 const CORNER: Pt = [INSIDE.width / 2, 330];
+/** Where a newly finished model hangs: above the back corner, its peak this far down from the dome. */
+export const HANG_SPOT = { x: CORNER[0], peakY: 96 };
 const WALL_HEIGHT = 280;
 const iso = (x: number, y: number, z = 0): Pt => [CORNER[0] + (x - y) * COS30 * SCALE, CORNER[1] + (x + y) * 0.5 * SCALE - z * SCALE];
 
@@ -165,12 +167,13 @@ function DisplayBoard() {
 }
 
 // More finished origami hanging from the dome on strings, clear of the kiosks below.
+// The spot above the back corner stays free: "You folded Mt. Fuji" hangs the visitor's model there.
 const hanging: { model: OrigamiModel; x: number; drop: number }[] = [
   { model: "crane", x: 110, drop: 150 },
   { model: "sakura", x: 260, drop: 230 },
   { model: "koi", x: 420, drop: 160 },
-  { model: "fuji", x: 780, drop: 70 },
-  { model: "crane", x: 950, drop: 90 },
+  { model: "fuji", x: 730, drop: 70 },
+  { model: "crane", x: 1000, drop: 90 },
   { model: "sakura", x: 1310, drop: 170 },
   { model: "fuji", x: 1470, drop: 230 },
   { model: "crane", x: 1620, drop: 150 },

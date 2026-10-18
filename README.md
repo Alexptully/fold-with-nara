@@ -63,9 +63,9 @@ On a touch screen, swipe left or right. The address bar shows the slide number (
 
 **Our mini booth.** This slide is your cue to point to the physical mini booth on the table and show what it does.
 
-**The "Try the lesson" slide is interactive.** The lesson is Mt. Fuji: three questions unlock each of its three folds. The slide plays the question that unlocks each fold, one per arrow press, and the room folds along. Each question opens with the paper as the last fold left it; a right answer has the projector draw the crease and arrow, then the paper folds over into its new shape. Click **Replay fold** to play it again from the last step. Question 3 unlocks fold 1 (fold in half into a triangle, with the snowy corners on the outside). On question 6, pick a wrong answer first to show Nara's hint, then the right one, and fold the left corner over. Question 9 unlocks fold 3 (open it so it stands); click **Finish Mt. Fuji** for the fanfare. Clicking inside the lesson card never skips the slide.
+**The "Try the lesson" slide is interactive.** The lesson is Mt. Fuji: saying hello unlocks the first fold, then every four questions unlock the next. The slide plays the question that unlocks each fold, one per arrow press, and the room folds along. Each question opens with the paper as the last fold left it; a right answer has the projector draw the crease and arrow, then the paper folds over into its new shape. Click **Replay fold** to play it again from the last step. On question 1 the whole room says konnichiwa; click **Everyone said it** to unlock fold 1 (fold in half into a triangle, with the snowy corners on the outside). On question 5 (what origami means), pick a wrong answer first to show Nara's hint, then the right one, and fold the left corner over. Question 9 unlocks fold 3 (open it so it stands); click **Finish Mt. Fuji** for the fanfare. Clicking inside the lesson card never skips the slide.
 
-**You folded Mt. Fuji.** The completion screen shows the finished mountain with Nara cheering. Click **Take it home** to show that choice, or **Hang it in the tent** (or press the arrow) to watch the mountain fly up and hang in the tent.
+**You folded Mt. Fuji.** The completion screen shows the finished mountain with Nara cheering. Click **Take it home** to show that choice, or **Hang it in the tent** (or press the arrow) to watch the mountain fly into our drawing of the tent and hang from the dome.
 
 ## Make a PDF
 
@@ -88,7 +88,6 @@ All the words live in three files. You can edit them in any text editor, or on G
 ### Swap in our own drawings
 
 - **Sophia's Nara:** the deck draws Nara from your character sheet and animation in every pose. To show your own file instead wherever Nara walks across the stage, export it as a PNG with a transparent background, save it as `public/renders/nara.png`, and set `characterImage: "/renders/nara.png"` in `config.ts`.
-- **The tent render:** "You folded Mt. Fuji" hangs the finished model inside `public/renders/tent-real.jpg`, cropped from our render sheet with Duo and the wordmark painted out. To use a different render, save it there and change `tentPhoto` in `config.ts`.
 - **The mini booth:** save a photo as `public/renders/mini-booth.jpg` and set `miniBoothPhoto: "/renders/mini-booth.jpg"`. Until then the slide shows the kiosk drawn at desk size.
 
 ## Before you push a change
