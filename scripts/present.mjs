@@ -4,10 +4,12 @@
 import fs from "node:fs";
 import http from "node:http";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { lanAddresses, startRelay } from "./kiosk-relay.mjs";
 
 const PORT = 3000;
-const ROOT = path.resolve("out");
+// The built deck sits next to this scripts folder, wherever it's started from.
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "out");
 const TYPES = {
   ".html": "text/html; charset=utf-8",
   ".js": "text/javascript; charset=utf-8",
