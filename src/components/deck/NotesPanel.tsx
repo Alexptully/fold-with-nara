@@ -1,6 +1,7 @@
 "use client";
 
 import type { Note } from "@/content/content";
+import type { LinkStatus } from "@/lib/kiosk/link";
 import { slides, talkSeconds } from "./slides";
 import type { SlideDef } from "./types";
 import { clock } from "./useTalkClock";
@@ -10,11 +11,13 @@ export function NotesPanel({
   index,
   step,
   elapsed,
+  kiosk,
   onClose,
 }: {
   index: number;
   step: number;
   elapsed: number;
+  kiosk: LinkStatus;
   onClose: () => void;
 }) {
   const slide = slides[index];
@@ -48,7 +51,7 @@ export function NotesPanel({
         ))}
       </ul>
       <p className="mx-auto mt-4 max-w-5xl text-ink-muted">
-        {nextSlide ? `Next slide: ${nextSlide.name}${handoff(slide, nextSlide)}. ` : ""}T resets the clock.
+        {nextSlide ? `Next slide: ${nextSlide.name}${handoff(slide, nextSlide)}. ` : ""}T resets the clock. {kioskLine(kiosk)}
       </p>
     </aside>
   );
@@ -68,4 +71,13 @@ function NoteLine({ note }: { note: Note }) {
 /** Names the next speaker when the next slide changes hands, so nobody misses their cue. */
 function handoff(slide: SlideDef, next: SlideDef): string {
   return next.speaker && next.speaker !== slide.speaker ? `, over to ${next.speaker}` : "";
+}
+
+const plural = (count: number, one: string, many: string) => `${count} ${count === 1 ? one : many}`;
+
+/** Whether the mini booth's iPad and projector are following the deck. */
+function kioskLine({ relay, viewers }: LinkStatus): string {
+  if (relay === "unavailable") return "";
+  if (relay === "offline") return "Kiosk link is off: start the deck with npm run present to drive the iPad and projector.";
+  return `Kiosk: ${plural(viewers.screen, "iPad screen", "iPad screens")} and ${plural(viewers.projector, "projector", "projectors")} following.`;
 }

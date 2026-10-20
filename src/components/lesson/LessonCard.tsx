@@ -2,11 +2,11 @@
 
 import { Check, X } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Nara, type Pose } from "@/components/art/nara/Nara";
 import { Button } from "@/components/ui/Button";
 import { SpeechBubble } from "@/components/ui/SpeechBubble";
-import { exerciseLabels, folds, foldUnlockedBy, foldsDoneBefore, questions, QUESTIONS_PER_FOLD, tryLesson, type Question } from "@/content/content";
+import { exerciseLabels, folds, foldUnlockedBy, foldsDoneBefore, questions, tryLesson, type Question } from "@/content/content";
 import { duration, ease, spring } from "@/lib/motion";
 import { play } from "@/lib/sound";
 import { ChoiceExercise, MatchExercise, SpeakExercise, type ExerciseOutcome } from "./Exercises";
@@ -14,7 +14,22 @@ import { ChoiceExercise, MatchExercise, SpeakExercise, type ExerciseOutcome } fr
 /**
  * A Duolingo-style lesson screen for one question: progress, Nara and her story,
  * the exercise, and a feedback banner that reacts to right and wrong answers.
+ *
+ * `LessonCard` holds the state and plays the sounds. `LessonCardView` only draws a
+ * state, so the demo kiosk can show the same card as the deck, tap for tap.
  */
+
+/** Everything about the card that the presenter changes by answering. */
+export type CardView = { outcome: ExerciseOutcome; selected: number | null; listening: boolean };
+
+type CardActions = {
+  select: (index: number) => void;
+  check: () => void;
+  retry: () => void;
+  listen: () => void;
+  solve: () => void;
+  advance: () => void;
+};
 
 type CardProps = {
   question: Question;
@@ -22,7 +37,7 @@ type CardProps = {
   /** The last question shown: its Continue finishes the model with the fanfare. */
   finishing?: boolean;
   onAdvance: () => void;
-  onOutcome: (outcome: ExerciseOutcome) => void;
+  onView: (view: CardView) => void;
 };
 
 const done = (outcome: ExerciseOutcome) => outcome === "solved" || outcome === "explained";
@@ -31,19 +46,25 @@ const done = (outcome: ExerciseOutcome) => outcome === "solved" || outcome === "
 // cheering a right answer and encouraging after a second miss.
 const poseFor: Record<ExerciseOutcome, Pose> = { open: "present", missed: "think", solved: "cheer", explained: "love" };
 
+// The speak question "listens" this long before it counts the room's hello.
+const LISTEN_MS = 1400;
+
 function initialSelection(question: Question, print: boolean): number | null {
   if (!print || question.kind === "speak" || question.kind === "match") return null;
   return question.correct;
 }
 
-export function LessonCard({ question, print, finishing = false, onAdvance, onOutcome }: CardProps) {
+/** The card's state, and what each of its buttons does to it. */
+function useLessonCard(question: Question, print: boolean, onAdvance: () => void) {
   const [outcome, setOutcomeState] = useState<ExerciseOutcome>(print ? "solved" : "open");
   const [selected, setSelected] = useState<number | null>(initialSelection(question, print));
   const [misses, setMisses] = useState(0);
+  const [listening, setListening] = useState(false);
+  const listenTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(listenTimer.current), []);
 
   const setOutcome = (next: ExerciseOutcome) => {
     setOutcomeState(next);
-    onOutcome(next);
     if (next === "solved") play("correct");
     if (next === "missed" || next === "explained") play("wrong");
   };
@@ -56,17 +77,55 @@ export function LessonCard({ question, print, finishing = false, onAdvance, onOu
     setOutcome(total >= 2 ? "explained" : "missed");
   };
 
-  const retry = () => {
-    setSelected(null);
-    setOutcomeState("open");
-    onOutcome("open");
+  const actions: CardActions = {
+    select: setSelected,
+    check,
+    retry: () => {
+      setSelected(null);
+      setOutcomeState("open");
+    },
+    listen: () => {
+      setListening(true);
+      listenTimer.current = setTimeout(() => setOutcome("solved"), LISTEN_MS);
+    },
+    solve: () => setOutcome("solved"),
+    advance: onAdvance,
   };
+  const view = useMemo<CardView>(() => ({ outcome, selected, listening }), [outcome, selected, listening]);
+  return { view, actions };
+}
 
+export function LessonCard({ question, print, finishing = false, onAdvance, onView }: CardProps) {
+  const { view, actions } = useLessonCard(question, print, onAdvance);
+  useEffect(() => onView(view), [onView, view]);
+  return <LessonCardView question={question} view={view} finishing={finishing} actions={actions} celebrate={!print} />;
+}
+
+const noop = () => undefined;
+const noActions: CardActions = { select: noop, check: noop, retry: noop, listen: noop, solve: noop, advance: noop };
+
+/** Draws the card in one state. Without `actions` it can't be clicked: the kiosk mirror. */
+export function LessonCardView({
+  question,
+  view,
+  finishing = false,
+  actions,
+  celebrate = true,
+}: {
+  question: Question;
+  view: CardView;
+  finishing?: boolean;
+  actions?: CardActions;
+  /** Floats "+10 XP" up after a right answer (off in print). */
+  celebrate?: boolean;
+}) {
+  const { outcome, selected } = view;
+  const act = actions ?? noActions;
   const progress = (question.n - 1 + (done(outcome) ? 1 : 0)) / questions.length;
   const pose = question.kind === "speak" && outcome === "open" ? "talk" : poseFor[outcome];
 
   return (
-    <div data-no-advance className="relative flex h-full flex-col rounded-card bg-paper-raised shadow-card">
+    <div data-no-advance inert={!actions} className="relative flex h-full flex-col rounded-card bg-paper-raised shadow-card">
       <div className="flex items-center gap-6 px-10 pt-8">
         <span className="shrink-0 text-small font-extrabold text-ink-muted">{exerciseLabels[question.kind]}</span>
         <ProgressBar value={progress} />
@@ -79,30 +138,19 @@ export function LessonCard({ question, print, finishing = false, onAdvance, onOu
       </div>
       <h3 className="px-10 pt-2 text-h3 text-ink">{question.prompt}</h3>
       <div className="flex-1 px-10 pt-5">
-        <ExerciseBody question={question} outcome={outcome} selected={selected} onSelect={setSelected} onSolve={() => setOutcome("solved")} />
+        <ExerciseBody question={question} view={view} actions={act} />
       </div>
-      <Footer question={question} outcome={outcome} canCheck={selected !== null} finishing={finishing} onCheck={check} onRetry={retry} onAdvance={onAdvance} />
-      <XpPop show={outcome === "solved" && !print} />
+      <Footer question={question} outcome={outcome} canCheck={selected !== null} finishing={finishing} actions={act} />
+      <XpPop show={outcome === "solved" && celebrate} />
     </div>
   );
 }
 
-function ExerciseBody({
-  question,
-  outcome,
-  selected,
-  onSelect,
-  onSolve,
-}: {
-  question: Question;
-  outcome: ExerciseOutcome;
-  selected: number | null;
-  onSelect: (index: number) => void;
-  onSolve: () => void;
-}) {
-  if (question.kind === "speak") return <SpeakExercise question={question} solved={done(outcome)} onSolve={onSolve} />;
-  if (question.kind === "match") return <MatchExercise question={question} solved={done(outcome)} onSolve={onSolve} />;
-  return <ChoiceExercise question={question} outcome={outcome} selected={selected} onSelect={onSelect} />;
+function ExerciseBody({ question, view, actions }: { question: Question; view: CardView; actions: CardActions }) {
+  const solved = done(view.outcome);
+  if (question.kind === "speak") return <SpeakExercise question={question} solved={solved} listening={view.listening} onListen={actions.listen} />;
+  if (question.kind === "match") return <MatchExercise question={question} solved={solved} onSolve={actions.solve} />;
+  return <ChoiceExercise question={question} outcome={view.outcome} selected={view.selected} onSelect={actions.select} />;
 }
 
 /** Duolingo's progress bar: a green fill with a lighter stripe along its top. */
@@ -146,9 +194,7 @@ type FooterProps = {
   outcome: ExerciseOutcome;
   canCheck: boolean;
   finishing: boolean;
-  onCheck: () => void;
-  onRetry: () => void;
-  onAdvance: () => void;
+  actions: CardActions;
 };
 
 const footerLook: Record<ExerciseOutcome, string> = {
@@ -173,7 +219,7 @@ function solvedLine(question: Question): string {
   if (fold) return tryLesson.unlockedLine(fold.n);
   if (question.n === questions.length) return tryLesson.finishedLine;
   const next = folds[foldsDoneBefore(question.n)];
-  return tryLesson.towardLine(QUESTIONS_PER_FOLD - (question.n % QUESTIONS_PER_FOLD), next.n);
+  return tryLesson.towardLine(next.unlockedBy - question.n, next.n);
 }
 
 function FooterMessage({ question, outcome }: { question: Question; outcome: ExerciseOutcome }) {
@@ -205,15 +251,15 @@ function Message({ good = false, title, children }: { good?: boolean; title: str
   );
 }
 
-function FooterAction({ question, outcome, canCheck, finishing, onCheck, onRetry, onAdvance }: FooterProps) {
-  const next = finishing ? () => finish(onAdvance) : onAdvance;
+function FooterAction({ question, outcome, canCheck, finishing, actions }: FooterProps) {
+  const next = finishing ? () => finish(actions.advance) : actions.advance;
   const sound = finishing ? null : "tap";
   if (outcome === "solved") return <Button variant="primary" onClick={next} sound={sound}>{finishing ? tryLesson.finishLabel : tryLesson.continueLabel}</Button>;
   if (outcome === "explained") return <Button variant="danger" onClick={next} sound={sound}>{tryLesson.continueLabel}</Button>;
-  if (outcome === "missed") return <Button variant="danger" onClick={onRetry}>{tryLesson.retryLabel}</Button>;
+  if (outcome === "missed") return <Button variant="danger" onClick={actions.retry}>{tryLesson.retryLabel}</Button>;
   if (question.kind === "choose" || question.kind === "word") {
     return (
-      <Button variant="primary" onClick={onCheck} disabled={!canCheck} sound={null}>
+      <Button variant="primary" onClick={actions.check} disabled={!canCheck} sound={null}>
         {tryLesson.checkLabel}
       </Button>
     );

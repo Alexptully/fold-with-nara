@@ -11,8 +11,8 @@ import { tryLesson } from "@/content/content";
 import { play } from "@/lib/sound";
 
 /**
- * The three exercise bodies inside the lesson card. Each one reports a right
- * answer with onSolve and a wrong one with onMiss; the card decides what Nara says.
+ * The exercise bodies inside the lesson card. The card owns their answer state, so
+ * the demo kiosk can draw the same exercise from the deck's state.
  */
 
 export type ExerciseOutcome = "open" | "missed" | "solved" | "explained";
@@ -70,12 +70,7 @@ function WordOption({ option }: { option: string }) {
   );
 }
 
-export function SpeakExercise({ question, solved, onSolve }: { question: SpeakQuestion; solved: boolean; onSolve: () => void }) {
-  const [listening, setListening] = useState(false);
-  const listen = () => {
-    setListening(true);
-    window.setTimeout(onSolve, 1400);
-  };
+export function SpeakExercise({ question, solved, listening, onListen }: { question: SpeakQuestion; solved: boolean; listening: boolean; onListen: () => void }) {
   if (solved) {
     return (
       <motion.div className="py-4" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}>
@@ -94,7 +89,7 @@ export function SpeakExercise({ question, solved, onSolve }: { question: SpeakQu
       >
         <Microphone size={64} weight="fill" />
       </motion.span>
-      <Button onClick={listen} disabled={listening}>
+      <Button onClick={onListen} disabled={listening}>
         {listening ? "Listening..." : tryLesson.speakLabel}
       </Button>
     </div>

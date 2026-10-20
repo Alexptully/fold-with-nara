@@ -5,12 +5,13 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import { FoldPlayer, FujiPaper } from "@/components/art/FujiPaper";
 import type { ExerciseOutcome } from "@/components/lesson/Exercises";
-import { LessonCard } from "@/components/lesson/LessonCard";
+import { LessonCard, type CardView } from "@/components/lesson/LessonCard";
 import { Button } from "@/components/ui/Button";
 import { demoQuestions, foldUnlockedBy, foldsDoneBefore, questions, tryLesson, type Fold, type Guidance } from "@/content/content";
 import { duration, ease } from "@/lib/motion";
 import { SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
+import { useReportToKiosk } from "../useKioskLink";
 
 const guidanceLabel: Record<Guidance, string> = {
   show: "Watch the fold",
@@ -39,10 +40,11 @@ const isAnswered = (outcome: ExerciseOutcome) => outcome === "solved" || outcome
 function LessonStage({ questionIndex, finishing, print, advance }: { questionIndex: number; finishing: boolean; print: boolean; advance: () => void }) {
   const question = questions[questionIndex];
   const fold = foldUnlockedBy(question.n);
-  const [outcome, setOutcome] = useState<ExerciseOutcome>(print ? "solved" : "open");
+  const [view, setView] = useState<CardView>({ outcome: print ? "solved" : "open", selected: null, listening: false });
   // Each replay remounts the paper, so the fold plays again from the last step.
   const [runs, setRuns] = useState(0);
-  const answered = isAnswered(outcome);
+  const answered = isAnswered(view.outcome);
+  useReportToKiosk({ lesson: { question: question.n, ...view, replays: runs, finishing } });
   return (
     <>
       <div className="absolute left-24 top-[176px] w-[620px]">
@@ -56,7 +58,7 @@ function LessonStage({ questionIndex, finishing, print, advance }: { questionInd
         {fold ? <FoldCaption fold={fold} answered={answered} onReplay={print ? null : () => setRuns((count) => count + 1)} /> : null}
       </div>
       <div className="absolute right-24 top-[176px] h-[836px] w-[1050px]">
-        <LessonCard question={question} print={print} finishing={finishing} onAdvance={advance} onOutcome={setOutcome} />
+        <LessonCard question={question} print={print} finishing={finishing} onAdvance={advance} onView={setView} />
       </div>
     </>
   );

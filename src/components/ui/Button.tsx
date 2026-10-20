@@ -17,14 +17,26 @@ const variants: Record<Variant, string> = {
 
 const disabledLook = "disabled:bg-line disabled:text-ink-faint disabled:shadow-none disabled:cursor-not-allowed";
 
+type Size = "body" | "large" | "panel" | "icon";
+
+// Slide buttons are "body". "large" is the kiosk's start button; "panel" and "icon" are the
+// projector's setup controls, sized for a laptop or phone screen rather than the stage.
+const sizes: Record<Size, string> = {
+  body: "px-9 py-4 text-body",
+  large: "px-16 py-6 text-h3",
+  panel: "px-4 py-2 text-panel",
+  icon: "grid h-12 w-12 place-items-center text-panel",
+};
+
 /** The deck's one button. It plays a soft tap unless told to play something else. */
 export function Button({
   variant = "chunky",
+  size = "body",
   className = "",
   sound = "tap",
   onClick,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; sound?: SoundName | null }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: Size; sound?: SoundName | null }) {
   return (
     <button
       type="button"
@@ -33,7 +45,7 @@ export function Button({
         if (sound) play(sound);
         onClick?.(event);
       }}
-      className={`shrink-0 whitespace-nowrap rounded-tile px-9 py-4 text-body font-extrabold transition-transform ${variants[variant]} ${disabledLook} ${className}`}
+      className={`shrink-0 whitespace-nowrap rounded-tile font-extrabold transition-transform ${sizes[size]} ${variants[variant]} ${disabledLook} ${className}`}
     />
   );
 }

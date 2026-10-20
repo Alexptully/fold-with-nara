@@ -9,8 +9,9 @@ import { NotesPanel } from "./NotesPanel";
 import { SlideFooter } from "./SlideFooter";
 import { SlideLayer, type TransitionCustom } from "./SlideTransition";
 import { slides } from "./slides";
-import { naraSpotFor, sourcesForStep } from "./types";
+import { kioskSceneFor, naraSpotFor, sourcesForStep } from "./types";
 import { useDeckNavigation } from "./useDeckNavigation";
+import { KioskLiveContext, useKioskBroadcast, useKioskLive } from "./useKioskLink";
 import { stageSize, usePresenterKeys } from "./usePresenterKeys";
 import { useTalkClock } from "./useTalkClock";
 
@@ -36,6 +37,8 @@ export function Deck() {
   const slide = slides[index];
   const custom = transitionFor(index, direction, animate);
   const highlight = useShapeHighlight(index);
+  const kiosk = useKioskLive(index);
+  const kioskStatus = useKioskBroadcast(slide.name, step, kioskSceneFor(slide, step, kiosk.live));
 
   return (
     <main
@@ -48,20 +51,22 @@ export function Deck() {
         className="absolute left-1/2 top-1/2"
         style={{ width: stageSize.width, height: stageSize.height, transform: `translate(-50%, -50%) scale(${presenter.scale})` }}
       >
-        <NaraHighlightContext.Provider value={highlight}>
-          <div className="relative h-full w-full overflow-hidden bg-paper">
-            <AnimatePresence initial={false} custom={custom}>
-              <SlideLayer key={index} custom={custom} label={slide.name}>
-                <slide.Content step={step} print={false} advance={nav.next} />
-                <SlideFooter sourceKeys={sourcesForStep(slide, step)} section={slide.section} />
-              </SlideLayer>
-            </AnimatePresence>
-            <NaraActor spot={naraSpotFor(slide, step)} cut={!animate} />
-            <Grain />
-          </div>
-        </NaraHighlightContext.Provider>
+        <KioskLiveContext.Provider value={kiosk.report}>
+          <NaraHighlightContext.Provider value={highlight}>
+            <div className="relative h-full w-full overflow-hidden bg-paper">
+              <AnimatePresence initial={false} custom={custom}>
+                <SlideLayer key={index} custom={custom} label={slide.name}>
+                  <slide.Content step={step} print={false} advance={nav.next} />
+                  <SlideFooter sourceKeys={sourcesForStep(slide, step)} section={slide.section} />
+                </SlideLayer>
+              </AnimatePresence>
+              <NaraActor spot={naraSpotFor(slide, step)} cut={!animate} />
+              <Grain />
+            </div>
+          </NaraHighlightContext.Provider>
+        </KioskLiveContext.Provider>
       </div>
-      {presenter.notesOpen ? <NotesPanel index={index} step={step} elapsed={elapsed} onClose={() => presenter.setNotesOpen(false)} /> : null}
+      {presenter.notesOpen ? <NotesPanel index={index} step={step} elapsed={elapsed} kiosk={kioskStatus} onClose={() => presenter.setNotesOpen(false)} /> : null}
       <SoundToast muted={presenter.muted} toastId={presenter.muteToast} />
       <p className="sr-only" aria-live="polite">
         {slide.name}, build {step} of {slide.steps}

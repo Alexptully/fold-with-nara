@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
-import type { Note } from "@/content/content";
+import type { Note, OrigamiModel } from "@/content/content";
 import type { SourceKey } from "@/content/sources";
+import type { KioskScene, LessonMirror } from "@/lib/kiosk/protocol";
 import type { NaraSpot } from "./NaraActor";
 import type { TransitionKind } from "./SlideTransition";
 
@@ -32,8 +33,15 @@ export type SlideDef = {
   speaker?: string;
   /** The script for this slide: lines to say and cues for the presenter. */
   notes: Note[];
+  /** What the demo kiosk's iPad and projector show at each build step. Defaults to the welcome screen. */
+  kiosk?: (step: number, live: KioskLive) => KioskScene;
   Content: ComponentType<SlideProps>;
 };
+
+/** What the presenter has done on the current slide that the kiosk mirrors. */
+export type KioskLive = { lesson?: LessonMirror; chosen?: OrigamiModel; kept?: boolean };
+
+export const kioskSceneFor = (slide: SlideDef, step: number, live: KioskLive): KioskScene => slide.kiosk?.(step, live) ?? { kind: "welcome" };
 
 export function sourcesForStep(slide: SlideDef, step: number): SourceKey[] {
   const entries = Object.entries(slide.sourcesByStep ?? {})
