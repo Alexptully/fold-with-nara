@@ -20,12 +20,15 @@ export function ScreenPage() {
   );
 }
 
-export function ProjectorPage() {
+/** `right` keeps the light in the right half, for a projector whose left half is blocked by the booth. */
+export function ProjectorPage({ side = "full" }: { side?: "full" | "right" }) {
   useStayAwake();
   const { message, linked } = useKioskFeed("projector");
   return (
-    <main className="fixed inset-0 select-none">
-      <ProjectorStage light={lightFor(message?.scene ?? { kind: "welcome" })} storageKey="fold-with-nara:projector-fit" linked={linked} />
+    <main className="fixed inset-0 select-none bg-projector">
+      <div className={side === "right" ? "absolute inset-y-0 right-0 w-1/2" : "absolute inset-0"}>
+        <ProjectorStage light={lightFor(message?.scene ?? { kind: "welcome" })} storageKey={`fold-with-nara:projector-fit-${side}`} linked={linked} />
+      </div>
     </main>
   );
 }

@@ -598,6 +598,11 @@ export const kioskSetup = {
       line: "Green fold lines on black. Open it on whatever feeds the projector (the iPad in a second window, a laptop or a phone), then tap it to line it up with a sheet of paper.",
     },
     {
+      path: "/kiosk/projector-right/",
+      name: "Projector, right half",
+      line: "The same light, kept in the right half of the picture for a projector whose left half the booth blocks. Open it on the phone that feeds the projector.",
+    },
+    {
       path: "/kiosk/combined/",
       name: "iPad and projector together",
       line: "For a projector that copies the iPad screen. The kiosk screen sits on top and the fold lines below, so aim the projector's black half at the paper.",
