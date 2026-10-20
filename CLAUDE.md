@@ -36,7 +36,7 @@ The speaker notes are the presentation script. Each slide names its `speaker` in
 - `/kiosk/` is the mini booth's setup page: a code to scan for each kiosk page and who is connected.
 - M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to two reveals (a pop as Nara is revealed on "Meet Nara", and a pop as Mt. Fuji lands in the tent). Changing slides is silent. Use `useRevealSound` for any new reveal so it only plays when the presenter steps forward into it.
 - T resets the rehearsal clock in the notes panel.
-- Work on a branch and open a pull request. Never push straight to `main`.
+- Work on a branch and open a pull request. Never push straight to `main`. Merging to `main` publishes the deck to https://alexptully.github.io/fold-with-nara/ (`.github/workflows/pages.yml`, which also runs `npm run check`).
 
 ## The demo kiosk
 

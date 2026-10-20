@@ -5,7 +5,7 @@ Our Prompt 2 deck for the Duolingo x Iovine and Young Innovator's Forum, Fall 20
 You don't need to know how to code to run it or to change the words on a slide.
 
 - **Code:** https://github.com/Alexptully/fold-with-nara. The repo is private, so ask Alex to add you as a collaborator, then accept the email invite.
-- **Quick look:** https://claude.ai/artifact/759sAUHgHzFMTMnrpiiCGw is a hosted copy of the deck. It doesn't update when the code changes, so run the deck yourself (below) to see the latest version.
+- **Present from the web:** https://alexptully.github.io/fold-with-nara/ is the deck, rebuilt from `main` every time a change is merged (it takes about two minutes). It works in any browser with nothing installed. The mini booth's iPad and projector can't follow the hosted copy, so run the deck from your laptop (below) when you use them.
 
 ## Run it on your computer
 
@@ -15,7 +15,7 @@ You don't need to know how to code to run it or to change the words on a slide.
 4. Run `npm install` once. It takes a minute or two.
 5. Run `npm run dev` and open http://localhost:3000 in Chrome. It also starts the link to the mini booth's iPad and projector (below).
 
-On presentation day, use `npm run present` instead. It builds the finished site once and serves it, so nothing recompiles while you're on stage.
+On presentation day, use `npm run present` instead. It builds the finished site once and serves it, so nothing recompiles while you're on stage. If you're not using the iPad and projector, the web link above is enough.
 
 ## Who says what
 
