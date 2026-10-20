@@ -17,6 +17,7 @@ import {
   whyOrigami,
 } from "@/content/content";
 import type { SourceKey } from "@/content/sources";
+import { celebrationScene, chooseScene, journeyScene, lessonScene, meetNaraScene, showOnKiosk } from "./kioskScenes";
 import { CelebrationSlide, celebrationSpot } from "./slides/CelebrationSlide";
 import { ChooseFoldSlide } from "./slides/ChooseFoldSlide";
 import { ClosingSlide, closingSpot } from "./slides/ClosingSlide";
@@ -52,8 +53,12 @@ const demoSources = Object.fromEntries(
   }),
 ) as Record<number, SourceKey[]>;
 
+// The kiosk bows with Nara on the last two slides.
+const thanksOnKiosk = showOnKiosk({ kind: "guide", say: "thanks" });
+
 // Nara stays off stage until "Meet Nara", so her arrival after the booth is a reveal.
 // The order follows the team's speaking order: everyone, Sam, Alex, Sophia, Tsion, Alex, Ledger, everyone.
+// Slides without `kiosk` leave the demo kiosk on its welcome screen, where Nara hasn't appeared yet.
 export const slides: SlideDef[] = [
   { name: "Title", speaker: title.speaker, steps: 1, seconds: 10, transition: "blend", notes: title.notes, Content: TitleSlide },
   {
@@ -99,6 +104,7 @@ export const slides: SlideDef[] = [
     printSteps: [1, 3],
     sourcesByStep: { 3: ["naraDeerCount2026", "naraDeerHistory", "naraNaturalMonument"] },
     notes: meetNara.notes,
+    kiosk: meetNaraScene,
     Content: MeetNaraSlide,
   },
   {
@@ -109,6 +115,7 @@ export const slides: SlideDef[] = [
     seconds: 14,
     transition: "rise",
     notes: reactions.notes,
+    kiosk: (step) => ({ kind: "reactions", misses: step >= 2 }),
     Content: ReactionsSlide,
   },
   {
@@ -120,6 +127,7 @@ export const slides: SlideDef[] = [
     transition: "push",
     nara: journeySpot,
     notes: journey.notes,
+    kiosk: journeyScene,
     Content: JourneySlide,
   },
   {
@@ -131,6 +139,7 @@ export const slides: SlideDef[] = [
     transition: "zoom",
     sourcesByStep: { 1: ["sakura", "fuji", "senbazuru", "childrensDay"] },
     notes: options.notes,
+    kiosk: chooseScene,
     Content: ChooseFoldSlide,
   },
   {
@@ -143,6 +152,7 @@ export const slides: SlideDef[] = [
     nara: () => methodSpot,
     sourcesByStep: { 1: ["duolingoPrompt"] },
     notes: method.notes,
+    kiosk: showOnKiosk({ kind: "guide", say: "method" }),
     Content: MethodSlide,
   },
   {
@@ -153,6 +163,7 @@ export const slides: SlideDef[] = [
     seconds: 14,
     transition: "push",
     notes: lessonOverview.notes,
+    kiosk: (step) => ({ kind: "path", folds: step >= 2 }),
     Content: LessonOverviewSlide,
   },
   {
@@ -165,6 +176,7 @@ export const slides: SlideDef[] = [
     printSteps: demoQuestions.map((_, i) => i + 1),
     sourcesByStep: demoSources,
     notes: tryLesson.notes,
+    kiosk: lessonScene,
     Content: TryLessonSlide,
   },
   {
@@ -177,10 +189,11 @@ export const slides: SlideDef[] = [
     nara: celebrationSpot,
     printSteps: [1, 2],
     notes: celebration.notes,
+    kiosk: celebrationScene,
     Content: CelebrationSlide,
   },
-  { name: "Thank you", speaker: closing.speaker, steps: 1, seconds: 7, transition: "blend", nara: () => closingSpot, notes: closing.notes, Content: ClosingSlide },
-  { name: "Sources", steps: 1, seconds: 0, transition: "rise", notes: sourcesSlide.notes, Content: SourcesSlide },
+  { name: "Thank you", speaker: closing.speaker, steps: 1, seconds: 7, transition: "blend", nara: () => closingSpot, notes: closing.notes, kiosk: thanksOnKiosk, Content: ClosingSlide },
+  { name: "Sources", steps: 1, seconds: 0, transition: "rise", notes: sourcesSlide.notes, kiosk: thanksOnKiosk, Content: SourcesSlide },
 ];
 
 /** The timed pitch, in seconds (the sources slide isn't presented). */

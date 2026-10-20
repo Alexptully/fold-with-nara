@@ -29,13 +29,26 @@ The speaker notes are the presentation script. Each slide names its `speaker` in
 
 ## Commands
 
-- `npm run dev` starts the deck at http://localhost:3000
+- `npm run dev` starts the deck at http://localhost:3000, plus the kiosk relay on port 3001 (`scripts/dev.mjs`).
 - `/print` (or the P key) is the print version, one landscape page per slide or build step, for PDF export
 - `npm run check` runs the type checker, the linter with its complexity limit, and the em dash scan. Run it before saying a task is done.
-- `npm run present` builds the static site and serves it at http://localhost:3000 (no dev server needed on presentation day).
+- `npm run present` builds the static site and serves it at http://localhost:3000 to this laptop and the local network, with the kiosk relay (`scripts/present.mjs`, no dependencies; no dev server needed on presentation day). `npm start` serves the last build the same way.
+- `/kiosk/` is the mini booth's setup page: a code to scan for each kiosk page and who is connected.
 - M mutes or unmutes the sound effects. Sounds are synthesized in `src/lib/sound.ts` (no audio files) and only play after a click or key press. Sounds belong to the lesson (taps, right and wrong answers, the finish fanfare) and to two reveals (a pop as Nara is revealed on "Meet Nara", and a pop as Mt. Fuji lands in the tent). Changing slides is silent. Use `useRevealSound` for any new reveal so it only plays when the presenter steps forward into it.
 - T resets the rehearsal clock in the notes panel.
 - Work on a branch and open a pull request. Never push straight to `main`.
+
+## The demo kiosk
+
+The mini booth's iPad and small projector follow the deck while it's presented: `/kiosk/screen/` is the kiosk's touchscreen, `/kiosk/projector/` is the light on the paper, and `/kiosk/combined/` puts both on one screen for a projector that can only copy the iPad.
+
+- Each slide in `slides.ts` says what the kiosk shows at each build step (`kiosk`), the same way it says where Nara stands. A slide without one leaves the kiosk on its welcome screen. The scene functions live in `kioskScenes.ts`, and the kiosk's words live in `content.ts` (`kioskScreen`, `kioskProjector`, `kioskSetup`).
+- Nara stays off the kiosk until "Meet Nara", the same as on the slides.
+- Slides report what the presenter does on them with `useReportToKiosk` (the lesson card's state, the chosen fold, Take it home). The deck sends the whole kiosk screen every time, never a change, so a page that opens late or reconnects is right at once.
+- `LessonCard` holds the lesson's state and plays its sounds; `LessonCardView` only draws a state, so the kiosk shows the same card tap for tap. The fold picker (`FoldOptions.tsx`) and the results (`LessonResults.tsx`) are shared the same way. Change them in one place.
+- The deck sends over a BroadcastChannel (kiosk pages in the same browser) and to the relay (`scripts/kiosk-relay.mjs`, port 3001, server-sent events) for the iPad and other devices. Keep both dependency free. Hosted https copies skip the relay.
+- The projector draws in FujiPaper's units at the paper's real size (`lightGeometry.ts`). Black is no light: green is the frame, crease and arrow, yellow is sparkles, and red corners mean a miss. Lining up the light (move, size, turn, mirror) is saved on each device.
+- Kiosk screens are drawn on a scaled canvas (`KioskCanvas`), at least 1400 by 1024 in landscape and 1024 by 1400 in portrait, and lay out for both orientations.
 
 ## General
 
@@ -67,7 +80,7 @@ The speaker notes are the presentation script. Each slide names its `speaker` in
 - Use monospace only for real code, data or figures aligned in a column. Never use it to make headings, captions or labels feel technical.
 - Use the type scale (`text-sm`, not `text-[9px]`). Arbitrary values need a reason.
 - Animate inline elements (a `motion.span` inside text or a flex-wrap row) only after giving them `inline-block` or `block`. An inline span with a running transform can drop out of the paint in Chromium, which hid a word on the method slide.
-- Presented slides never show text smaller than 24 px on the 1920 by 1080 stage (`text-small`); footer sources are the one exception at 20 px (`text-cite`). Don't put tiny words inside drawings either: at slide size they read as noise.
+- Presented slides never show text smaller than 24 px on the 1920 by 1080 stage (`text-small`); footer sources are the one exception at 20 px (`text-cite`). Don't put tiny words inside drawings either: at slide size they read as noise. Kiosk screens keep the same 24 px floor on their canvas. The kiosk setup page and the projector's line-up panel are tools for the team and use `text-panel`.
 
 ### Define it once
 
@@ -89,7 +102,7 @@ If a design change means touching many files, the abstraction is missing. Extend
 - No reflexive rows of three (three cards, three stats, three steps). Show as many things as there really are.
 - Avoid colored icons on pastel rounded squares as a layout device.
 - No mystery controls. A button or link says what it does before it's clicked ("Open our Figma board", not "Figma").
-- A hot, saturated accent is for glow, motion and small marks, not for filling primary buttons or chips. Controls stay neutral with one calm accent. The one exception is the Duolingo lesson mockup (`LessonCard`) and the journey path, which copy Duolingo's own UI: filled green Check and Continue buttons, a filled red Try again, and filled path nodes, because those slides depict the product.
+- A hot, saturated accent is for glow, motion and small marks, not for filling primary buttons or chips. Controls stay neutral with one calm accent. The one exception is the Duolingo lesson mockup (`LessonCard`), the journey path and the demo kiosk's own screens (`src/components/kiosk/`), which copy Duolingo's own UI: filled green Check, Continue and start buttons, a filled red Try again, and filled path nodes, because they depict the product.
 - Text is the last resort. Before writing a label or caption, ask whether size, weight, color, position, a container, an icon or a small diagram could carry the same fact.
 - Give each section one heading that names the thing, with no comma and no supporting paragraph that restates it.
 - Prefer a diagram, table or marked-up state over prose that says the same thing. Put details that don't fit into presenter notes or behind a disclosure.
@@ -140,3 +153,4 @@ If your Claude Code setup has the `better-*` skills (`better-ui`, `better-typogr
 4. Keyboard navigation, speaker notes (N), full screen (F), print-to-PDF (P), mute (M) and the clock reset (T) all work.
 5. The timed slides still add up to under four minutes.
 6. `npm run check` passes with no errors.
+7. The kiosk pages follow the deck: with `npm run dev` running, open `/kiosk/screen/` and `/kiosk/projector/` in other windows and step through the deck, including right and wrong answers on "Try the lesson".

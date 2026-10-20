@@ -1,20 +1,13 @@
 "use client";
 
-import { ArrowsLeftRight, ChatCircleDots, CursorClick, Microphone, type Icon } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { FujiPaper } from "@/components/art/FujiPaper";
 import { OrigamiIcon } from "@/components/art/OrigamiIcon";
-import { folds, lessonOverview, questions, type ExerciseKind } from "@/content/content";
+import { exerciseIcons } from "@/components/lesson/exerciseIcons";
+import { folds, lessonOverview, questions } from "@/content/content";
 import { duration, ease } from "@/lib/motion";
 import { Jp, SlideShell } from "../primitives";
 import type { SlideProps } from "../types";
-
-const exerciseIcons: Record<ExerciseKind, Icon> = {
-  speak: Microphone,
-  choose: CursorClick,
-  word: ChatCircleDots,
-  match: ArrowsLeftRight,
-};
 
 /**
  * Step 1: the ten questions. Step 2: dashed creases run from each question to the

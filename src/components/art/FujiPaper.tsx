@@ -20,7 +20,7 @@ import type { Pt } from "@/lib/shapes";
 
 type Tone = "paper" | "snow" | "lit" | "shade" | "flap";
 type Face = { pts: Pt[]; tone: Tone };
-type Segment = readonly [Pt, Pt];
+export type Segment = readonly [Pt, Pt];
 type PaperState = { faces: Face[]; creases?: Segment[] };
 
 const square: Pt[] = [[30, 30], [210, 30], [210, 210], [30, 210]];
@@ -126,6 +126,12 @@ const moves: Record<number, FoldMove> = {
     arrows: [{ from: [168, 150], to: [56, 156], bend: 0.38 }],
   },
 };
+
+/** The projector's crease lines and arrows for a fold, on the paper as the last fold left it. */
+export function foldMarks(fold: number): { lines: Segment[]; arrows: FoldMove["arrows"] } {
+  const move = moves[fold];
+  return { lines: move.lines, arrows: move.arrows };
+}
 
 const toneFill: Record<Tone, string> = {
   paper: "var(--color-fuji-paper)",

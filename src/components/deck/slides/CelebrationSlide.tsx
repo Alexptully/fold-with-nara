@@ -3,14 +3,15 @@
 import { motion } from "motion/react";
 import { useState } from "react";
 import { FujiPaper } from "@/components/art/FujiPaper";
+import { Rays } from "@/components/art/Rays";
 import { HANG_SPOT, INSIDE, TentInside } from "@/components/art/TentInside";
-import { Button } from "@/components/ui/Button";
+import { LessonResults } from "@/components/lesson/LessonResults";
 import { celebration } from "@/content/content";
 import { duration, ease, spring } from "@/lib/motion";
 import { Confetti } from "../Confetti";
 import type { NaraSpot } from "../NaraActor";
-import { Jp } from "../primitives";
 import type { SlideProps } from "../types";
+import { useReportToKiosk } from "../useKioskLink";
 import { useRevealSound } from "../useRevealSound";
 
 /**
@@ -45,11 +46,12 @@ export function CelebrationSlide({ step, print, advance }: SlideProps) {
   const hung = step >= 2;
   const [kept, setKept] = useState(false);
   useRevealSound(hung, print, "pop", 1250);
+  useReportToKiosk({ kept });
   return (
     <div className="absolute inset-0 overflow-hidden px-24 pt-16">
       {hung ? null : <Confetti />}
       <h1 className="relative z-10 text-h1 text-accent-ink">{celebration.heading}</h1>
-      <Rays show={!hung} />
+      <HeroRays show={!hung} />
       <TentCard show={hung} />
       <motion.div
         className="absolute"
@@ -58,7 +60,7 @@ export function CelebrationSlide({ step, print, advance }: SlideProps) {
         transition={{ duration: duration.base, ease: ease.outSoft }}
         aria-hidden={hung}
       >
-        <Results kept={kept} onKeep={() => setKept(true)} onHang={advance} />
+        <LessonResults kept={kept} onKeep={() => setKept(true)} onHang={advance} className="absolute left-[230px] top-[600px] w-[640px]" />
       </motion.div>
       <motion.p
         className="absolute left-[1230px] top-[200px] w-[600px] text-lead text-ink"
@@ -73,28 +75,11 @@ export function CelebrationSlide({ step, print, advance }: SlideProps) {
   );
 }
 
-/** Light rays turning slowly behind the model, like Duolingo's lesson-complete screen. */
-function Rays({ show }: { show: boolean }) {
-  const wedges = Array.from({ length: 12 }, (_, i) => i * 30);
-  return (
-    <motion.svg
-      className="absolute"
-      style={{ left: HERO.left + HERO.width / 2 - 330, top: HERO.top + HERO.height / 2 - 330 }}
-      width={660}
-      height={660}
-      viewBox="-330 -330 660 660"
-      aria-hidden="true"
-      initial={false}
-      animate={{ opacity: show ? 1 : 0 }}
-      transition={{ duration: duration.base }}
-    >
-      <motion.g animate={{ rotate: 360 }} transition={{ duration: 40, repeat: Infinity, ease: "linear" }}>
-        {wedges.map((angle) => (
-          <path key={angle} d="M0 0 L-42 -330 A330 330 0 0 1 42 -330 Z" fill="var(--color-accent-soft)" transform={`rotate(${angle})`} />
-        ))}
-      </motion.g>
-    </motion.svg>
-  );
+/** The rays sit centered behind the model in step 1. */
+function HeroRays({ show }: { show: boolean }) {
+  const left = HERO.left + HERO.width / 2 - 330;
+  const top = HERO.top + HERO.height / 2 - 330;
+  return <Rays show={show} className="absolute" style={{ left, top, width: 660, height: 660 }} />;
 }
 
 /** The finished model: pops in on arrival, then flies up and hangs from a string in step 2. */
@@ -146,47 +131,5 @@ function TentCard({ show }: { show: boolean }) {
         <TentInside />
       </div>
     </motion.div>
-  );
-}
-
-/** Name, score and the two choices, under the model. */
-function Results({ kept, onKeep, onHang }: { kept: boolean; onKeep: () => void; onHang: () => void }) {
-  return (
-    <div className="absolute left-[230px] top-[600px] flex w-[640px] flex-col items-center" data-no-advance>
-      <p className="flex items-baseline gap-4">
-        <Jp className="text-jp-md font-extrabold text-ink">{celebration.jp}</Jp>
-        <span className="text-lead text-ink-muted">{celebration.romaji}</span>
-      </p>
-      <div className="mt-6 flex gap-6">
-        {celebration.stats.map((stat) => (
-          <StatCard key={stat.label} {...stat} />
-        ))}
-      </div>
-      <div className="mt-10 flex gap-6">
-        <Button variant={kept ? "chosen" : "chunky"} onClick={onKeep}>
-          {celebration.keepLabel}
-        </Button>
-        <Button variant="primary" onClick={onHang}>
-          {celebration.hangLabel}
-        </Button>
-      </div>
-      <p className={`mt-3 h-[38px] text-body font-bold text-macaw-ink transition-opacity ${kept ? "opacity-100" : "opacity-0"}`}>{celebration.keptLine}</p>
-    </div>
-  );
-}
-
-const statLook = {
-  bee: { frame: "bg-bee", label: "text-ink", value: "text-bee-ink" },
-  accent: { frame: "bg-accent", label: "text-paper", value: "text-accent-ink" },
-};
-
-/** A Duolingo-style result card: a colored frame with the label on top and the value inside. */
-function StatCard({ label, value, tone }: { label: string; value: string; tone: string }) {
-  const look = statLook[tone as keyof typeof statLook];
-  return (
-    <div className={`w-[250px] rounded-tile p-1 ${look.frame}`}>
-      <p className={`py-1 text-center text-small font-extrabold ${look.label}`}>{label}</p>
-      <p className={`rounded-tile bg-paper py-3 text-center font-display text-h3 ${look.value}`}>{value}</p>
-    </div>
   );
 }

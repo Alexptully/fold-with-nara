@@ -537,3 +537,83 @@ export const sourcesSlide = {
   heading: "Sources",
   notes: [cue("Every number and cultural fact in the deck is listed here. Not part of the timed pitch.")],
 };
+
+/* ---------- The demo kiosk: the iPad screen and projector that follow the deck ---------- */
+// The mini booth's iPad shows what a visitor would see on the kiosk's touchscreen, and
+// its projector draws the folds on real paper. Both follow the deck as it's presented:
+// each slide picks a kiosk screen in slides.ts (`kiosk`), and the lesson mirrors every
+// tap. Nara stays off the kiosk until "Meet Nara", the same as on the slides.
+
+export type KioskGuideKey = "meet" | "intro" | "hello" | "print" | "place" | "light" | "method" | "badge" | "thanks";
+export type KioskPicture = "start" | "printer" | "frame" | "light" | "badge";
+export type KioskGuide = { pose: Pose; line: string; picture?: KioskPicture; jp?: string; romaji?: string };
+
+export const kioskScreen = {
+  startLabel: "Tap to start",
+  guide: {
+    meet: { pose: "smile", line: "Konnichiwa!" },
+    intro: { pose: "talk", line: `I'm ${nara}, a sika deer from Nara Park. Let's fold something together!` },
+    hello: { pose: "wave", line: `Konnichiwa! I'm ${nara}. Tap start when you're ready to fold.`, picture: "start" },
+    print: { pose: "present", line: "Your paper is printing. Take it from the tray under the ledge.", picture: "printer" },
+    place: { pose: "smile", line: "Lay your paper inside the green corners on the ledge.", picture: "frame" },
+    light: { pose: "talk", line: "Watch your paper. My light draws each fold right on it.", picture: "light" },
+    method: { pose: "talk", line: method.naraLine },
+    badge: { pose: "cheer", line: "Scan the code with your phone to add a Mt. Fuji badge to your Duolingo profile.", picture: "badge" },
+    thanks: { pose: "bow", line: closing.line, jp: closing.jp, romaji: closing.romaji },
+  } satisfies Record<KioskGuideKey, KioskGuide>,
+  /** Where the badge code points in the mockup. */
+  badgeLink: "https://www.duolingo.com/",
+  badgeLabel: "Mt. Fuji badge",
+  pathLine: "Ten stops around Nara Park. Saying hello lights up your first fold!",
+  foldsLabel: "Your folds",
+  reactionsLabel: "When you miss",
+  waitingTitle: "Waiting for the deck",
+  waitingLine: "Start the deck on the laptop with npm run present, then keep this page open.",
+};
+
+export const kioskProjector = {
+  adjustHint: "Tap anywhere to line up the light with your paper.",
+  fitTitle: "Line up the light",
+  fitLine: "Lay a sheet of the kiosk paper on the ledge, then move and size the white square until it sits on the sheet's edges.",
+  move: { up: "Move up", down: "Move down", left: "Move left", right: "Move right" },
+  smaller: "Smaller",
+  bigger: "Bigger",
+  turnLeft: "Turn left",
+  turnRight: "Turn right",
+  mirror: "Mirror",
+  reset: "Reset",
+  fullScreen: "Full screen",
+  done: "Done",
+  keys: "Keys: arrows move (hold Shift for big steps), minus and plus size, [ and ] turn, C closes.",
+};
+
+export const kioskSetup = {
+  heading: "Kiosk setup",
+  intro: "The iPad and projector in our mini booth follow the deck. Run the deck on this laptop, then open these pages on them. Both need the same Wi-Fi as this laptop.",
+  pages: [
+    { path: "/kiosk/screen/", name: "iPad screen", line: "What a visitor sees on the kiosk's touchscreen. Open it on the iPad." },
+    {
+      path: "/kiosk/projector/",
+      name: "Projector",
+      line: "Green fold lines on black. Open it on whatever feeds the projector (the iPad in a second window, a laptop or a phone), then tap it to line it up with a sheet of paper.",
+    },
+    {
+      path: "/kiosk/combined/",
+      name: "iPad and projector together",
+      line: "For a projector that copies the iPad screen. The kiosk screen sits on top and the fold lines below, so aim the projector's black half at the paper.",
+    },
+  ],
+  statusTitle: "Connected now",
+  deckLabel: "Deck",
+  screenLabel: "iPad screens",
+  projectorLabel: "Projectors",
+  relayOff: "The kiosk link isn't running. Start the deck with npm run present (or npm run dev to rehearse), then reload this page.",
+  noNetwork: "This laptop isn't on a Wi-Fi network yet. Join the same network as the iPad, then reload.",
+  notStarted: "Not started yet",
+  openHere: "Open it on this computer",
+  tips: [
+    "Event Wi-Fi often stops devices from seeing each other. If the iPad can't connect, turn on a phone hotspot and join it with the laptop and the iPad.",
+    "On a Mac, allow incoming connections for Node if macOS asks.",
+    "On the iPad, tap the screen once so it stays awake and goes full screen.",
+  ],
+};

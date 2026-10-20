@@ -101,6 +101,11 @@
   --color-screen: #ffffff;
   --color-screen-frame: #2b2b2b;
 
+  /* The demo kiosk's projector: black is no light, so the page around the folds stays black */
+  --color-projector: #000000;
+  --color-projector-guide: #ffffff;
+  --color-projector-panel: #1f1f1f;
+
   /* Type scale at 1080p. Headlines 48px and up, body 24px and up. */
   --text-display: 156px;
   --text-display--line-height: 0.98;
