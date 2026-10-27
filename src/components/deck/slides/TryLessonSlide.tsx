@@ -68,12 +68,12 @@ function LessonStage({ questionIndex, finishing, print, advance }: { questionInd
  * The paper starts as the last fold left it, without popping in again. A right
  * answer plays the next fold on it: crease, flap, and the new shape.
  */
-function LessonPaper({ fold, done, play, print }: { fold: number | null; done: number; play: boolean; print: boolean }) {
+export function LessonPaper({ fold, done, play, print }: { fold: number | null; done: number; play: boolean; print: boolean }) {
   if (fold === null) return <FujiPaper state={done} appear={false} className="h-full w-full" />;
   return <FoldPlayer fold={fold} play={play} instant={print} className="h-full w-full" />;
 }
 
-function StatusBadge({ answered }: { answered: boolean }) {
+export function StatusBadge({ answered }: { answered: boolean }) {
   const Icon = answered ? CheckCircle : LockSimple;
   return (
     <motion.div
@@ -88,7 +88,7 @@ function StatusBadge({ answered }: { answered: boolean }) {
   );
 }
 
-function FoldCaption({ fold, answered, onReplay }: { fold: Fold; answered: boolean; onReplay: (() => void) | null }) {
+export function FoldCaption({ fold, answered, onReplay }: { fold: Fold; answered: boolean; onReplay: (() => void) | null }) {
   return (
     <motion.div key={String(answered)} className="mt-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
       <p className={`text-h3 ${answered ? "text-ink" : "text-ink-faint"}`}>

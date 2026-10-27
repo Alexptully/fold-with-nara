@@ -15,7 +15,7 @@ import { StartButton } from "./GuidePictures";
 const floatingModels: OrigamiModel[] = ["sakura", "crane", "fuji", "koi", "kabuto"];
 
 /** The kiosk waiting for a visitor. Nara hasn't been revealed yet, so only the paper models are here. */
-export function WelcomeScene() {
+export function WelcomeScene({ onStart }: { onStart?: () => void }) {
   const landscape = useOrientation() === "landscape";
   return (
     <div className="flex h-full flex-col items-center justify-center gap-16 px-16">
@@ -31,7 +31,7 @@ export function WelcomeScene() {
         ))}
       </div>
       <h1 className={`text-center text-ink ${landscape ? "text-display" : "text-h1"}`}>{config.productName}</h1>
-      <StartButton />
+      <StartButton onStart={onStart} />
     </div>
   );
 }
