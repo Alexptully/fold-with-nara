@@ -622,3 +622,17 @@ export const kioskSetup = {
     "On the iPad, tap the screen once so it stays awake and goes full screen.",
   ],
 };
+
+/**
+ * The standalone demo kiosk (/demo/): the whole visit on one screen, worked by taps
+ * instead of the deck, for the team's portfolios. It reuses the kiosk's own screens and words.
+ */
+export const demoKiosk = {
+  title: `${config.productName}: try the kiosk`,
+  nextLabel: "Next",
+  restartLabel: "Start over",
+  chooseNote: "Today we're folding Mt. Fuji.",
+  foldLabel: "Fold Mt. Fuji",
+  lessonLabel: "Start the lesson",
+  againLabel: "Fold it again",
+};

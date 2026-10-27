@@ -11,8 +11,10 @@ import { celebration } from "@/content/content";
 import { spring } from "@/lib/motion";
 import { useOrientation } from "../KioskCanvas";
 
+type FinishProps = { kept: boolean; hung: boolean; onKeep?: () => void; onHang?: () => void };
+
 /** The kiosk's lesson-complete screen, then Nara seeing the model off to hang in the tent. */
-export function FinishScene({ kept, hung }: { kept: boolean; hung: boolean }) {
+export function FinishScene({ kept, hung, onKeep, onHang }: FinishProps) {
   const landscape = useOrientation() === "landscape";
   if (hung) return <Hung landscape={landscape} />;
   return (
@@ -27,7 +29,7 @@ export function FinishScene({ kept, hung }: { kept: boolean; hung: boolean }) {
               <FujiPaper state={3} tight appear={false} className="h-full w-full" label="The finished origami Mt. Fuji" />
             </motion.div>
           </div>
-          <LessonResults kept={kept} className="relative" />
+          <LessonResults kept={kept} onKeep={onKeep} onHang={onHang} className="relative" />
         </div>
         <Nara pose="cheer" className={landscape ? "h-[700px] w-[482px] shrink-0" : "h-[420px] w-[290px] shrink-0"} />
       </div>

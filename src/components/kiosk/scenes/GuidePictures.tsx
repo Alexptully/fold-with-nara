@@ -15,11 +15,11 @@ export function GuidePicture({ picture }: { picture: KioskPicture }) {
   return <Picture />;
 }
 
-/** The kiosk's pulsing start button. On the mirror it's a picture of the button, not a control. */
-export function StartButton() {
+/** The kiosk's pulsing start button. On the mirror (no `onStart`) it's a picture of the button, not a control. */
+export function StartButton({ onStart }: { onStart?: () => void }) {
   return (
     <motion.div animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
-      <Button variant="primary" size="large" tabIndex={-1} sound={null}>
+      <Button variant="primary" size="large" tabIndex={onStart ? 0 : -1} sound={onStart ? "tap" : null} onClick={onStart}>
         {kioskScreen.startLabel}
       </Button>
     </motion.div>
@@ -119,7 +119,7 @@ function Badge() {
 }
 
 const pictures: Record<KioskPicture, () => React.ReactNode> = {
-  start: StartButton,
+  start: () => <StartButton />,
   printer: Printer,
   frame: Frame,
   light: Light,
